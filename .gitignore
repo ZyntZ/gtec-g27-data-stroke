@@ -1,0 +1,13 @@
+# organizer recordings, archive and fitted models stay local
+data/
+.venv/
+# slides, deck builders, animations and the video script are delivered outside Git
+presentation/
+*.pptx
+*.gif
+video_script*.md
+__pycache__/
+*.pyc
+.pytest_cache/
+.ipynb_checkpoints/
+.DS_Store
