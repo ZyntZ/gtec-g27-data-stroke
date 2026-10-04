@@ -44,7 +44,7 @@ Overall: **433/480 = 90.2%** over these *six observed runs* (not 480 independent
 
 The time audit is a warning, not a victory lap. With fixed CSP, the **2.5–3.5 s** window scored 364/480 (75.8%); the **4.5–6.5 s** window scored 412/480 (85.8%). In particular, P2 PRE scored 52/80 early versus 66/80 late. See `results/timing_audit.csv`. The late rise could reflect actual imagery, feedback-related activity, or both. This dataset does not isolate these explanations. This offline score is neither proof of a rehabilitation benefit nor a real-time deployment result.
 
-The organizer's `overview.pdf` lists another pair of methods and six scores, but it evaluates a different pipeline/time-scoring rule; **those percentages are not a head-to-head leaderboard comparison**. Do not tune future models to the already inspected test labels and then describe the same tests as fresh validation. For what to build next, see [next steps](docs/next_steps.md).
+The organizer's `overview.pdf` lists another pair of methods and six scores, but it evaluates a different pipeline/time-scoring rule; **those percentages are not a head-to-head leaderboard comparison**. Do not tune future models to the already inspected test labels and then describe the same tests as fresh validation.
 
 ## Layout
 
@@ -56,7 +56,7 @@ results/train_cv_candidates.json
 results/timing_audit.csv
 results/session_accuracy.png
 tests/                       synthetic, data-free checks
-docs/                        protocol and follow-up experiments
+docs/                        evaluation protocol
 data/                        locally downloaded archive and MAT files (ignored)
 ```
 
@@ -77,5 +77,41 @@ The controls compare fixed post-cue CSP with a **causally filtered,
 pre-instruction** power probe; both are scored on shuffled and contiguous
 (purged-neighbour) training-run folds. These are diagnostic out-of-fold
 training scores, **not a new test score**, an online classifier, or evidence
-that the feedback effect is solved. See [the repository review](docs/repo_review.md)
-and [the evaluation contract](docs/protocol.md).
+that the feedback effect is solved. See [the evaluation contract](docs/protocol.md).
+
+## Causal training-only replay
+
+`stroke-rehab causal-train` reads `configs/causal_training.json`, replays only
+six training MAT files in 64-sample chunks, and writes
+`results/causal_train_cv.csv`. With data elsewhere:
+
+```bash
+stroke-rehab causal-train --data-dir /path/to/extracted/stroke-rehab
+pytest -q
+```
+
+Each cue onset is passed to the stream only when its chunk arrives. The
+stateful filter bank yields a 48-dimensional log-variance feature from the
+2.5–3.5 s post-trigger interval (instruction at 2 s). A standardized,
+shrinkage linear discriminant analysis (LDA) model is fitted anew inside
+each five-fold **chronological, one-neighbour-purged** training-run split.
+A separately fitted complete training-run decoder can produce causal
+`DecisionEvent` objects from incoming EEG via `CausalTrialDecoder.process`.
+The earliest feature interval ends at 3.5 s; 64-sample chunking can add up
+to 0.25 s of acquisition delay. The reported per-chunk processing times are
+machine-dependent replay measurements, **not** validated device latency.
+
+| Training run | Causal, blocked out-of-fold correct / 80 |
+|:--|--:|
+| P1 PRE | 59 |
+| P1 POST | 70 |
+| P2 PRE | 35 |
+| P2 POST | 37 |
+| P3 PRE | 48 |
+| P3 POST | 36 |
+
+These are **training-only** scores, not held-out test results. The existing
+offline 2.5–6.5 s scores cannot be compared directly: they use more EEG,
+a different model and noncausal filtering. Feedback may occur in the early
+window, and this dataset does not provide its timestamps. No FES or clinical
+deployment is implied by the replay.

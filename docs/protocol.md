@@ -65,3 +65,35 @@ descriptive, unit-free heuristic, not an automated exclusion or clinical
 artifact definition. There are 2 flagged training trials in P1 PRE and
 2 in P2 POST, 0 in each other training run. The original baseline has not
 been reranked or retrained using these diagnostics.
+
+## Fixed causal training-only replay
+
+`configs/causal_training.json` defines a 64-sample (~250 ms) chunk, a
+2.5–3.5 s post-trigger decision window, five chronological validation
+blocks and one adjacent trial removed on each training side. Each session
+has a separate filter state, reset at the beginning of its continuous run.
+Incoming triggers are supplied only when their chunk arrives. A fourth-order
+Butterworth 8–12, 12–20 and 20–30 Hz filter bank operates with stateful,
+one-pass `sosfilt`; centred log variance per channel and band is accumulated
+incrementally. Training partitions fit a standard scaler and shrinkage LDA
+from scratch. `stroke-rehab causal-train` loads the six training MAT paths,
+never reads any test MAT and never selects a model using known test labels.
+The fitted full-training model is used only to benchmark end-to-end replay;
+its in-sample predictions are not scored. `results/causal_train_cv.csv`
+stores deterministic out-of-fold scores and decision times in EEG seconds.
+Runtime measurements are printed to the console rather than committed since
+they depend on the executing CPU. A decision stamped with the end sample of
+its chunk is not an experimental feedback timestamp or a measurement of
+external device latency. The data do not contain timing of contingent FES.
+
+The causal short-window power baseline is intentionally small (48 features,
+80 training trials per session) and has no window or hyperparameter search.
+With purged chronological folds, performance varies widely across sessions:
+59, 70, 35, 37, 48 and 36 correct out of 80, respectively. The poor scores
+for P2 and P3 must not be hidden by pooled accuracy or by relabelling this
+model a rehabilitation decoder. A model using earlier training trials can
+still inherit filters from previously seen validation EEG through the
+continuous, causal filter state. One full-trial purge makes that remote
+filter-state dependence small but does not establish sample independence.
+The interleaved per-trial triggering and zero initial filter state are
+algorithmic choices, not claims about the organizer's exact online hardware.

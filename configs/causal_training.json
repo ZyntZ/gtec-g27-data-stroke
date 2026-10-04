@@ -1,0 +1,11 @@
+{
+  "data_dir": "data/stroke-rehab",
+  "output": "results/causal_train_cv.csv",
+  "chunk_samples": 64,
+  "window_seconds": [
+    2.5,
+    3.5
+  ],
+  "folds": 5,
+  "purge_trials": 1
+}

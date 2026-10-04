@@ -1,0 +1,7 @@
+patient,session,train_trials,correct,accuracy,balanced_accuracy,chunk_samples,window_start_s,window_stop_s,n_splits,purge_trials,min_decision_s,max_decision_s
+P1,pre,80,59,0.7375,0.7375,64,2.5,3.5,5,1,3.5,3.7421875
+P1,post,80,70,0.875,0.875,64,2.5,3.5,5,1,3.50390625,3.72265625
+P2,pre,80,35,0.4375,0.4375,64,2.5,3.5,5,1,3.5,3.72265625
+P2,post,80,37,0.4625,0.4625,64,2.5,3.5,5,1,3.5,3.74609375
+P3,pre,80,48,0.6,0.6,64,2.5,3.5,5,1,3.5,3.7421875
+P3,post,80,36,0.45,0.45,64,2.5,3.5,5,1,3.5,3.71875

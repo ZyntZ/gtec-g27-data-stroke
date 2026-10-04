@@ -1,9 +1,6 @@
 """Command-line entry point."""
 import argparse
 
-from .download import download_and_extract
-from .experiment import evaluate_all
-from .plotting import plot_results
 
 
 def main(argv=None):
@@ -30,16 +27,22 @@ def main(argv=None):
     diagnostics.add_argument("--seed", type=int, default=None)
     diagnostics.add_argument("--folds", type=int, default=None)
     diagnostics.add_argument("--purge", type=int, default=None)
+    causal = sub.add_parser("causal-train", help="Replay and score the fixed causal training-only decoder")
+    causal.add_argument("--config", default="configs/causal_training.json")
+    causal.add_argument("--data-dir", default=None)
+    causal.add_argument("--output", default=None)
     plot = sub.add_parser("plot", help="Visualize saved session scores")
     plot.add_argument("--csv", default="results/session_results.csv")
     plot.add_argument("--output", default="results/session_accuracy.png")
     args = parser.parse_args(argv)
     if args.command == "download":
+        from .download import download_and_extract
         download_and_extract(args.archive, args.data_dir)
     elif args.command == "inventory":
         from .inventory import build_inventory
         print(f"Validated {len(build_inventory(args.data_dir, args.output))} MAT files")
     elif args.command == "run":
+        from .experiment import evaluate_all
         evaluate_all(args.data_dir, args.output_dir, seed=args.seed,
                      n_splits=args.folds)
     elif args.command == "audit":
@@ -58,7 +61,19 @@ def main(argv=None):
             purge=args.purge if args.purge is not None else config["purge_trials"],
         )
         print(f"Wrote {len(rows)} training-only diagnostic scores")
+    elif args.command == "causal-train":
+        import json
+        from pathlib import Path
+        from .causal_experiment import run_causal_training
+        config = json.loads(Path(args.config).read_text())
+        run_causal_training(
+            args.data_dir if args.data_dir is not None else config["data_dir"],
+            args.output if args.output is not None else config["output"],
+            chunk_samples=config["chunk_samples"],
+            window=tuple(config["window_seconds"]),
+            n_splits=config["folds"], purge=config["purge_trials"])
     else:
+        from .plotting import plot_results
         print(plot_results(args.csv, args.output))
 
 
