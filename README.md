@@ -2,6 +2,12 @@
 
 A reproducible starting line for the BR41N.IO Stroke Rehab track. We use the organizer's EEG recordings, keep training and test runs separate, and measure what our decoder actually does on **80 held-out trials per session**. Three active collaborators, six sessions, no mystery score.
 
+## Active team
+
+- [Anna Sokolova](https://github.com/ZyntZ)
+- [Jason Wang](https://github.com/wjason00)
+- [Sudip Sharma](https://github.com/nxxis)
+
 ## What is here
 
 - A verified download of the organizer archive (SHA-256 checked before extraction). The recordings stay in ignored `data/`, not Git or the update zip.
@@ -204,12 +210,6 @@ present, and test-run stimulation is contingent on earlier decoding. There
 are no precise feedback timestamps in this dataset. Do not use this audit to
 select 6.5 s and then report its score as an independent validation result.
 
-## Active team
-
-- [Anna Sokolova](https://github.com/ZyntZ)
-- [Jason Wang](https://github.com/wjason00)
-- [Sudip Sharma](https://github.com/nxxis)
-
 ## Training-only negative controls
 
 `stroke-rehab controls` reads `configs/negative_controls.json` and only the six
@@ -247,3 +247,12 @@ anticipation, residual filter state, or other confounds. Likewise, the early
 window is not guaranteed to precede visual or electrical feedback because
 per-trial feedback timestamps are unavailable. No new organizer test files or
 labels are read by this command.
+
+## Pull-request sanity checks
+
+The GitHub Actions `Sanity checks` workflow runs synthetic `pytest` cases on
+Python 3.11 and 3.13 and calls `python tools/repo_preflight.py` on the Git
+index. Preflight rejects staged MAT/RAR files, serialized estimators, cache
+folders and notebook error outputs. It does not download organizer data;
+training-only analyses must still be rerun locally before numerical changes
+are reviewed. Inspect `git diff --cached --stat` before pushing a PR.
