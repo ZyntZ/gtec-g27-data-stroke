@@ -1,0 +1,180 @@
+{
+  "scope": "Descriptive training runs only; no classifier, no test data.",
+  "primary_run": "P1_pre_training.mat",
+  "channel_columns_1based": {
+    "C3": 5,
+    "C4": 9
+  },
+  "channel_source": "Supplied montage.png",
+  "band_hz": [
+    8.0,
+    13.0
+  ],
+  "baseline_seconds": [
+    -1.0,
+    0.0
+  ],
+  "windows_seconds": {
+    "early": [
+      2.0,
+      3.5
+    ],
+    "full_task": [
+      2.0,
+      8.0
+    ]
+  },
+  "power_change": "10 * log10(task_mu_power / same_trial_baseline_mu_power)",
+  "welch": {
+    "window": "hann",
+    "nperseg": 256,
+    "noverlap": 128,
+    "nfft": 256,
+    "detrend": "constant",
+    "scaling": "density",
+    "average": "mean"
+  },
+  "segments_per_window": {
+    "baseline": 1,
+    "early": 2,
+    "full_task": 11
+  },
+  "artifact_rejection": "none; all trials shown",
+  "reference": "original supplied reference retained",
+  "physical_units": "unknown; raw power in original units squared; dB is a dimensionless within-trial ratio",
+  "feedback": "Diagram approximately 3.5 s, actual onset not separately recorded; no feedback-free claim",
+  "runtime": {
+    "python": "3.13.14",
+    "numpy": "1.26.4",
+    "scipy": "1.16.3"
+  },
+  "estimator_checks": {
+    "double_amplitude_is_6p0206_db": true,
+    "equal_power_is_zero_db": true,
+    "constant_offset_does_not_change_mu_power": true,
+    "25_hz_has_lower_mu_power_than_10_hz": true
+  },
+  "csv_roundtrip_checks": true,
+  "inputs": [
+    {
+      "file": "P1_pre_training.mat",
+      "sha256": "6a2b29ef701d3e839f9ce5e81a9e5df6458130e252a4d94465ecdf249b43c889",
+      "eeg_shape": [
+        271816,
+        16
+      ],
+      "checks": {
+        "finite_signal": true,
+        "fs_256_hz": true,
+        "channels_16": true,
+        "trials_80": true,
+        "left_40_right_40": true,
+        "held_blocks_8_seconds": true,
+        "all_baselines_in_bounds_and_unlabelled": true,
+        "positive_finite_bandpower": true,
+        "independent_first_band_integral_agrees": true,
+        "source_hash_unchanged": true
+      }
+    },
+    {
+      "file": "P1_post_training.mat",
+      "sha256": "88cdaa8214c015d39c8f18f68db8b02c6b46cfffaaeabe2f081d7f582f017732",
+      "eeg_shape": [
+        197343,
+        16
+      ],
+      "checks": {
+        "finite_signal": true,
+        "fs_256_hz": true,
+        "channels_16": true,
+        "trials_80": true,
+        "left_40_right_40": true,
+        "held_blocks_8_seconds": true,
+        "all_baselines_in_bounds_and_unlabelled": true,
+        "positive_finite_bandpower": true,
+        "independent_first_band_integral_agrees": true,
+        "source_hash_unchanged": true
+      }
+    },
+    {
+      "file": "P2_pre_training.mat",
+      "sha256": "7296aa803d488d6a8f1d1bd0621c1c011c561ac0dc8867c17256bc4a0ed4b93c",
+      "eeg_shape": [
+        223112,
+        16
+      ],
+      "checks": {
+        "finite_signal": true,
+        "fs_256_hz": true,
+        "channels_16": true,
+        "trials_80": true,
+        "left_40_right_40": true,
+        "held_blocks_8_seconds": true,
+        "all_baselines_in_bounds_and_unlabelled": true,
+        "positive_finite_bandpower": true,
+        "independent_first_band_integral_agrees": true,
+        "source_hash_unchanged": true
+      }
+    },
+    {
+      "file": "P2_post_training.mat",
+      "sha256": "fcb480909f6e2c4b81ce0fcebaca242e2ad4d5dc3163d205f74e3a1c45c845bb",
+      "eeg_shape": [
+        216720,
+        16
+      ],
+      "checks": {
+        "finite_signal": true,
+        "fs_256_hz": true,
+        "channels_16": true,
+        "trials_80": true,
+        "left_40_right_40": true,
+        "held_blocks_8_seconds": true,
+        "all_baselines_in_bounds_and_unlabelled": true,
+        "positive_finite_bandpower": true,
+        "independent_first_band_integral_agrees": true,
+        "source_hash_unchanged": true
+      }
+    },
+    {
+      "file": "P3_pre_training.mat",
+      "sha256": "247a1a5d585f60da71412892e3f70f10d59c6505cf079d7bb54f78cf779faeed",
+      "eeg_shape": [
+        205536,
+        16
+      ],
+      "checks": {
+        "finite_signal": true,
+        "fs_256_hz": true,
+        "channels_16": true,
+        "trials_80": true,
+        "left_40_right_40": true,
+        "held_blocks_8_seconds": true,
+        "all_baselines_in_bounds_and_unlabelled": true,
+        "positive_finite_bandpower": true,
+        "independent_first_band_integral_agrees": true,
+        "source_hash_unchanged": true
+      }
+    },
+    {
+      "file": "P3_post_training.mat",
+      "sha256": "ac47b77cf0d954f4287685d5cf81ffccf611befa1d9e1f3f21c42856afe2140c",
+      "eeg_shape": [
+        206504,
+        16
+      ],
+      "checks": {
+        "finite_signal": true,
+        "fs_256_hz": true,
+        "channels_16": true,
+        "trials_80": true,
+        "left_40_right_40": true,
+        "held_blocks_8_seconds": true,
+        "all_baselines_in_bounds_and_unlabelled": true,
+        "positive_finite_bandpower": true,
+        "independent_first_band_integral_agrees": true,
+        "source_hash_unchanged": true
+      }
+    }
+  ]
+}

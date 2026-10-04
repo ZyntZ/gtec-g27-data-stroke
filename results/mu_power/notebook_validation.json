@@ -1,0 +1,9 @@
+{
+  "schema_validation": "PASS",
+  "top_to_bottom_execution": "PASS",
+  "code_cells": 8,
+  "errors": 0,
+  "notebook": "03_mu_power.ipynb",
+  "csv_values_unchanged": true,
+  "personal_path_scan": "PASS"
+}

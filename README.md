@@ -19,7 +19,7 @@ A reproducible starting line for the BR41N.IO Stroke Rehab track. We use the org
 
 ## Get running
 
-Python 3.10+ and a system `libarchive` library are needed for the RAR reader (for example, `libarchive13` on Debian/Ubuntu). From the repository root:
+Python 3.11+ and a system `libarchive` library are needed for the RAR reader (for example, `libarchive13` on Debian/Ubuntu). From the repository root:
 
 ```bash
 python -m venv .venv
@@ -209,3 +209,12 @@ Pooled descriptive counts are 340, 384, 418 and 436 out of 480, respectively.
 present, and test-run stimulation is contingent on earlier decoding. There
 are no precise feedback timestamps in this dataset. Do not use this audit to
 select 6.5 s and then report its score as an independent validation result.
+
+## Training-only mu-power analysis
+
+[The executed C3/C4 notebook](notebooks/03_mu_power.ipynb) measures fixed
+8–13 Hz task/baseline power changes across the six training runs. It retains
+every trial, uses window-local spectra, and records checks and input hashes.
+It does not fit a classifier or load test EEG. Full-task measurements include
+feedback; these descriptive results do not establish rehabilitation benefit.
+See [methods and reproduction](analysis/mu_power/README.md).

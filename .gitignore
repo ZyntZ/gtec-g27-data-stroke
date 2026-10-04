@@ -1,0 +1,10 @@
+/data/
+*.mat
+*.rar
+.venv/
+__pycache__/
+.pytest_cache/
+.ipynb_checkpoints/
+.matplotlib-cache/
+.analysis-kernel.json
+*.egg-info/

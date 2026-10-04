@@ -22,6 +22,11 @@ The power baseline and CSP were fixed before examining test outcomes within the 
 
 ## How these metrics differ from the organizer's table
 
+The offline timing audit filters the continuous recording in both directions
+before selecting epochs. Later samples can therefore affect its early-window
+estimates. This is a timing sensitivity analysis, not a feedback-free or causal
+decoding control. The separate causal replay below uses a one-pass filter.
+
 The organizer reports `CSP+LDA` and `PCA+TVLDA` accuracies in `overview.pdf`. We report one fixed-window prediction per trial from a different model and implementation. Their referenced paper describes averaging classification accuracy over multiple time steps, then taking a maximum over a feedback period. We have **not** reproduced that protocol and do not claim our scores improve on it. Nor can offline `sosfiltfilt` be put directly into a real-time stimulator.
 
 ## Sources bundled with the organizer archive
