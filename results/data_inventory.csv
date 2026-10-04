@@ -1,0 +1,13 @@
+file,patient,session,run,fs_hz,samples,channels,trials,left_trials,right_trials,sha256
+P1_pre_training.mat,P1,pre,training,256,271816,16,80,40,40,6a2b29ef701d3e839f9ce5e81a9e5df6458130e252a4d94465ecdf249b43c889
+P1_pre_test.mat,P1,pre,test,256,204560,16,80,40,40,67932a40769002a7c15a8ce138562fb4ecbab9f6d5a92c99c310a76a9ae61bac
+P1_post_training.mat,P1,post,training,256,197343,16,80,40,40,88cdaa8214c015d39c8f18f68db8b02c6b46cfffaaeabe2f081d7f582f017732
+P1_post_test.mat,P1,post,test,256,194088,16,80,40,40,91faebdc77e73ce0b90917b3a0a42e50b5cf3da3aaa333c38672450fe603e840
+P2_pre_training.mat,P2,pre,training,256,223112,16,80,40,40,7296aa803d488d6a8f1d1bd0621c1c011c561ac0dc8867c17256bc4a0ed4b93c
+P2_pre_test.mat,P2,pre,test,256,199552,16,80,40,40,a7486f171e98ff5e362ac05983165771c9fd5ed9b964e79d0a495692a03994f9
+P2_post_training.mat,P2,post,training,256,216720,16,80,40,40,fcb480909f6e2c4b81ce0fcebaca242e2ad4d5dc3163d205f74e3a1c45c845bb
+P2_post_test.mat,P2,post,test,256,233576,16,80,40,40,d177cae4a56b06168df85db2e7b72df514b938f7198df91578c613454fcb3f21
+P3_pre_training.mat,P3,pre,training,256,205536,16,80,40,40,247a1a5d585f60da71412892e3f70f10d59c6505cf079d7bb54f78cf779faeed
+P3_pre_test.mat,P3,pre,test,256,248488,16,80,40,40,bccab42d93f4b1d5a9760bec9e6f88c6e7175aab5c239478cc7258e11179641c
+P3_post_training.mat,P3,post,training,256,206504,16,80,40,40,ac47b77cf0d954f4287685d5cf81ffccf611befa1d9e1f3f21c42856afe2140c
+P3_post_test.mat,P3,post,test,256,218432,16,80,40,40,73fcb2e93d4fa4d7db3a82f1e7e9389a55152a7dc9ab990819775610af984ccf
