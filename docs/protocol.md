@@ -97,3 +97,58 @@ continuous, causal filter state. One full-trial purge makes that remote
 filter-state dependence small but does not establish sample independence.
 The interleaved per-trial triggering and zero initial filter state are
 algorithmic choices, not claims about the organizer's exact online hardware.
+
+## Nested causal covariance protocol
+
+Versioned configuration `configs/spatial_nested.json` fixes the bands, the
+2.5–3.5 s window, 64-sample chunk size, five chronological outer folds,
+three chronological inner folds, one purged neighbouring trial, two filter
+pair counts (1 and 2), and ridge 0.01. The control is channel log variance,
+computed from the same stream's covariance diagonals; this ensures equal EEG
+availability and filter state for all candidates. The spatial estimator uses
+trace-normalized class-average covariances, ridge-stabilized generalized
+eigenvectors fitted on only the current fold's calibration trials, and log
+relative projected variances. All 80 training trials receive one outer-fold
+prediction per fixed method; the nested rule selects only by inner training
+accuracy (power first for exact ties). Validation trial labels are read only
+to score their own outer fold. Every programmatic input path ends in
+`_training.mat`; a calibration function rejects `_test.mat` paths. A local
+calibration model is trained on all 80 training trials after selection by
+training-only CV, never on held-out runs.
+
+| Training run | Nested | Power | CSP 1 pair | CSP 2 pairs |
+|:--|--:|--:|--:|--:|
+| P1 PRE | 66/80 | 59/80 | 70/80 | 66/80 |
+| P1 POST | 77/80 | 70/80 | 76/80 | 78/80 |
+| P2 PRE | 40/80 | 35/80 | 46/80 | 43/80 |
+| P2 POST | 48/80 | 37/80 | 46/80 | 49/80 |
+| P3 PRE | 55/80 | 48/80 | 56/80 | 53/80 |
+| P3 POST | 43/80 | 36/80 | 46/80 | 47/80 |
+
+The within-run outer-fold scores are an estimate for the predefined
+algorithm-selection rule, **not** an independent estimate for a new decision
+to choose CSP-1 after viewing this table. The 480 trial outcomes are
+clustered within just three patients and six runs. Purged blocks reduce,
+but cannot eliminate, within-run dependence. The causal filter's state can
+carry earlier EEG into later segments, although each trial is >8 s long;
+there is no selective refit on a test recording. External stimulation and
+feedback timestamps are not available. A classifiable early-window signal
+may be imagery, unintended cue information, or feedback. Model files use
+joblib/pickle and are unsafe to load from untrusted sources. This research
+replay never actuates functional electrical stimulation.
+
+## Fixed-model decision-latency sensitivity
+
+`configs/spatial_latency.json` fixes a single 1-pair CSP and 2.5 s window
+start while ending its observation at 3.5, 4.5, 5.5 or 6.5 s after trigger.
+`stroke-rehab latency-audit` fits each method only on the corresponding
+training portion of the same five chronological, one-neighbour-purged folds.
+`results/causal_latency_audit.csv` contains six sessions × four fixed
+endpoints. The output is a feedback-timing *diagnostic*, not a competing
+nested learner or permission to optimize against its validation labels.
+The aggregate counts 340/480, 384/480, 418/480 and 436/480 do not show
+motor-intent accuracy improves: later training trials can contain visual
+and functional electrical stimulation (FES) feedback. Subject-wise curves
+and numeric values are reproduced by `notebooks/02_causal_latency.ipynb`.
+The fixed early window remains the calibration default until feedback
+timestamps and the organizers' scoring contract establish a valid endpoint.

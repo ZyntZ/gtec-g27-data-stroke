@@ -1,0 +1,7 @@
+patient,session,train_trials,nested_correct,fixed_power_correct,fixed_csp_1pair_correct,fixed_csp_2pairs_correct,selection_power,selection_csp_1pair,selection_csp_2pairs,window_start_s,window_stop_s,chunk_samples,latest_decision_s
+P1,pre,80,66,59,70,66,0,2,3,2.5,3.5,64,3.7421875
+P1,post,80,77,70,76,78,0,4,1,2.5,3.5,64,3.72265625
+P2,pre,80,40,35,46,43,3,0,2,2.5,3.5,64,3.72265625
+P2,post,80,48,37,46,49,0,2,3,2.5,3.5,64,3.74609375
+P3,pre,80,55,48,56,53,0,2,3,2.5,3.5,64,3.7421875
+P3,post,80,43,36,46,47,0,3,2,2.5,3.5,64,3.71875

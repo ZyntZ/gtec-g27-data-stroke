@@ -1,0 +1,9 @@
+{
+  "data_dir": "data/stroke-rehab",
+  "output_dir": "results",
+  "chunk_samples": 64,
+  "window_seconds": [2.5, 3.5],
+  "outer_folds": 5,
+  "inner_folds": 3,
+  "purge_trials": 1
+}

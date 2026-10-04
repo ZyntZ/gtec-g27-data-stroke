@@ -31,6 +31,18 @@ def main(argv=None):
     causal.add_argument("--config", default="configs/causal_training.json")
     causal.add_argument("--data-dir", default=None)
     causal.add_argument("--output", default=None)
+    nested = sub.add_parser("nested-train", help="Nested blocked CV for fixed causal spatial candidates")
+    nested.add_argument("--config", default="configs/spatial_nested.json")
+    nested.add_argument("--data-dir", default=None)
+    nested.add_argument("--output-dir", default=None)
+    calibrate = sub.add_parser("calibrate-spatial", help="Fit trusted, local models on training runs only")
+    calibrate.add_argument("--config", default="configs/spatial_nested.json")
+    calibrate.add_argument("--data-dir", default=None)
+    calibrate.add_argument("--output-dir", default="data/models")
+    latency = sub.add_parser("latency-audit", help="Training-only, fixed-CSP feedback-timing sensitivity")
+    latency.add_argument("--config", default="configs/spatial_latency.json")
+    latency.add_argument("--data-dir", default=None)
+    latency.add_argument("--output", default=None)
     plot = sub.add_parser("plot", help="Visualize saved session scores")
     plot.add_argument("--csv", default="results/session_results.csv")
     plot.add_argument("--output", default="results/session_accuracy.png")
@@ -72,6 +84,37 @@ def main(argv=None):
             chunk_samples=config["chunk_samples"],
             window=tuple(config["window_seconds"]),
             n_splits=config["folds"], purge=config["purge_trials"])
+    elif args.command in ("nested-train", "calibrate-spatial"):
+        import json
+        from pathlib import Path
+        from .nested import export_calibrations, run_nested_training
+        config = json.loads(Path(args.config).read_text())
+        data_dir = args.data_dir if args.data_dir is not None else config["data_dir"]
+        if args.command == "nested-train":
+            run_nested_training(data_dir,
+                args.output_dir if args.output_dir is not None else config["output_dir"],
+                chunk_samples=config["chunk_samples"],
+                window=tuple(config["window_seconds"]),
+                outer_folds=config["outer_folds"], inner_folds=config["inner_folds"],
+                purge=config["purge_trials"])
+        else:
+            export_calibrations(data_dir, args.output_dir,
+                chunk_samples=config["chunk_samples"],
+                window=tuple(config["window_seconds"]),
+                n_splits=config["inner_folds"], purge=config["purge_trials"])
+    elif args.command == "latency-audit":
+        import json
+        from pathlib import Path
+        from .nested import run_latency_audit
+        config = json.loads(Path(args.config).read_text())
+        rows = run_latency_audit(
+            args.data_dir if args.data_dir is not None else config["data_dir"],
+            args.output if args.output is not None else config["output"],
+            window_starts=config["window_start_s"],
+            stops=tuple(config["window_stops_s"]),
+            chunk_samples=config["chunk_samples"],
+            folds=config["folds"], purge=config["purge_trials"])
+        print(f"Saved {len(rows)} exploratory training-only latency checks")
     else:
         from .plotting import plot_results
         print(plot_results(args.csv, args.output))

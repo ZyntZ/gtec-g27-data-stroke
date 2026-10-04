@@ -1,0 +1,9 @@
+{
+  "data_dir": "data/stroke-rehab",
+  "output": "results/causal_latency_audit.csv",
+  "window_start_s": 2.5,
+  "window_stops_s": [3.5, 4.5, 5.5, 6.5],
+  "chunk_samples": 64,
+  "folds": 5,
+  "purge_trials": 1
+}
