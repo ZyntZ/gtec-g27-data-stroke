@@ -43,6 +43,10 @@ def main(argv=None):
     latency.add_argument("--config", default="configs/spatial_latency.json")
     latency.add_argument("--data-dir", default=None)
     latency.add_argument("--output", default=None)
+    control = sub.add_parser("controls", help="Training-only pre-cue and label-permutation checks")
+    control.add_argument("--config", default="configs/negative_controls.json")
+    control.add_argument("--data-dir", default=None)
+    control.add_argument("--output", default=None)
     plot = sub.add_parser("plot", help="Visualize saved session scores")
     plot.add_argument("--csv", default="results/session_results.csv")
     plot.add_argument("--output", default="results/session_accuracy.png")
@@ -115,6 +119,17 @@ def main(argv=None):
             chunk_samples=config["chunk_samples"],
             folds=config["folds"], purge=config["purge_trials"])
         print(f"Saved {len(rows)} exploratory training-only latency checks")
+    elif args.command == "controls":
+        import json
+        from pathlib import Path
+        from .controls import run_controls
+        config = json.loads(Path(args.config).read_text())
+        run_controls(
+            args.data_dir if args.data_dir is not None else config["data_dir"],
+            args.output if args.output is not None else config["output"],
+            permutations=config["permutations"], seed=config["seed"],
+            folds=config["folds"], purge=config["purge_trials"],
+            chunk_samples=config["chunk_samples"])
     else:
         from .plotting import plot_results
         print(plot_results(args.csv, args.output))
