@@ -2,18 +2,24 @@
 
 A reproducible starting line for the BR41N.IO Stroke Rehab track. We use the organizer's EEG recordings, keep training and test runs separate, and measure what our decoder actually does on **80 held-out trials per session**. Three active collaborators, six sessions, no mystery score.
 
+## Active team
+
+- [Anna Sokolova](https://github.com/ZyntZ)
+- [Jason Wang](https://github.com/wjason00)
+- [Sudip Sharma](https://github.com/nxxis)
+
 ## What is here
 
 - A verified download of the organizer archive (SHA-256 checked before extraction). The recordings stay in ignored `data/`, not Git or the update zip.
 - A strict loader for the unusual trigger format: **one label repeated for 2,048 samples**, not 2,048 separate examples.
-- A 3-band EEG feature bank (8–12, 12–20, 20–30 Hz), a shrinkage linear discriminant analysis (LDA) baseline, and a regularized filter-bank common spatial patterns (CSP) model.
-- Training-run-only 5-fold trial-level cross-validation (CV), followed by one held-out test evaluation for each patient × session.
+- A 3-band EEG feature bank (8â€“12, 12â€“20, 20â€“30 Hz), a shrinkage linear discriminant analysis (LDA) baseline, and a regularized filter-bank common spatial patterns (CSP) model.
+- Training-run-only 5-fold trial-level cross-validation (CV), followed by one held-out test evaluation for each patient Ã— session.
 - A fixed early/late timing audit. This matters: a late high score is not automatically clean evidence of *motor-intent* decoding when the test run can contain conditional feedback.
 - Provenance, machine-readable scores, a figure, and synthetic unit tests. See [the protocol](docs/protocol.md) before comparing numbers with anyone else's.
 
 ## Get running
 
-Python 3.11+ and a system `libarchive` library are needed for the RAR reader (for example, `libarchive13` on Debian/Ubuntu). From the repository root:
+Python 3.10+ and a system `libarchive` library are needed for the RAR reader (for example, `libarchive13` on Debian/Ubuntu). From the repository root:
 
 ```bash
 python -m venv .venv
@@ -32,7 +38,7 @@ pytest -q
 
 ## First held-out run
 
-Selection is based on training-run CV alone. One final prediction is made for each test trial from **2.5–6.5 seconds after trigger onset**; the instruction is given at **2 seconds**. Numbers below are from the committed `results/session_results.csv`, seed 27.
+Selection is based on training-run CV alone. One final prediction is made for each test trial from **2.5â€“6.5 seconds after trigger onset**; the instruction is given at **2 seconds**. Numbers below are from the committed `results/session_results.csv`, seed 27.
 
 | Patient | PRE: correct / 80 | PRE accuracy | POST: correct / 80 | POST accuracy |
 |:--|--:|--:|--:|--:|
@@ -42,7 +48,7 @@ Selection is based on training-run CV alone. One final prediction is made for ea
 
 Overall: **433/480 = 90.2%** over these *six observed runs* (not 480 independent people). Both classes have 40 test trials per run. CSP won training CV in all six sessions; the other candidate's training CV scores are in `results/train_cv_candidates.json`. [View the figure](results/session_accuracy.png).
 
-The time audit is a warning, not a victory lap. With fixed CSP, the **2.5–3.5 s** window scored 364/480 (75.8%); the **4.5–6.5 s** window scored 412/480 (85.8%). In particular, P2 PRE scored 52/80 early versus 66/80 late. See `results/timing_audit.csv`. The late rise could reflect actual imagery, feedback-related activity, or both. This dataset does not isolate these explanations. This offline score is neither proof of a rehabilitation benefit nor a real-time deployment result.
+The time audit is a warning, not a victory lap. With fixed CSP, the **2.5â€“3.5 s** window scored 364/480 (75.8%); the **4.5â€“6.5 s** window scored 412/480 (85.8%). In particular, P2 PRE scored 52/80 early versus 66/80 late. See `results/timing_audit.csv`. The late rise could reflect actual imagery, feedback-related activity, or both. This dataset does not isolate these explanations. This offline score is neither proof of a rehabilitation benefit nor a real-time deployment result.
 
 The organizer's `overview.pdf` lists another pair of methods and six scores, but it evaluates a different pipeline/time-scoring rule; **those percentages are not a head-to-head leaderboard comparison**. Do not tune future models to the already inspected test labels and then describe the same tests as fresh validation.
 
@@ -92,7 +98,7 @@ pytest -q
 
 Each cue onset is passed to the stream only when its chunk arrives. The
 stateful filter bank yields a 48-dimensional log-variance feature from the
-2.5–3.5 s post-trigger interval (instruction at 2 s). A standardized,
+2.5â€“3.5 s post-trigger interval (instruction at 2 s). A standardized,
 shrinkage linear discriminant analysis (LDA) model is fitted anew inside
 each five-fold **chronological, one-neighbour-purged** training-run split.
 A separately fitted complete training-run decoder can produce causal
@@ -111,7 +117,7 @@ machine-dependent replay measurements, **not** validated device latency.
 | P3 POST | 36 |
 
 These are **training-only** scores, not held-out test results. The existing
-offline 2.5–6.5 s scores cannot be compared directly: they use more EEG,
+offline 2.5â€“6.5 s scores cannot be compared directly: they use more EEG,
 a different model and noncausal filtering. Feedback may occur in the early
 window, and this dataset does not provide its timestamps. No FES or clinical
 deployment is implied by the replay.
@@ -119,10 +125,10 @@ deployment is implied by the replay.
 ## Causal spatial decoding: nested training-run study
 
 `stroke-rehab nested-train` runs the fixed `configs/spatial_nested.json` design:
-causal 8–12/12–20/20–30 Hz Butterworth filtering, a single 2.5–3.5 s
+causal 8â€“12/12â€“20/20â€“30 Hz Butterworth filtering, a single 2.5â€“3.5 s
 post-trigger window (the cue occurs at 2 s), and streaming, mean-centered
-16×16 channel covariance per band. Unlike epoch buffering, inference only
-keeps the filter states plus O(3 × 16²) trial statistics. A fold-local,
+16Ã—16 channel covariance per band. Unlike epoch buffering, inference only
+keeps the filter states plus O(3 Ã— 16Â²) trial statistics. A fold-local,
 ridge-regularized common spatial patterns (CSP) estimator transforms each
 covariance to log relative spatial variance; standardized shrinkage linear
 discriminant analysis (LDA) makes the binary decision. Three candidates are
@@ -176,7 +182,7 @@ The pooled counts over the six *observed* runs are **329/480 nested**, versus
 2 pairs**. This does not demonstrate that nested selection beats the fixed
 CSP choices; all these numbers are exploratory training-run scores, not six
 independent patients. No new test-set score is claimed. Decisions depend on
-2.5–3.5 s EEG and appear by 3.5–3.75 s after the trigger with 64-sample
+2.5â€“3.5 s EEG and appear by 3.5â€“3.75 s after the trigger with 64-sample
 chunks. Unknown feedback/electrical-stimulation timing still prevents a
 feedback-free or medical-device performance claim.
 
@@ -207,24 +213,18 @@ select 6.5 s and then report its score as an independent validation result.
 ## Training-only mu-power analysis
 
 [The executed C3/C4 notebook](notebooks/03_mu_power.ipynb) measures fixed
-8–13 Hz task/baseline power changes across the six training runs. It retains
+8â€“13 Hz task/baseline power changes across the six training runs. It retains
 every trial, uses window-local spectra, and records checks and input hashes.
 It does not fit a classifier or load test EEG. Full-task measurements include
 feedback; these descriptive results do not establish rehabilitation benefit.
 See [methods and reproduction](analysis/mu_power/README.md).
-
-## Active team
-
-- [Anna Sokolova](https://github.com/ZyntZ)
-- [Jason Wang](https://github.com/wjason00)
-- [Sudip Sharma](https://github.com/nxxis)
 
 ## Training-only negative controls
 
 `stroke-rehab controls` reads `configs/negative_controls.json` and only the six
 `*_training.mat` recordings. It compares fixed one-pair causal CSP with the
 same fold-local shrinkage LDA on (i) an EEG window entirely **before** the
-instruction (0.5–1.75 s), and (ii) the early post-cue 2.5–3.5 s window.
+instruction (0.5â€“1.75 s), and (ii) the early post-cue 2.5â€“3.5 s window.
 Five contiguous validation folds purge a neighboring trial from fitting.
 Within each original 16-trial validation block, 99 randomizations shuffle
 trial labels while preserving that block's class counts; the *full pipeline*
@@ -256,3 +256,12 @@ anticipation, residual filter state, or other confounds. Likewise, the early
 window is not guaranteed to precede visual or electrical feedback because
 per-trial feedback timestamps are unavailable. No new organizer test files or
 labels are read by this command.
+
+## Pull-request sanity checks
+
+The GitHub Actions `Sanity checks` workflow runs synthetic `pytest` cases on
+Python 3.11 and 3.13 and calls `python tools/repo_preflight.py` on the Git
+index. Preflight rejects staged MAT/RAR files, serialized estimators, cache
+folders and notebook error outputs. It does not download organizer data;
+training-only analyses must still be rerun locally before numerical changes
+are reviewed. Inspect `git diff --cached --stat` before pushing a PR.
