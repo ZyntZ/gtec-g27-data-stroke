@@ -1,5 +1,6 @@
 # organizer recordings, archive and fitted models stay local
 data/
+results/mu_power/
 .venv/
 # slides, deck builders, animations and the video script are delivered outside Git
 presentation/

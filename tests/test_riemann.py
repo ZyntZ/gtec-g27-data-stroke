@@ -61,3 +61,5 @@ def test_layout_fit_prefers_the_generating_layout():
     assert paper[0] < -0.9 and paper[0] < other[0] and paper[1] < 0.01
     assert layout_for("x/P1_post_test.mat") == LAYOUTS["montage_png"]
     assert layout_for("x/P2_post_test.mat") == LAYOUTS["paper"]
+    assert layout_for("x/P1_pre_test.mat").index("C3") == 6
+    assert all(sorted(layout) == sorted(set(layout)) for layout in LAYOUTS.values())

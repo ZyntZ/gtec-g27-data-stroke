@@ -1,7 +1,7 @@
 """Cross-session transfer: decode a session with no calibration data from that day.
 
-The model is fitted on the SAME patient's other session (both runs) and applied
-to the target run. Every run is recentered by its own covariance average,
+The model is fitted on the training run of the SAME patient's other session and
+applied to the target run; no test run is ever used for fitting. Every run is recentered by its own covariance average,
 without labels; the target run is recentered causally, starting from its first
 trial. Channels are matched by NAME through `montage.layout_for`, because the
 two P1 sessions use different electrode layouts. `columns_as_stored` skips that
@@ -53,9 +53,8 @@ def run_transfer(data_root, output_file):
     for channels, names in (("common_names", COMMON), ("columns_as_stored", None)):
         cache = {path: _covariances(path, names) for pair in paths.values() for path in pair}
         for (patient, stage), targets in paths.items():
-            source = paths[patient, "post" if stage == "pre" else "pre"]
-            x = np.concatenate([_features(cache[p][0], online=False) for p in source])
-            y = np.concatenate([cache[p][1] for p in source])
+            source = paths[patient, "post" if stage == "pre" else "pre"][0]
+            x, y = _features(cache[source][0], online=False), cache[source][1]
             model = make_pipeline(StandardScaler(),
                                   LogisticRegression(C=0.01, max_iter=3000)).fit(x, y)
             for run, path in zip(("training", "test"), targets):
@@ -63,6 +62,7 @@ def run_transfer(data_root, output_file):
                 predicted = model.predict(_features(covariances, online=True))
                 rows.append(dict(patient=patient, session=stage, target_run=run,
                                  source_session="post" if stage == "pre" else "pre",
+                                 source_run="training",
                                  channels=channels,
                                  n_channels=covariances.shape[-1],
                                  correct=int((predicted == labels).sum()),
