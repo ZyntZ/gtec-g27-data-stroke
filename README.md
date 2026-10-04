@@ -251,8 +251,8 @@ labels are read by this command.
 ## Pull-request sanity checks
 
 Run `pytest -q` and `python tools/repo_preflight.py` locally before opening a
-pull request. The tracked `Sanity checks` workflow runs the same source-policy and data-free
-tests on Python 3.11 and 3.13; hosted runs are not verified here. Preflight rejects staged MAT/RAR files, serialized estimators, cache
+pull request. There is no hosted CI workflow in this repository; these checks
+run only when someone runs them. Preflight rejects staged MAT/RAR files, serialized estimators, cache
 folders and notebook error outputs. It does not download organizer data;
 training-only analyses must still be rerun locally before numerical changes
 are reviewed. Inspect `git diff --cached --stat` before pushing a PR.
@@ -262,8 +262,138 @@ are reviewed. Inspect `git diff --cached --stat` before pushing a PR.
 The compact [C3/C4 mu-power notebook](notebooks/03_mu_power.ipynb) and
 [reproduction instructions](analysis/mu_power/README.md) report the fixed
 8–13 Hz task-to-baseline contrast for all 80 trials in each training run.
-The montage identifies C3/C4 as columns 5/9. The analysis never opens test
+C3/C4 columns are looked up per file (see the channel-layout check below);
+earlier outputs that used columns 5/9 for every run are superseded. The analysis never opens test
 recordings and does not improve or select the decoder. Outputs are rebuilt
 locally under ignored `results/mu_power/`; the notebook contains no saved
 outputs. Windows include [2, 3.5) s and [2, 8) s after trigger; the cue is
 at 2 s. Feedback onset is unknown, including for the shorter window.
+
+## Riemannian decoder, decision-time curve and channel-layout check
+
+```bash
+stroke-rehab montage-check       # results/montage_check.csv
+stroke-rehab compare             # results/model_comparison.csv
+stroke-rehab decision-time       # results/decision_time.csv
+stroke-rehab plot-decision-time  # results/decision_time.png (--theme dark for slides)
+stroke-rehab lateralize          # results/lateralization.csv
+stroke-rehab transfer            # results/transfer.csv
+```
+
+**Read this first.** Every test-run number in this section is exploratory.
+The Riemannian model's settings were fixed in earlier solo work that had
+already seen these test runs, and the team has inspected them too, so none of
+these scores is an unbiased estimate. The 3.5 s line in the figure is the
+feedback-phase start drawn in `DatasetInformation.pdf`. It is an assumption
+from the protocol diagram, not a recorded FES timestamp: the files contain no
+per-trial stimulation marker, so nothing before 3.5 s is shown to be
+feedback-free.
+
+### Same trials, same windows
+
+`stroke-rehab compare` puts the selected filter-bank CSP model next to a
+filter-bank Riemannian tangent-space model (seven 4 Hz bands from 4 to 32 Hz,
+shrunk covariance, logistic regression, label-free online recentering; see
+`stroke_rehab/riemann.py`). Both use the strict loader (80 trials per run), the
+same seed-27 training folds, zero-phase filtering and one decision per test trial.
+The CSP column reproduces `session_results.csv` and `timing_audit.csv` exactly.
+
+| Window after trigger | Filter-bank CSP | Riemannian + recentering |
+|:--|--:|--:|
+| 2.5–6.5 s | 433/480 (90.2%) | 449/480 (93.5%) |
+| Early, 2.5–3.5 s | 364/480 (75.8%) | 376/480 (78.3%) |
+| Late, 4.5–6.5 s | 412/480 (85.8%) | 417/480 (86.9%) |
+
+On 2.5–6.5 s the two models disagree on 38 trials (27 only Riemannian correct,
+11 only CSP correct; exact McNemar p = 0.014, trials treated as independent,
+which they are not across six runs). Training-run CV does not separate them
+(442 versus 441 of 480), so a training-only selection rule would not reliably
+pick the Riemannian model. Without recentering it scores 441/480. The earlier
+solo figure of 444/479 used a 2.5–8.0 s window and dropped one P1 POST test
+trial (its loader required two seconds of EEG before the trigger; both P1
+POST runs start under 1.4 s before their first trial). With all 80 trials that
+window gives 444/480.
+
+### Accuracy against decision time
+
+`stroke-rehab decision-time` uses **causal** one-pass filters and a one-second
+window ending at the decision time, so no EEG after that time is used. Models
+are fitted on the training run and scored on the test run every 0.25 s.
+[Figure](results/decision_time.png); [dark version](results/decision_time_dark.png).
+
+| Decision time | 2.0 s | 3.0 s | 3.5 s | 4.25 s | 6.5 s | 8.0 s |
+|:--|--:|--:|--:|--:|--:|--:|
+| Filter-bank CSP | 48.1% | 59.4% | 74.6% | 84.8% | 77.7% | 72.5% |
+| Riemannian | 50.6% | 55.6% | 71.2% | 86.2% | 84.4% | 74.2% |
+
+Both models are at chance up to the instruction at 2 s. A 65–95 Hz power
+check found no consistent stimulation trace from which feedback onset could be
+timed, so the interval before 3.5 s is labelled "early post-cue".
+
+### Channel order differs between files
+
+`montage.png` lists FC3 FCz FC4 C5 C3 C1 Cz C2 C4 C6 CP3 CP1 CPz CP2 CP4 Pz.
+The bundled paper lists FC5 FC1 FCz FC2 FC6 C5 C3 C1 Cz C2 C4 C6 CP5 CP1 CP2
+CP6. Neighbouring electrodes share more signal than distant ones, so
+`stroke-rehab montage-check` rank-correlates electrode distance with signal
+correlation (8–30 Hz, median over trials; no labels are used) for each layout.
+
+| Files | Fit to `montage.png` | Fit to paper layout | Mains notch |
+|:--|--:|--:|--:|
+| P1 POST (2 files) | −0.96, −0.97 | −0.22, −0.24 | 60 Hz |
+| P1 PRE (2 files) | −0.13, −0.12 | −0.81, −0.80 (−0.93 with columns 13/14 exchanged) | 50 Hz |
+| P2, P3 (8 files) | −0.15 to −0.23 | −0.88 to −0.93 | 50 Hz |
+
+- **Only the two P1 POST files follow `montage.png`.** They also carry a
+  60 Hz notch where all others have 50 Hz, so that session used a different setup.
+- **The other ten follow the paper's layout.** In both P1 PRE files, columns
+  13 and 14 (CP5, CP1) fit clearly better exchanged; C3 and C4 are unaffected.
+- **Order, not only electrode set:** with the layout assigned to each file,
+  none of the 120 possible two-channel swaps improves the fit in any file.
+- **What this cannot show:** a left-right mirrored layout fits identically. In
+  every file the lowest-amplitude channel is on the right edge, which agrees
+  with the paper's right-earlobe reference but does not prove orientation. The
+  mapping is inferred from the signals and is not confirmed by the organizer.
+
+Within-session decoding does not depend on channel names. Anything that names
+a hemisphere or moves a model between P1 sessions does: **C3/C4 are columns
+7/11 in ten files and 5/9 only in P1 POST.** `stroke_rehab.montage.layout_for`
+returns the layout per file, and `analysis/mu_power/mu_pass.py` now uses it.
+The C3/C4 mu-power outputs produced earlier with columns 5/9 read FC6 and Cz
+in five of the six training runs and should not be used in slides.
+
+`stroke-rehab lateralize` uses that mapping, causal 13–30 Hz power relative to
+0.5–2 s, and C3/C4 each minus the mean of their two row neighbours (present in
+both layouts). In the early window (2–3.5 s) no patient shows a PRE-to-POST
+change in contralateral-minus-ipsilateral power (all Mann–Whitney p > 0.07).
+The PRE-to-POST hemisphere flip for P1 in the earlier solo analysis came from
+applying the `montage.png` labels to P1 PRE and does not hold.
+
+### Cross-session transfer with name-matched channels
+
+`stroke-rehab transfer` fits the Riemannian model on the **training run only**
+of the same patient's other session and applies it to the target session with
+no calibration data from that day (2.5–6.5 s, zero-phase filters). Each run is
+recentered on itself without labels; the target is recentered causally from
+its first trial. `common_names` uses the ten electrodes present in both
+layouts (FCz C5 C3 C1 Cz C2 C4 C6 CP1 CP2), matched by name;
+`columns_as_stored` uses all 16 columns in file order.
+
+| Target test run | Common names (10 channels) | Columns as stored (16) |
+|:--|--:|--:|
+| P1 PRE | 68/80 | 56/80 |
+| P1 POST | 73/80 | 53/80 |
+| P2 PRE | 64/80 | 67/80 |
+| P2 POST | 68/80 | 69/80 |
+| P3 PRE | 72/80 | 73/80 |
+| P3 POST | 72/80 | 75/80 |
+| Pooled | 417/480 (86.9%) | 393/480 (81.9%) |
+
+For P1, transfer is near chance with columns as stored and recovers when
+channels are matched by name, which is consistent with a channel-order
+mismatch between the two sessions; other differences between those recordings
+(such as the different recording setup) are not ruled out. For P2
+and P3 the layout is the same in both sessions, so the 16-column result is the
+valid one. Three of the six targets are decoded with a model from the LATER
+session, which could not happen in practice. Scores on the target training
+runs are in the CSV.

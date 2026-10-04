@@ -1,8 +1,14 @@
 # Training-only C3/C4 mu power
 
 This analysis measures 8–13 Hz power in the six **training** runs (three people,
-PRE and POST). It does not fit a decoder or open test runs. The supplied
-`montage.png` identifies C3 and C4 as EEG columns 5 and 9 (one-based).
+PRE and POST). It does not fit a decoder or open test runs. C3 and C4 are
+looked up per file: only P1 POST follows the supplied `montage.png` (EEG
+columns 5 and 9, one-based); the other five training runs follow the bundled
+paper's layout (columns 7 and 11). The mapping comes from `stroke-rehab
+montage-check` (`results/montage_check.csv`), which infers it from
+inter-channel correlations; it is not confirmed by the organizer. Figures and
+CSVs made before this change used columns 5 and 9 everywhere and are wrong
+for those five runs.
 
 From the repository root, after `stroke-rehab download`:
 

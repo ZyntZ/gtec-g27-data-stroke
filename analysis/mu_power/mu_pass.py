@@ -18,7 +18,12 @@ from scipy.integrate import trapezoid
 from scipy.io import loadmat
 from scipy.signal import welch
 
-CHANNELS = {"C3": 4, "C4": 8}  # Zero based; supplied montage.png: columns 5 and 9.
+from stroke_rehab.montage import FILE_LAYOUT, layout_for
+
+# Columns differ between files: only P1 POST follows the supplied montage.png
+# (C3/C4 in columns 5/9). The other training runs follow the bundled paper's
+# layout (columns 7/11). See `stroke-rehab montage-check`.
+CHANNELS = ("C3", "C4")
 BAND_HZ = (8.0, 13.0)
 WINDOWS = {"early": (2.0, 3.5), "full_task": (2.0, 8.0)}
 BASELINE_S = (-1.0, 0.0)
@@ -70,7 +75,9 @@ def read_training(path):
             raise ValueError("The label changes inside a block.")
         if onset < fs or not np.all(trigger[onset - fs:onset] == 0):
             raise ValueError("A one-second baseline overlaps a trial or file boundary.")
+    layout = layout_for(path)
     return {"path": path, "sha256": digest, "fs": fs, "eeg": eeg,
+            "columns": {channel: layout.index(channel) for channel in CHANNELS},
             "trigger": trigger, "onsets": onsets, "labels": labels,
             "checks": {"finite_signal": True, "fs_256_hz": True,
                        "channels_16": True, "trials_80": True,
@@ -100,7 +107,7 @@ def mu_power(epochs, fs=256):
 
 def get_epochs(recording, start_s, stop_s):
     fs = recording["fs"]
-    columns = list(CHANNELS.values())
+    columns = list(recording["columns"].values())
     return np.stack([recording["eeg"][onset + int(start_s * fs):
                                         onset + int(stop_s * fs), columns].T
                      for onset in recording["onsets"]])
@@ -120,7 +127,7 @@ def analyze_training(path):
             rows.append({"patient": patient, "stage": stage, "run": "training",
                          "trial": trial, "onset_sample_0based": int(onset),
                          "label": int(label), "hand": "left" if label == 1 else "right",
-                         "channel": channel, "column_1based": CHANNELS[channel] + 1,
+                         "channel": channel, "column_1based": recording["columns"][channel] + 1,
                          "baseline_mu_power_original_units_squared": float(baseline[trial - 1, column]),
                          "early_mu_power_original_units_squared": float(windows["early"]["power"][trial - 1, column]),
                          "full_task_mu_power_original_units_squared": float(windows["full_task"]["power"][trial - 1, column]),
@@ -202,7 +209,7 @@ def plot_p1(result, output):
                     axis.plot([x - .23, x + .23], [median, median], color="#202020", linewidth=2.5)
                     axis.text(x, 1.02, f"Median {median:+.2f} dB", ha="center", fontsize=10,
                               transform=axis.get_xaxis_transform())
-                axis.set_title(f"{channel} · EEG column {CHANNELS[channel] + 1}", y=1.13)
+                axis.set_title(f"{channel} · EEG column {result['recording']['columns'][channel] + 1}", y=1.13)
                 axis.set(xticks=[0, 1], xticklabels=["Left trials (+1)\nn = 40", "Right trials (−1)\nn = 40"],
                          xlim=(-.5, 1.5))
                 axis.grid(axis="y", color="#ECECEC", linewidth=.6)
@@ -282,8 +289,13 @@ def run_pass(data_dir=DEFAULT_DATA, output_dir=DEFAULT_OUTPUT):
     assert len(exported) == 960  # 6 runs x 80 trials x 2 channels, not 960 participants.
     assert float(exported[0]["full_task_change_db"]) == rows[0]["full_task_change_db"]
     provenance = {"scope": "Descriptive training runs only; no classifier, no test data.",
-                  "primary_run": "P1_pre_training.mat", "channel_columns_1based": {k: v + 1 for k, v in CHANNELS.items()},
-                  "channel_source": "Supplied montage.png", "band_hz": BAND_HZ,
+                  "primary_run": "P1_pre_training.mat",
+                  "channel_columns_1based": {r["recording"]["path"].name: {k: v + 1 for k, v in r["recording"]["columns"].items()}
+                                             for r in results},
+                  "channel_layout": {r["recording"]["path"].name: FILE_LAYOUT.get(r["recording"]["path"].stem, "paper")
+                                     for r in results},
+                  "channel_source": "Per-file layout inferred by stroke-rehab montage-check; not confirmed by the organizer",
+                  "band_hz": BAND_HZ,
                   "baseline_seconds": BASELINE_S, "windows_seconds": WINDOWS,
                   "power_change": "10 * log10(task_mu_power / same_trial_baseline_mu_power)",
                   "welch": {"window": "hann", "nperseg": 256, "noverlap": 128,

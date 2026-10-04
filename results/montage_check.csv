@@ -1,0 +1,13 @@
+patient,session,run,montage_png_rho,montage_png_perm_p,montage_png_adjacent_best_partner,paper_rho,paper_perm_p,paper_adjacent_best_partner,paper_cp5_cp1_swapped_rho,paper_cp5_cp1_swapped_perm_p,paper_cp5_cp1_swapped_adjacent_best_partner,best_layout,swaps_improving_best_layout,notch_hz,assumed_layout,lowest_amplitude_channel
+P1,pre,training,-0.126,0.1334,11,-0.807,0.0005,14,-0.933,0.0005,15,paper_cp5_cp1_swapped,0,50,paper_cp5_cp1_swapped,FC6
+P1,pre,test,-0.117,0.1494,11,-0.796,0.0005,14,-0.925,0.0005,15,paper_cp5_cp1_swapped,0,50,paper_cp5_cp1_swapped,FC6
+P1,post,training,-0.958,0.0005,16,-0.218,0.03,8,-0.197,0.036,8,montage_png,0,60,montage_png,C6
+P1,post,test,-0.967,0.0005,16,-0.242,0.0215,8,-0.219,0.026,8,montage_png,0,60,montage_png,C6
+P2,pre,training,-0.152,0.0945,9,-0.922,0.0005,15,-0.801,0.0005,14,paper,0,50,paper,C6
+P2,pre,test,-0.163,0.081,9,-0.925,0.0005,15,-0.795,0.0005,13,paper,0,50,paper,C6
+P2,post,training,-0.176,0.0615,11,-0.93,0.0005,15,-0.83,0.0005,14,paper,0,50,paper,CP6
+P2,post,test,-0.174,0.062,11,-0.928,0.0005,16,-0.826,0.0005,14,paper,0,50,paper,CP6
+P3,pre,training,-0.227,0.0195,12,-0.897,0.0005,15,-0.785,0.0005,12,paper,0,50,paper,CP6
+P3,pre,test,-0.207,0.0295,12,-0.884,0.0005,15,-0.772,0.0005,12,paper,0,50,paper,CP6
+P3,post,training,-0.16,0.0725,11,-0.897,0.0005,16,-0.794,0.0005,14,paper,0,50,paper,CP6
+P3,post,test,-0.173,0.0645,10,-0.893,0.0005,15,-0.791,0.0005,12,paper,0,50,paper,CP6
