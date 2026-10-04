@@ -2,12 +2,6 @@
 
 A reproducible starting line for the BR41N.IO Stroke Rehab track. We use the organizer's EEG recordings, keep training and test runs separate, and measure what our decoder actually does on **80 held-out trials per session**. Three active collaborators, six sessions, no mystery score.
 
-## Active team
-
-- [Anna Sokolova](https://github.com/ZyntZ) — GitHub: `ZyntZ`
-- [Jason Wang](https://github.com/wjason00) — GitHub: `wjason00`
-- [Sudip Sharma](https://github.com/nxxis) — GitHub: `nxxis` (Discord: Thomas)
-
 ## What is here
 
 - A verified download of the organizer archive (SHA-256 checked before extraction). The recordings stay in ignored `data/`, not Git or the update zip.
@@ -209,3 +203,9 @@ Pooled descriptive counts are 340, 384, 418 and 436 out of 480, respectively.
 present, and test-run stimulation is contingent on earlier decoding. There
 are no precise feedback timestamps in this dataset. Do not use this audit to
 select 6.5 s and then report its score as an independent validation result.
+
+## Active team
+
+- [Anna Sokolova](https://github.com/ZyntZ)
+- [Jason Wang](https://github.com/wjason00)
+- [Sudip Sharma](https://github.com/nxxis)
