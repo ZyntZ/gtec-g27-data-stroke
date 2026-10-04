@@ -1,0 +1,149 @@
+{
+  "checked_at_utc": "2026-10-04T22:22:27.039664+00:00",
+  "source_commit": "df5792c54044eb9bd1b5aca9dd5b277f5b58785a",
+  "upstream_commit": "45d5b91a17d94554a7483bd458a83f59605da6d8",
+  "method": "Identical module/notebook hashes verified against isolated overnight reproduction",
+  "notebook": {
+    "file": "03_mu_power.ipynb",
+    "source_sha256": "366d80de03e3f440842b2ecfe7705a8e8ccd10c10cdc509d1173e795894f6e51",
+    "executed_copy_sha256": "366d80de03e3f440842b2ecfe7705a8e8ccd10c10cdc509d1173e795894f6e51",
+    "code_cells": 8,
+    "errors": 0,
+    "status": "pass",
+    "seconds": 9.92
+  },
+  "csv_checks": [
+    {
+      "file": "mu_power/all_training_trial_mu.csv",
+      "status": "match",
+      "rows": 960,
+      "reference_sha256": "0ffa4e2fe7206c65f472f8026a320f8cca148ca4c6d5eccd497489f0eb43b265",
+      "actual_sha256": "0ffa4e2fe7206c65f472f8026a320f8cca148ca4c6d5eccd497489f0eb43b265"
+    },
+    {
+      "file": "mu_power/p1_pre_training_trial_mu.csv",
+      "status": "match",
+      "rows": 160,
+      "reference_sha256": "04937ef759937b2abf6f153f24d746213439536501bc52731911af0765edaa3f",
+      "actual_sha256": "04937ef759937b2abf6f153f24d746213439536501bc52731911af0765edaa3f"
+    },
+    {
+      "file": "mu_power/training_mu_summary.csv",
+      "status": "match",
+      "rows": 48,
+      "reference_sha256": "0a5b8919e894dbd9fb24fcfa332296a1cbbd8efcda9c99c223c30b447edc4619",
+      "actual_sha256": "0a5b8919e894dbd9fb24fcfa332296a1cbbd8efcda9c99c223c30b447edc4619"
+    }
+  ],
+  "montage": {
+    "supplied_order": "FC3 FCz FC4 C5 C3 C1 Cz C2 C4 C6 CP3 CP1 CPz CP2 CP4 Pz",
+    "C3_column_1based": 5,
+    "C4_column_1based": 9,
+    "verified_by": "Direct visual inspection of supplied montage.png; acquisition reference not independently established"
+  },
+  "trials": {
+    "training_runs": 6,
+    "trials_each": 80,
+    "left_each": 40,
+    "right_each": 40,
+    "total": 480,
+    "participants": 3
+  },
+  "windows_seconds": {
+    "baseline": [
+      -1,
+      0
+    ],
+    "early": [
+      2,
+      3.5
+    ],
+    "full_task": [
+      2,
+      8
+    ]
+  },
+  "P1_post_first_training_trial": {
+    "onset_sample": 351,
+    "baseline_start_sample": 95,
+    "baseline_valid": true,
+    "two_second_baseline_start_sample": -161
+  },
+  "frozen_pipeline": {
+    "source_commit": "1edae10a422d62a33e052b481af0a8b67e5404a3",
+    "runtime": {
+      "python": "3.13.14",
+      "numpy": "1.26.4",
+      "scipy": "1.16.3",
+      "sklearn": "1.8.0",
+      "pandas": "2.3.3"
+    },
+    "csv_comparisons": [
+      {
+        "file": "data_inventory.csv",
+        "reproduced_sha256": "47d5020d8aa5f92cbd5510ddbe91dca7a2a68fe36ccc7a3890176f8b6a794bc7",
+        "status": "match",
+        "reference_sha256": "47d5020d8aa5f92cbd5510ddbe91dca7a2a68fe36ccc7a3890176f8b6a794bc7",
+        "rows": 12
+      },
+      {
+        "file": "session_results.csv",
+        "reproduced_sha256": "0d0c0a5b473aa11e1f0fb1906a3fd4c335fba21a0f50b8231ee5670a37896ae9",
+        "status": "match",
+        "reference_sha256": "0d0c0a5b473aa11e1f0fb1906a3fd4c335fba21a0f50b8231ee5670a37896ae9",
+        "rows": 6
+      },
+      {
+        "file": "timing_audit.csv",
+        "reproduced_sha256": "c471c912867e5cb30bbf35ca5c4ab520f24a8c02994b574aa7f895376adfd9f6",
+        "status": "match",
+        "reference_sha256": "c471c912867e5cb30bbf35ca5c4ab520f24a8c02994b574aa7f895376adfd9f6",
+        "rows": 12
+      },
+      {
+        "file": "train_diagnostics.csv",
+        "reproduced_sha256": "9011d71275df2d721d2a5dd6df4ef9112dc728bf09569e2d758a00446965556a",
+        "status": "match",
+        "reference_sha256": "9011d71275df2d721d2a5dd6df4ef9112dc728bf09569e2d758a00446965556a",
+        "rows": 24
+      },
+      {
+        "file": "causal_train_cv.csv",
+        "reproduced_sha256": "071014d5204e37a9ce5cce70ebf66708c141050e0b1d3d6c4dfa555d1343b947",
+        "status": "match",
+        "reference_sha256": "071014d5204e37a9ce5cce70ebf66708c141050e0b1d3d6c4dfa555d1343b947",
+        "rows": 6
+      },
+      {
+        "file": "causal_nested_summary.csv",
+        "reproduced_sha256": "a4bf54c7c148e34a8f4363a850655b357b3a35b1b3eaaa4b279cf5841f4b40bb",
+        "status": "match",
+        "reference_sha256": "a4bf54c7c148e34a8f4363a850655b357b3a35b1b3eaaa4b279cf5841f4b40bb",
+        "rows": 6
+      },
+      {
+        "file": "causal_nested_folds.csv",
+        "reproduced_sha256": "e07d8d07c260b49f8071d6833d60e130f6ad03426a27f28d6691cac69f595cdc",
+        "status": "match",
+        "reference_sha256": "e07d8d07c260b49f8071d6833d60e130f6ad03426a27f28d6691cac69f595cdc",
+        "rows": 30
+      },
+      {
+        "file": "causal_latency_audit.csv",
+        "reproduced_sha256": "fa9fea5a1530e1476735463cd1cd01f9909aac5dac9defae32f0e4a641b46534",
+        "status": "match",
+        "reference_sha256": "fa9fea5a1530e1476735463cd1cd01f9909aac5dac9defae32f0e4a641b46534",
+        "rows": 24
+      },
+      {
+        "file": "training_negative_controls.csv",
+        "reproduced_sha256": "e2e69c5fbf5dbbdc73dce660cbb7e116bef37847f9894bcaeaf1d70b3cd63a56",
+        "status": "match",
+        "reference_sha256": "e2e69c5fbf5dbbdc73dce660cbb7e116bef37847f9894bcaeaf1d70b3cd63a56",
+        "rows": 12
+      }
+    ],
+    "inputs_unchanged": true
+  },
+  "boundaries": "Physiology uses training EEG only; frozen classifier reproduction separately reuses exposed tests. No accuracy improvement or treatment benefit claimed."
+}

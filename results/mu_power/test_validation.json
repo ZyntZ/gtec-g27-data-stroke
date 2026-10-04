@@ -1,11 +1,27 @@
 {
+  "checked_at_utc": "2026-10-04T22:22:27.039664+00:00",
+  "source_commit": "df5792c54044eb9bd1b5aca9dd5b277f5b58785a",
+  "upstream_commit": "45d5b91a17d94554a7483bd458a83f59605da6d8",
   "pytest_exit_code": 0,
-  "scope": "All synthetic tests on Anna main aa2ac65 plus the mu contribution",
-  "python": "3.12.13",
-  "numpy": "2.5.3",
-  "scipy": "1.18.1",
-  "scikit_learn": "1.9.1",
-  "pytest": "8.4.2",
-  "model_training_on_organiser_data": false,
-  "tests_passed": 34
+  "tests_passed": 39,
+  "scope": "All synthetic tests on latest Anna main plus this physiology contribution",
+  "runtime": {
+    "python": "3.13.14",
+    "numpy": "1.26.4",
+    "scipy": "1.16.3",
+    "sklearn": "1.8.0",
+    "pytest": "8.4.2"
+  },
+  "previous_receipt": {
+    "pytest_exit_code": 0,
+    "scope": "All synthetic tests on Anna main aa2ac65 plus the mu contribution",
+    "python": "3.12.13",
+    "numpy": "2.5.3",
+    "scipy": "1.18.1",
+    "scikit_learn": "1.9.1",
+    "pytest": "8.4.2",
+    "model_training_on_organiser_data": false,
+    "tests_passed": 34
+  },
+  "scientific_validation": false
 }

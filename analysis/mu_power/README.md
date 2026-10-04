@@ -38,3 +38,9 @@ participants.
 
 Input hashes, parameters, runtime versions, synthetic estimator checks and CSV
 readback are recorded in `results/mu_power/provenance_and_checks.json`.
+
+## Latest-main checks
+
+Verified against Anna main `45d5b91`; see [the reproduction receipt](../../results/mu_power/latest_main_verification.json) and refreshed test record (39 passing tests). The unchanged notebook executes all eight code cells; all three physiology CSVs reproduce exactly. Montage columns 5/9 and all 80 trials per run are verified. P1 POST starts at sample 351: the one-second baseline begins at sample 95, while a two-second baseline would cross the recording boundary.
+
+The configuration raises the minimum Python version from 3.10 to 3.11 because the hashing helper uses `hashlib.file_digest`, and adds an optional notebook dependency group. The notebook embeds three derived figures; the larger diff contains no raw EEG.
