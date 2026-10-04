@@ -252,9 +252,10 @@ labels are read by this command.
 
 ## Pull-request sanity checks
 
-The GitHub Actions `Sanity checks` workflow runs synthetic `pytest` cases on
-Python 3.11 and 3.13 and calls `python tools/repo_preflight.py` on the Git
-index. Preflight rejects staged MAT/RAR files, serialized estimators, cache
+Run the local checks with `python -m pytest -q` and
+`python tools/repo_preflight.py`. Preflight reads the Git index and rejects
+staged MAT/RAR files, serialized estimators, cache
 folders and notebook error outputs. It does not download organizer data;
 training-only analyses must still be rerun locally before numerical changes
 are reviewed. Inspect `git diff --cached --stat` before pushing a PR.
+This repository snapshot has no hosted sanity-check workflow; these are local checks.

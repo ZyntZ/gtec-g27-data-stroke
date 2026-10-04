@@ -91,6 +91,12 @@ def run(data_dir):
                     check['reference_sha256'] = digest(reference)
                     check['rows'] = len(actual)
                 record['comparisons'].append(check)
+            failures = [check for check in record['comparisons'] if check['status'] != 'match']
+            record['verification_passed'] = not failures
+            if failures:
+                save()
+                detail = ', '.join(f'{check["file"]}: {check["status"]}' for check in failures)
+                raise RuntimeError(f'{name} executed successfully but numerical verification failed: {detail}')
             record['status'] = 'complete'
             save()
             print(f'Finished {name}: {record["seconds"]} seconds; '
@@ -104,7 +110,7 @@ def run(data_dir):
     report['inputs_unchanged'] = True
     report['finished_stages'] = len(stages)
     save()
-    print('Frozen pipeline reproduction stages completed. Review mismatches and notebooks separately.', flush=True)
+    print('Frozen pipeline CSV verification passed. Review notebooks and model exports separately.', flush=True)
 
 
 if __name__ == '__main__':
