@@ -1,0 +1,9 @@
+{
+  "data_dir": "data/stroke-rehab",
+  "output": "results/training_negative_controls.csv",
+  "permutations": 99,
+  "seed": 27,
+  "folds": 5,
+  "purge_trials": 1,
+  "chunk_samples": 64
+}

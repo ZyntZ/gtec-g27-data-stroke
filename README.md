@@ -209,3 +209,41 @@ select 6.5 s and then report its score as an independent validation result.
 - [Anna Sokolova](https://github.com/ZyntZ)
 - [Jason Wang](https://github.com/wjason00)
 - [Sudip Sharma](https://github.com/nxxis)
+
+## Training-only negative controls
+
+`stroke-rehab controls` reads `configs/negative_controls.json` and only the six
+`*_training.mat` recordings. It compares fixed one-pair causal CSP with the
+same fold-local shrinkage LDA on (i) an EEG window entirely **before** the
+instruction (0.5–1.75 s), and (ii) the early post-cue 2.5–3.5 s window.
+Five contiguous validation folds purge a neighboring trial from fitting.
+Within each original 16-trial validation block, 99 randomizations shuffle
+trial labels while preserving that block's class counts; the *full pipeline*
+is refitted in every shuffle. This is a diagnostic, not a new model-selection
+endpoint. Results are saved to `results/training_negative_controls.csv`.
+
+```bash
+stroke-rehab controls
+# Or: stroke-rehab controls --data-dir /path/to/extracted/stroke-rehab
+```
+
+| Training run | Before instruction | Early post-cue | Early upper-tail permutation p |
+|:--|--:|--:|--:|
+| P1 PRE | 38/80 | 70/80 | 0.01 |
+| P1 POST | 39/80 | 76/80 | 0.01 |
+| P2 PRE | 37/80 | 46/80 | 0.14 |
+| P2 POST | 29/80 | 46/80 | 0.12 |
+| P3 PRE | 33/80 | 56/80 | 0.01 |
+| P3 POST | 39/80 | 46/80 | 0.17 |
+
+The one-sided p values are limited to 0.01 resolution by 99 randomizations;
+all sessions and both directions of a possible pre-instruction effect are
+reported in the CSV. These exploratory null distributions assume trial-label
+exchangeability *within* each temporal block and are not clinical evidence.
+In particular, 29/80 in the P2 POST pre-instruction control is below chance;
+its two-sided exploratory permutation p is 0.06 and should not be described
+as proof of no pre-cue information. EEG before the instruction could reflect
+anticipation, residual filter state, or other confounds. Likewise, the early
+window is not guaranteed to precede visual or electrical feedback because
+per-trial feedback timestamps are unavailable. No new organizer test files or
+labels are read by this command.
