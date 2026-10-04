@@ -1,6 +1,21 @@
-# G27 verification and research handoff — 4 October 2026
+# G27 verification and research handoff — 4–5 October 2026
 
-Anna's physiology PR [#1](https://github.com/ZyntZ/gtec-g27-data-stroke/pull/1) is ready for review at `8f44f8d`. It incorporates main `483ac87`; 42 tests and repository preflight pass. The numerical pipeline, notebook execution and model-export checks are complete. The single training-only selection sensitivity is mixed and is not adopted as a universal upgrade.
+Historical physiology PR [#1](https://github.com/ZyntZ/gtec-g27-data-stroke/pull/1) was ready at `8f44f8d` against main `483ac87` after 42 tests/preflight. Its implementation is now incorporated directly in main `44d240f`. The numerical pipeline, notebook execution and model-export checks are complete. The single training-only selection sensitivity is mixed and is not adopted as a universal upgrade.
+
+
+## Latest follow-up — 5 October 2026
+
+Main is now `44d240f`. Anna incorporated PR #1's identical physiology module, tests and eight notebook code cells, with saved outputs removed. The redundant PR #1 is closed as superseded; its commits and earlier receipts remain history. The separate model/research PR #2 integrates this main snapshot and remains draft for review.
+
+Astra's further review led to a portable published-CSV validator, nineteen independent arithmetic/membership checks, and eleven corruption/portability tests. It neither needs the ignored covariance cache nor claims that pytest ran. The notebook verifier also requires all three frozen physiology hashes; missing/changed references fail, with four regression tests. Current checks: **66 scientific-environment tests**, **63 default-environment tests plus one optional module skipped**, preflight and diff checks pass. The current compact physiology notebook executes all eight code cells and reproduces three CSV hashes, with all six training input hashes unchanged.
+
+Riemannian leads training classification accuracy, 437/480 versus fixed causal CSP422/480, but is worse on mean Brier (0.098683 vs0.083978) and log loss (0.343823 vs0.297291). It gains in two sessions, ties one and loses two trials in each other session. The report now presents this tradeoff and separates the +6.5s EEG cutoff from unmeasured delivered latency. Verified streaming exports concern separate early continuous-filter CSP models, not Riemannian deployment.
+
+Sudip's [PR #3](https://github.com/ZyntZ/gtec-g27-data-stroke/pull/3) supplies the requested time-resolved work and raises a substantive channel-layout hypothesis. It has been source-reviewed, not numerically reproduced by this pass. Correlation topology cannot certify electrode names/orientation. Keep physiology described as **columns5/9, labelledC3/C4 by the supplied montage**, pending authoritative acquisition metadata. Cross-run/source pooling also assumes channel correspondence; transfer failure may conflate layout and session effects. PR3 changes bands and adds sequential unlabeled recentering, so it is a different complete-pipeline comparison; its auxiliary transfer uses source test labels/zero-phase filtering and its beta lateralization pools training/test. These cannot validate this training-only physiology or PRE-training→POST-test result. Do not claim rehabilitation benefit or patient-level significance from trial resampling.
+
+**Learning:** yes, learn enough to explain the decoder chain, training/evaluation boundary, accuracy/confidence tradeoff and feedback limits. The existing first-trial notebook now has a complete optional15-minute decoder section with predictions and self-checks; seven total code cells execute without error and the original ten cell sources are unchanged. No learner answer/mastery is inferred. Use the existing NeuralBench guide§4.1–§4.2 for deeper covariance detail; deep geometry/game theory can wait. The smallest future two-learner simulation is specified in the existing literature review, proposed rather than launched.
+
+The older sections below describe the original frozen execution snapshots. Current sources and receipts are in `FINAL_CHECKS.json`, `main_integration_check.json` and `../accuracy_calibration/validation.json`. The new report table was checked against CSV arithmetic; a new browser preview was blocked by its local-file policy, so no new layout inspection is claimed.
 
 ## Reproduction and source
 

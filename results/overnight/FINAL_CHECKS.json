@@ -1,14 +1,14 @@
 {
-  "checked_at_utc": "2026-10-04T22:44:09.692164+00:00",
-  "base_commit": "483ac87b98ad385664b11986382e53a8c69abd2e",
+  "checked_at_utc": "2026-10-04T23:23:26.973055+00:00",
+  "base_commit": "44d240ffc82c2088ea58537e81565f3acb736ca0",
   "branch": "codex/calibration-review",
   "default_environment_tests": {
-    "passed": 46,
+    "passed": 63,
     "skipped_modules": 1,
     "reason": "Optional pyRiemann absent"
   },
   "scientific_environment_tests": {
-    "passed": 49,
+    "passed": 66,
     "python": "3.12.13",
     "numpy": "2.5.3",
     "scipy": "1.18.1",
@@ -28,6 +28,7 @@
     "original_comparator_matches_all_sessions": true
   },
   "source_files_sha256": {
+    "stroke_rehab/__init__.py": "5501c055e73bd2975e42e9084fd9639ff2d786d81f24eff9afcf9f2d78707380",
     "stroke_rehab/audit.py": "9360c2e00a34f5310b04d1a371fd019d20d53f1c1a8fc8201e2412caafcb93bb",
     "stroke_rehab/causal_experiment.py": "8892a9c84d7bfd204041c57f0fde97b3080d4a762436ba5cb506930a66477e57",
     "stroke_rehab/cli.py": "9e76a63c9aa580579e32755fdeb22cf04189726f9f853653a1c23864f0a838d9",
@@ -43,13 +44,13 @@
     "stroke_rehab/plotting.py": "b51ecb95f571a8c80ee120506e4ac64ad14a3c921ed449727eb3cc5859a8db34",
     "stroke_rehab/spatial.py": "490eabf8c9e2a8366eb4c5bc8720568838cc286384836c85b4aa8af6128741a9",
     "stroke_rehab/streaming.py": "c1e753649c5856ceead9cb5b35b860fb32ba174614453c599962a13dab304880",
-    "stroke_rehab/__init__.py": "5501c055e73bd2975e42e9084fd9639ff2d786d81f24eff9afcf9f2d78707380",
-    "analysis/accuracy_calibration/build_report.py": "0dd9681b566951ae5a2a5dd03470fd9752508d3fdbc0cde099db367c9c372fec",
+    "analysis/accuracy_calibration/build_report.py": "8e788162f9a760d954b4e1deb466a085390e9297891c0e4c841029d8e4c379c2",
     "analysis/accuracy_calibration/run.py": "35aa6acd3e1e6fa28d41c3de946ee98a78c4f64ea4c42bc3b14443ddea44369f",
-    "analysis/accuracy_calibration/validate.py": "fe4fd1373f28bbcde6914f987cd45ddf1bc7a8a96db9da8d381f857c9303a172",
+    "analysis/accuracy_calibration/validate.py": "c0ee65d8dede31493f6f34a5ccf1ed918067071025b1050a0f16523db7d69bcd",
+    "analysis/mu_power/mu_pass.py": "670678b581edb8441f0f1ea8deea7b21f037f66941dead64188ced1bd9ea4893",
     "analysis/overnight/reproduce.py": "ddf07ea27cfc478c3e4755a82d40400cb2960bb6b92e295a418ce77c71beb57d",
     "analysis/overnight/selection_sensitivity.py": "37a7bc2169ca6e8401edca8d566710b6769b51d764e90a5659aa57f848aaf348",
-    "analysis/overnight/verify_artifacts.py": "c52cfd5c6b6a2464cea9fb84f47a7d435b6255e938f1ab59a1c70da8070e2247",
+    "analysis/overnight/verify_artifacts.py": "43528d9c5a5060bc55b1af05808a87cbb86d7557215445d0a1809e695b3cad51",
     "tests/test_accuracy_calibration.py": "4629d3ed69e0ed1d7d615c4ab0b722605c6775d1a24860195a5d36ba2ae8c96a",
     "tests/test_causal_experiment.py": "c2f479cfed9b277991eb1a1b86ce5ede534c6973f4a47ba7a1dfff3a1e340d31",
     "tests/test_controls.py": "6e564068267f8584e52347c57669152459c59c539018d8776f1ae35b37142245",
@@ -57,9 +58,12 @@
     "tests/test_diagnostics.py": "dc20d12d27b88ad89ff4ef31a7ccdeb748421fa4b164d030eb20402024fa54cd",
     "tests/test_features.py": "f925760fddef914304a456f5445df5eaad64332ac383e01abfe4397c719bd659",
     "tests/test_models.py": "ee99bab25412cffcd5dba59d1bf1d740e2c09c71ec5813c9f03e14b65f1d3b77",
+    "tests/test_mu_power.py": "4cde4e0f77b2c964efbdcefad02f97732c27e3f84faf92adecb5553ac1f560ea",
     "tests/test_nested.py": "47cd25e14476ddc88fc5290a2c86fabaec0a79ca588819153ebf11dfec08c83e",
+    "tests/test_physiology_reference_checks.py": "d94fbd471fcbf84282a24bdf58aa3ef769918ae17d174d47078f10c0b19ea65f",
     "tests/test_repository_preflight.py": "4643513003eac5b043dd4b328dbf60b25d4ed1aa3c97b8a6f04d9feadd190e39",
     "tests/test_reproduction_receipts.py": "b4c352872d91c5575afbe1fd2c6f52c896445ae1d9da26fd00a7eb4b1d5563b7",
+    "tests/test_saved_accuracy_validation.py": "9d770ca1386961ba6f65776f1192880fd4c4ffed53f0b14d490d030d0c6bb9bb",
     "tests/test_selection_sensitivity.py": "088e058ecb6572f989d0705813df5438a54cb03f6359d1e9866dec648a967f55",
     "tests/test_spatial.py": "3cbd5a42a3e1eceaf5adf31ad0b79560e3937fa5356b5f88568ea20ba0297d1a",
     "tests/test_streaming.py": "4e1798b1bd36099da8290bb0d2e93ef7e9143685179e50c4d719875f84be51ed",
@@ -73,5 +77,41 @@
     "runtime_model_id": "not independently exposed by collaboration tool",
     "changes": "Correct nonexistent hosted-workflow and historical-report wording; fail on numerical mismatches/missing references",
     "numerical_results_changed": false
-  }
+  },
+  "previous_review_test_execution": {
+    "checked_at_utc": "2026-10-04T22:44:09.692164+00:00",
+    "base_commit": "483ac87b98ad385664b11986382e53a8c69abd2e",
+    "default_environment_tests": {
+      "passed": 63,
+      "skipped_modules": 1,
+      "reason": "Optional pyRiemann absent"
+    },
+    "scientific_environment_tests": {
+      "passed": 66,
+      "python": "3.12.13",
+      "numpy": "2.5.3",
+      "scipy": "1.18.1",
+      "sklearn": "1.9.1",
+      "pyriemann": "0.12",
+      "pytest": "8.4.2",
+      "runner": "Scientific environment; pytest imported from existing user package directory after scientific imports; plugin autoload disabled"
+    }
+  },
+  "astra_followup": {
+    "dispatch_model": "gpt-6-astra",
+    "requested_effort": "ultra",
+    "runtime_id": "not independently exposed",
+    "fixes": [
+      "Portable published CSV validation and truthful test evidence",
+      "Accuracy vs probability tradeoffs",
+      "EEG cutoff vs delivered latency and exported-model identity",
+      "Required frozen physiology CSV references on output-free main",
+      "Main integration and montage/transfer assumptions"
+    ],
+    "new_decoder_fitting": false,
+    "test_scores_changed": false
+  },
+  "main_integration_receipt": "main_integration_check.json",
+  "current_saved_csv_checks": 19,
+  "new_regression_tests": 15
 }

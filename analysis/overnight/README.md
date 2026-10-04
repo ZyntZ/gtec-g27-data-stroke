@@ -48,3 +48,11 @@ post-cue interval must not be called definitely feedback-free.
 ## Completed outputs
 
 [Morning report](../../results/overnight/MORNING_REPORT.md) summarizes nine exact pipeline CSV matches, three executed notebooks, six verified local model exports, the five-paper review and the single training-only split sensitivity. The newer preflight commit does not alter numerical methods. Both original and sensitivity results are retained; no new exposed-test scores were calculated for the sensitivity. Anna physiology PR #1 is ready for review at `8f44f8d` after 42 tests and preflight passed.
+
+## Follow-up integration — 5 October 2026
+
+Main advanced to `44d240f`: Anna carried over the same physiology module, tests and all eight notebook code cells while removing saved outputs. PR #1 is superseded by that commit. PR #2 retains the accuracy/verification extras and adds Anna's notebook extra and Python ≥3.11 requirement. Raw data and generated physiology outputs remain ignored on this branch; main itself has no tracked ignore file.
+
+The artifact runner now requires all three frozen physiology CSV hashes in `mu_reference_hashes.json`; an absent reference directory cannot silently produce zero checks. The current compact main notebook executes eight code cells without errors and matches all three historical CSV hashes, with unchanged six training input hashes. See `main_integration_check.json`. Earlier pipeline/export receipts keep their original snapshots.
+
+The supplied-montage mapping remains an assumption for each recording. PR #3's correlation topology does not verify acquisition labels or orientation; it proposes a layout hypothesis. Cross-run transfer and source pooling assume channel correspondence. PR #3's adapted Riemannian pipeline, feedback plots and transfer contract differ from this fixed-reference comparison; do not pool their scores.

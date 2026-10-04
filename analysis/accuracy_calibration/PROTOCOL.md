@@ -31,6 +31,13 @@ Probability reliability uses the full-training selected model's exposed-test pro
 
 ## PRE → POST transfer
 
+These cross-run fits and the zero-label source pooling assume consistent channel
+identity/order across recordings. [PR #3](https://github.com/ZyntZ/gtec-g27-data-stroke/pull/3)
+now raises a possible layout difference from signal topology. This is a hypothesis,
+not verified acquisition metadata; if true, the transfer scores also reflect
+channel mismatch. Do not interpret a poor transfer cell solely as physiological
+session drift, or change channel names/order using that hypothesis as ground truth.
+
 Select the model and settings using that participant's **80 PRE training trials only**. Fit once on those trials and score the **80 POST test trials**. No PRE test labels, POST training labels or POST-based settings are used. Report three patient cells separately. This differs from the original transfer script, which pools source training and test labels and also considers POST→PRE.
 
 ## Interpretation and finish condition

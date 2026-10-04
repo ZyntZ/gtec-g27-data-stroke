@@ -9,3 +9,4 @@ __pycache__/
 .analysis-kernel.json
 *.egg-info/
 results/accuracy_calibration/training_covariances.npz
+/results/mu_power/

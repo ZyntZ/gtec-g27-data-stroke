@@ -17,6 +17,27 @@ sys.path.insert(0, str(ROOT))
 def sha(path):
     return hashlib.sha256(path.read_bytes()).hexdigest()
 
+
+def verify_physiology_csvs(output, reference_manifest):
+    """Fail closed when output-free notebooks have no tracked reference CSVs."""
+    expected = {'mu_power/all_training_trial_mu.csv',
+                'mu_power/p1_pre_training_trial_mu.csv',
+                'mu_power/training_mu_summary.csv'}
+    refs = reference_manifest['csv_checks']
+    if len(refs) != len(expected) or {r['file'] for r in refs} != expected:
+        raise ValueError('Expected all three frozen physiology references')
+    checks = []
+    for reference in refs:
+        actual = Path(output) / reference['file']
+        actual_hash = sha(actual)
+        if actual_hash != reference['reference_sha256']:
+            raise RuntimeError(f"Physiology CSV mismatch: {reference['file']}")
+        checks.append(dict(file=reference['file'], status='match',
+                           reference_sha256=reference['reference_sha256'],
+                           actual_sha256=actual_hash,
+                           reference_source=reference_manifest['source_commit']))
+    return checks
+
 def run(data):
     import jsonschema
     import pandas as pd
@@ -99,13 +120,16 @@ def run(data):
             if client is not None: client.stop_channels()
             if manager.has_kernel: manager.shutdown_kernel(now=True)
             manager.cleanup_connection_file()
-    references = [ROOT / 'results/train_signal_qc.csv', *sorted((ROOT / 'results/mu_power').glob('*.csv'))]
+    references = [ROOT / 'results/train_signal_qc.csv']
     for reference in references:
         actual = output / reference.relative_to(ROOT / 'results')
         pd.testing.assert_frame_equal(pd.read_csv(actual),pd.read_csv(reference),
                                       check_exact=False,rtol=1e-10,atol=1e-10,check_dtype=False)
         receipt['csv_checks'].append(dict(file=str(reference.relative_to(ROOT / 'results')).replace('\\','/'),
             status='match',rows=len(pd.read_csv(actual)),reference_sha256=sha(reference),actual_sha256=sha(actual)))
+    if receipt['physiology_notebook_present']:
+        manifest = json.loads((ROOT / 'results/overnight/mu_reference_hashes.json').read_text())
+        receipt['csv_checks'].extend(verify_physiology_csvs(output, manifest))
     save()
     import joblib
     import numpy as np

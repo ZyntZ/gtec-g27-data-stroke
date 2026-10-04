@@ -4,6 +4,13 @@ This analysis measures 8–13 Hz power in the six **training** runs (three peopl
 PRE and POST). It does not fit a decoder or open test runs. The supplied
 `montage.png` identifies C3 and C4 as EEG columns 5 and 9 (one-based).
 
+Those names are an explicit supplied-montage assumption, not verified acquisition
+metadata for every recording. The new [montage PR #3](https://github.com/ZyntZ/gtec-g27-data-stroke/pull/3)
+investigates an alternative layout using signal correlations. That can identify
+a hypothesis to check, but not establish electrode identity or left/right
+orientation. Retain the calculation on columns 5/9 pending authoritative mapping;
+do not use these plots as verified hemisphere measurements.
+
 From the repository root, after `stroke-rehab download`:
 
 ```bash

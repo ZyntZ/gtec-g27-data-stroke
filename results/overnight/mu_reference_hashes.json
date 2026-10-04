@@ -1,0 +1,19 @@
+{
+  "source_commit": "4285e85f095a1c78aa3daad408c73b75fd3575d4",
+  "source_receipt": "artifact_checks.json (historical combined-worktree verification)",
+  "csv_checks": [
+    {
+      "file": "mu_power/all_training_trial_mu.csv",
+      "reference_sha256": "0ffa4e2fe7206c65f472f8026a320f8cca148ca4c6d5eccd497489f0eb43b265"
+    },
+    {
+      "file": "mu_power/p1_pre_training_trial_mu.csv",
+      "reference_sha256": "04937ef759937b2abf6f153f24d746213439536501bc52731911af0765edaa3f"
+    },
+    {
+      "file": "mu_power/training_mu_summary.csv",
+      "reference_sha256": "0a5b8919e894dbd9fb24fcfa332296a1cbbd8efcda9c99c223c30b447edc4619"
+    }
+  ],
+  "policy": "Exact frozen CSV hashes, required even when main stores notebook source without outputs; no ignored local CSV becomes its own reference."
+}
