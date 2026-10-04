@@ -21,7 +21,7 @@ A reproducible starting line for the BR41N.IO Stroke Rehab track. We use the org
 
 ## Get running
 
-Python 3.10+ and a system `libarchive` library are needed for the RAR reader (for example, `libarchive13` on Debian/Ubuntu). From the repository root:
+Python 3.11+ and a system `libarchive` library are needed for the RAR reader (for example, `libarchive13` on Debian/Ubuntu). From the repository root:
 
 ```bash
 python -m venv .venv
@@ -259,3 +259,14 @@ folders and notebook error outputs. It does not download organizer data;
 training-only analyses must still be rerun locally before numerical changes
 are reviewed. Inspect `git diff --cached --stat` before pushing a PR.
 This repository snapshot has no hosted sanity-check workflow; these are local checks.
+
+## Training-only physiology companion (review of PR #1)
+
+The compact [C3/C4 mu-power notebook](notebooks/03_mu_power.ipynb) and
+[reproduction instructions](analysis/mu_power/README.md) report the fixed
+8–13 Hz task-to-baseline contrast for all 80 trials in each training run.
+The montage identifies C3/C4 as columns 5/9. The analysis never opens test
+recordings and does not improve or select the decoder. Outputs are rebuilt
+locally under ignored `results/mu_power/`; the notebook contains no saved
+outputs. Windows include [2, 3.5) s and [2, 8) s after trigger; the cue is
+at 2 s. Feedback onset is unknown, including for the shorter window.
