@@ -23,6 +23,13 @@ def main(argv=None):
     audit = sub.add_parser("audit", help="Predeclared early/late CSP sensitivity check")
     audit.add_argument("--data-dir", default="data/stroke-rehab")
     audit.add_argument("--output", default="results/timing_audit.csv")
+    diagnostics = sub.add_parser("diagnose", help="Training-only pre-cue and temporal CV controls")
+    diagnostics.add_argument("--config", default="configs/diagnostics.json")
+    diagnostics.add_argument("--data-dir", default=None)
+    diagnostics.add_argument("--output", default=None)
+    diagnostics.add_argument("--seed", type=int, default=None)
+    diagnostics.add_argument("--folds", type=int, default=None)
+    diagnostics.add_argument("--purge", type=int, default=None)
     plot = sub.add_parser("plot", help="Visualize saved session scores")
     plot.add_argument("--csv", default="results/session_results.csv")
     plot.add_argument("--output", default="results/session_accuracy.png")
@@ -38,6 +45,19 @@ def main(argv=None):
     elif args.command == "audit":
         from .audit import run_audit
         print(run_audit(args.data_dir, args.output))
+    elif args.command == "diagnose":
+        from .diagnostics import run_diagnostics
+        import json
+        from pathlib import Path
+        config = json.loads(Path(args.config).read_text())
+        rows = run_diagnostics(
+            args.data_dir if args.data_dir is not None else config["data_dir"],
+            args.output if args.output is not None else config["output"],
+            seed=args.seed if args.seed is not None else config["seed"],
+            n_splits=args.folds if args.folds is not None else config["folds"],
+            purge=args.purge if args.purge is not None else config["purge_trials"],
+        )
+        print(f"Wrote {len(rows)} training-only diagnostic scores")
     else:
         print(plot_results(args.csv, args.output))
 

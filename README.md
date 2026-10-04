@@ -21,6 +21,7 @@ python -m venv .venv
 python -m pip install -e '.[test]'
 stroke-rehab download
 stroke-rehab inventory
+stroke-rehab diagnose
 stroke-rehab run
 stroke-rehab audit
 stroke-rehab plot
@@ -60,3 +61,21 @@ data/                        locally downloaded archive and MAT files (ignored)
 ```
 
 The source download is [g.tec's Stroke Rehab archive](https://www.gtec.at/downloads_QyTs23/Hackathon/stroke-rehab.rar). See its `DatasetInformation.pdf` and `overview.pdf` for recording details. These recordings and the supplied PDFs are not redistributed here; use the organizer's access terms when sharing the data.
+
+## Training-only stress tests and EDA
+
+Run `stroke-rehab diagnose` after downloading, then open
+`notebooks/01_training_eda.ipynb` from the repository root (run all cells).
+`configs/diagnostics.json` is read by the command; use `--config` to change its
+location or `--data-dir` if the archive was extracted elsewhere. The
+notebook reads only training-run EEG and saves `results/train_signal_qc.csv`
+and `results/train_diagnostics.png`. Reproducing a local analysis with data
+outside `data/stroke-rehab` requires setting `STROKE_REHAB_DATA` to the
+extracted directory. No MAT recordings belong in a commit.
+
+The controls compare fixed post-cue CSP with a **causally filtered,
+pre-instruction** power probe; both are scored on shuffled and contiguous
+(purged-neighbour) training-run folds. These are diagnostic out-of-fold
+training scores, **not a new test score**, an online classifier, or evidence
+that the feedback effect is solved. See [the repository review](docs/repo_review.md)
+and [the evaluation contract](docs/protocol.md).

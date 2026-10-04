@@ -30,3 +30,38 @@ The organizer reports `CSP+LDA` and `PCA+TVLDA` accuracies in `overview.pdf`. We
 - `overview.pdf` (MAT variable descriptions and the original method table).
 - `StrokeRehab.pdf` (feasibility study; interpretation of treatment and BCI feedback).
 - `Gruenwald et al. - 2019 - Time-Variant Linear Discriminant Analysis Improves.pdf` (methodological background, not our implemented classifier).
+
+## Added training-only controls (not a replacement leaderboard)
+
+`stroke-rehab diagnose` loads only the six training MAT files. Its JSON
+manifest `configs/diagnostics.json` fixes the five folds, seed 27 and
+one-neighbour purge. It compares random stratified trial folds with five
+contiguous 16-trial validation blocks. The latter exclude adjacent trials
+from each training partition but score each trial once. Every fitted CSP,
+scaler and LDA is learned anew on that fold's training trials. These scores
+do not select or modify the original held-out models. The post-cue CSP
+uses the original offline 2.5–6.5 s feature and is **noncausal**. The other
+control is causal 8–12, 12–20 and 20–30 Hz channel log-power, with a
+0.5–1.75 s window entirely before the instruction at +2 s. Because it is
+filtered causally on the continuous run, later EEG cannot enter this window.
+Its analysis still cannot determine when feedback begins.
+
+| Training run | Pre-cue random | Pre-cue blocked | Post-cue CSP random | Post-cue CSP blocked |
+|:--|--:|--:|--:|--:|
+| P1 PRE | 46/80 | 39/80 | 77/80 | 75/80 |
+| P1 POST | 33/80 | 31/80 | 79/80 | 79/80 |
+| P2 PRE | 35/80 | 34/80 | 71/80 | 71/80 |
+| P2 POST | 37/80 | 33/80 | 74/80 | 74/80 |
+| P3 PRE | 30/80 | 31/80 | 72/80 | 72/80 |
+| P3 POST | 36/80 | 36/80 | 68/80 | 68/80 |
+
+Do not interpret the pre-cue numbers as proving a clean decoder: some are
+below 50%, and inverted classification can itself be informative. Neither
+these 80 trials nor the six runs are independent patient replications.
+Temporal folds can still share stable within-run artifacts. The notebook's
+`gross_excursion_trials` flags a trial if at least one channel has post-cue
+peak-to-peak amplitude >5× that channel's within-run median. This is a
+descriptive, unit-free heuristic, not an automated exclusion or clinical
+artifact definition. There are 2 flagged training trials in P1 PRE and
+2 in P2 POST, 0 in each other training run. The original baseline has not
+been reranked or retrained using these diagnostics.

@@ -1,0 +1,7 @@
+{
+  "data_dir": "data/stroke-rehab",
+  "output": "results/train_diagnostics.csv",
+  "seed": 27,
+  "folds": 5,
+  "purge_trials": 1
+}
