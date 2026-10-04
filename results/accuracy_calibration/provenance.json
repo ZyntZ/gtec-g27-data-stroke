@@ -1,0 +1,76 @@
+{
+  "protocol": "../../analysis/accuracy_calibration/PROTOCOL.md",
+  "date": "2026-10-04",
+  "python": "3.13.14",
+  "numpy": "2.4.6",
+  "scipy": "1.16.3",
+  "sklearn": "1.8.0",
+  "pyriemann": "0.12",
+  "selection_receipt_sha256": "f4ff773cdf1079e24abdcb37df6c5e71e67f696bea81ddc924a8037d6582259c",
+  "files": [
+    {
+      "name": "P1_post_test.mat",
+      "sha256": "91faebdc77e73ce0b90917b3a0a42e50b5cf3da3aaa333c38672450fe603e840"
+    },
+    {
+      "name": "P1_post_training.mat",
+      "sha256": "88cdaa8214c015d39c8f18f68db8b02c6b46cfffaaeabe2f081d7f582f017732"
+    },
+    {
+      "name": "P1_pre_test.mat",
+      "sha256": "67932a40769002a7c15a8ce138562fb4ecbab9f6d5a92c99c310a76a9ae61bac"
+    },
+    {
+      "name": "P1_pre_training.mat",
+      "sha256": "6a2b29ef701d3e839f9ce5e81a9e5df6458130e252a4d94465ecdf249b43c889"
+    },
+    {
+      "name": "P2_post_test.mat",
+      "sha256": "d177cae4a56b06168df85db2e7b72df514b938f7198df91578c613454fcb3f21"
+    },
+    {
+      "name": "P2_post_training.mat",
+      "sha256": "fcb480909f6e2c4b81ce0fcebaca242e2ad4d5dc3163d205f74e3a1c45c845bb"
+    },
+    {
+      "name": "P2_pre_test.mat",
+      "sha256": "a7486f171e98ff5e362ac05983165771c9fd5ed9b964e79d0a495692a03994f9"
+    },
+    {
+      "name": "P2_pre_training.mat",
+      "sha256": "7296aa803d488d6a8f1d1bd0621c1c011c561ac0dc8867c17256bc4a0ed4b93c"
+    },
+    {
+      "name": "P3_post_test.mat",
+      "sha256": "73fcb2e93d4fa4d7db3a82f1e7e9389a55152a7dc9ab990819775610af984ccf"
+    },
+    {
+      "name": "P3_post_training.mat",
+      "sha256": "ac47b77cf0d954f4287685d5cf81ffccf611befa1d9e1f3f21c42856afe2140c"
+    },
+    {
+      "name": "P3_pre_test.mat",
+      "sha256": "bccab42d93f4b1d5a9760bec9e6f88c6e7175aab5c239478cc7258e11179641c"
+    },
+    {
+      "name": "P3_pre_training.mat",
+      "sha256": "247a1a5d585f60da71412892e3f70f10d59c6505cf079d7bb54f78cf779faeed"
+    }
+  ],
+  "code_sha256": "b832c6b1475a4424005b08cb760ea5bb45b902c2cbc66d676a76834c5493ee02",
+  "current_code_sha256": "9138a413d4abf6603cfd74cf8e900528c8ac09ba3f95e52c09c1ee8a817295f3",
+  "post_run_plot_changes": "Full subset min/max bars replace SD bars; margin and label positions adjusted after visual inspection. Numerical fitting, selection and score CSVs unchanged.",
+  "output_sha256": {
+    "baseline_reproduction.csv": "96454b776c13dd803e3adca46b960e0646998bba7a2457dcabe2968a261ca908",
+    "calibration_curves.csv": "8ddf173f78a78852e5f0e46b9739caaa79e402e0446712a817659002033785e5",
+    "calibration_subsets.csv": "fa68f8d263d34cf0a1c16565bed2cfbac7bbe94af697cf7219fce2b9dc995ddc",
+    "exploratory_test_accuracy.csv": "1ba4f0f92f3b4586271b34d2da8350088d99b1327caaaad6cc98f2eb8bf86b1e",
+    "nested_training_cv.csv": "9b27aab33a167749c6778162e8fabcf5d2f53e16c4ae0ccddede5497e8831f93",
+    "nxxis_reference_reproduction.csv": "75599f41b2a8515a1aca2d3dd53d3ca88dc7dd0bc2b25821534d088d45b4a8ac",
+    "pre_post_transfer.csv": "71e355835b1bfb97c0cd93a16b56f25b341c88d61f189440567da14e88424640",
+    "probability_reliability.csv": "2ee2ab477cb5c4f78142b50ed4475a84b2e0556f378f93667e1ea1aa481360eb",
+    "training_oof_predictions.csv": "99467bdaeab9f8c40f104a47a500a15dbfb510a6b2f2065490413899c13028d8"
+  },
+  "repository_correction": "Anna/ZyntZ is the team repository, based on ffcdb7e. Independent comparison outputs moved unchanged from the separate nxxis reference checkout. Reproduced Anna baseline433/480 here; nxxis444/479 remains a separate reference receipt.",
+  "assistant_model": "Current Codex session and inherited specialist review; exact model/effort identifier was not exposed by tool results."
+}

@@ -1,0 +1,4 @@
+patient,direction,source_trials,source_test_labels_used,target_calibration_labels,chosen_setting,correct,trials,accuracy,balanced_accuracy,brier,log_loss
+P1,PRE training -> POST test,80,0,0,"('TV-CSP', 4)",40,80,0.5,0.5,0.4531255649907672,2.1336860783304368
+P2,PRE training -> POST test,80,0,0,"('FBCSP', 2)",52,80,0.65,0.65,0.3356222179173221,2.2278421337472656
+P3,PRE training -> POST test,80,0,0,"('Riemann', 0.01)",65,80,0.8125,0.8125,0.1311601745553948,0.40987340373273967

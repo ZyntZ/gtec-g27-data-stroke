@@ -1,0 +1,374 @@
+{
+  "P1_pre": {
+    "chosen": [
+      "TV-CSP",
+      4
+    ],
+    "grid": [
+      [
+        "FBCSP",
+        2
+      ],
+      [
+        "FBCSP",
+        4
+      ],
+      [
+        "Riemann",
+        0.01
+      ],
+      [
+        "Riemann",
+        0.1
+      ],
+      [
+        "TV-CSP",
+        2
+      ],
+      [
+        "TV-CSP",
+        4
+      ]
+    ],
+    "cv_accuracy": [
+      0.6625,
+      0.9375,
+      0.925,
+      0.9375,
+      0.8625,
+      0.9625
+    ],
+    "families": {
+      "CSP-baseline": [
+        "CSP-baseline",
+        4
+      ],
+      "FBCSP": [
+        "FBCSP",
+        4
+      ],
+      "Riemann": [
+        "Riemann",
+        0.1
+      ],
+      "TV-CSP": [
+        "TV-CSP",
+        4
+      ],
+      "selected": [
+        "TV-CSP",
+        4
+      ]
+    }
+  },
+  "P1_post": {
+    "chosen": [
+      "FBCSP",
+      4
+    ],
+    "grid": [
+      [
+        "FBCSP",
+        2
+      ],
+      [
+        "FBCSP",
+        4
+      ],
+      [
+        "Riemann",
+        0.01
+      ],
+      [
+        "Riemann",
+        0.1
+      ],
+      [
+        "TV-CSP",
+        2
+      ],
+      [
+        "TV-CSP",
+        4
+      ]
+    ],
+    "cv_accuracy": [
+      0.975,
+      1.0,
+      0.9875,
+      1.0,
+      1.0,
+      1.0
+    ],
+    "families": {
+      "CSP-baseline": [
+        "CSP-baseline",
+        4
+      ],
+      "FBCSP": [
+        "FBCSP",
+        4
+      ],
+      "Riemann": [
+        "Riemann",
+        0.1
+      ],
+      "TV-CSP": [
+        "TV-CSP",
+        2
+      ],
+      "selected": [
+        "FBCSP",
+        4
+      ]
+    }
+  },
+  "P2_pre": {
+    "chosen": [
+      "FBCSP",
+      2
+    ],
+    "grid": [
+      [
+        "FBCSP",
+        2
+      ],
+      [
+        "FBCSP",
+        4
+      ],
+      [
+        "Riemann",
+        0.01
+      ],
+      [
+        "Riemann",
+        0.1
+      ],
+      [
+        "TV-CSP",
+        2
+      ],
+      [
+        "TV-CSP",
+        4
+      ]
+    ],
+    "cv_accuracy": [
+      0.7875,
+      0.7875,
+      0.75,
+      0.75,
+      0.7125,
+      0.7875
+    ],
+    "families": {
+      "CSP-baseline": [
+        "CSP-baseline",
+        4
+      ],
+      "FBCSP": [
+        "FBCSP",
+        2
+      ],
+      "Riemann": [
+        "Riemann",
+        0.01
+      ],
+      "TV-CSP": [
+        "TV-CSP",
+        4
+      ],
+      "selected": [
+        "FBCSP",
+        2
+      ]
+    }
+  },
+  "P2_post": {
+    "chosen": [
+      "FBCSP",
+      4
+    ],
+    "grid": [
+      [
+        "FBCSP",
+        2
+      ],
+      [
+        "FBCSP",
+        4
+      ],
+      [
+        "Riemann",
+        0.01
+      ],
+      [
+        "Riemann",
+        0.1
+      ],
+      [
+        "TV-CSP",
+        2
+      ],
+      [
+        "TV-CSP",
+        4
+      ]
+    ],
+    "cv_accuracy": [
+      0.9,
+      0.95,
+      0.9125,
+      0.925,
+      0.8625,
+      0.9375
+    ],
+    "families": {
+      "CSP-baseline": [
+        "CSP-baseline",
+        4
+      ],
+      "FBCSP": [
+        "FBCSP",
+        4
+      ],
+      "Riemann": [
+        "Riemann",
+        0.1
+      ],
+      "TV-CSP": [
+        "TV-CSP",
+        4
+      ],
+      "selected": [
+        "FBCSP",
+        4
+      ]
+    }
+  },
+  "P3_pre": {
+    "chosen": [
+      "Riemann",
+      0.01
+    ],
+    "grid": [
+      [
+        "FBCSP",
+        2
+      ],
+      [
+        "FBCSP",
+        4
+      ],
+      [
+        "Riemann",
+        0.01
+      ],
+      [
+        "Riemann",
+        0.1
+      ],
+      [
+        "TV-CSP",
+        2
+      ],
+      [
+        "TV-CSP",
+        4
+      ]
+    ],
+    "cv_accuracy": [
+      0.8875,
+      0.9125,
+      0.9375,
+      0.9375,
+      0.9,
+      0.9375
+    ],
+    "families": {
+      "CSP-baseline": [
+        "CSP-baseline",
+        4
+      ],
+      "FBCSP": [
+        "FBCSP",
+        4
+      ],
+      "Riemann": [
+        "Riemann",
+        0.01
+      ],
+      "TV-CSP": [
+        "TV-CSP",
+        4
+      ],
+      "selected": [
+        "Riemann",
+        0.01
+      ]
+    }
+  },
+  "P3_post": {
+    "chosen": [
+      "FBCSP",
+      4
+    ],
+    "grid": [
+      [
+        "FBCSP",
+        2
+      ],
+      [
+        "FBCSP",
+        4
+      ],
+      [
+        "Riemann",
+        0.01
+      ],
+      [
+        "Riemann",
+        0.1
+      ],
+      [
+        "TV-CSP",
+        2
+      ],
+      [
+        "TV-CSP",
+        4
+      ]
+    ],
+    "cv_accuracy": [
+      0.8625,
+      0.9,
+      0.85,
+      0.825,
+      0.8125,
+      0.875
+    ],
+    "families": {
+      "CSP-baseline": [
+        "CSP-baseline",
+        4
+      ],
+      "FBCSP": [
+        "FBCSP",
+        4
+      ],
+      "Riemann": [
+        "Riemann",
+        0.01
+      ],
+      "TV-CSP": [
+        "TV-CSP",
+        4
+      ],
+      "selected": [
+        "FBCSP",
+        4
+      ]
+    }
+  }
+}

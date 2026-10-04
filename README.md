@@ -10,6 +10,8 @@ A reproducible starting line for the BR41N.IO Stroke Rehab track. We use the org
 
 ## What is here
 
+**Accuracy/calibration review candidate:** [comparison report](results/accuracy_calibration/REPORT.html), [fixed methods](analysis/accuracy_calibration/PROTOCOL.md), and [verification/research handoff](results/overnight/MORNING_REPORT.md). Anna's baseline reproduces at 433/480. The Riemannian family leads the nested training comparison and scores 446/480 on already-exposed tests; this is exploratory, not fresh validation. The full selector scores only 428/480 on those tests. A single training-only inner-split sensitivity is mixed across sessions, and both results are retained. Physiology is reviewed separately in PR #1.
+
 - A verified download of the organizer archive (SHA-256 checked before extraction). The recordings stay in ignored `data/`, not Git or the update zip.
 - A strict loader for the unusual trigger format: **one label repeated for 2,048 samples**, not 2,048 separate examples.
 - A 3-band EEG feature bank (8–12, 12–20, 20–30 Hz), a shrinkage linear discriminant analysis (LDA) baseline, and a regularized filter-bank common spatial patterns (CSP) model.

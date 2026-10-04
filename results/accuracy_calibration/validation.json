@@ -1,0 +1,27 @@
+{
+  "checks": {
+    "team_baseline_six_sessions_match": true,
+    "team_baseline_433_of_480": true,
+    "all_new_train_and_test_counts_80": true,
+    "oof_trial_coverage": true,
+    "all_requested_calibration_budgets": true,
+    "full_calibration_endpoint_matches_selected": true,
+    "reliability_bins_account_for_80_trials": true,
+    "pre_post_transfer_only_pre_training_labels": true,
+    "exact_balanced_subset_counts": true,
+    "full_choice_matches_training_receipt": true,
+    "nested_subsets": true
+  },
+  "tests": {
+    "passed": 37,
+    "synthetic_causality": "Perturbing later samples and another trial leaves current and other trial covariances exactly unchanged",
+    "scope": "Implementation checks, not scientific or clinical validation"
+  },
+  "pooled_correct": {
+    "CSP-baseline": 433,
+    "FBCSP": 423,
+    "Riemann": 446,
+    "TV-CSP": 427,
+    "selected": 428
+  }
+}
