@@ -2,6 +2,12 @@
 
 A reproducible starting line for the BR41N.IO Stroke Rehab track. We use the organizer's EEG recordings, keep training and test runs separate, and measure what our decoder actually does on **80 held-out trials per session**. Three active collaborators, six sessions, no mystery score.
 
+## Active team
+
+- [Anna Sokolova](https://github.com/ZyntZ)
+- [Jason Wang](https://github.com/wjason00)
+- [Sudip Sharma](https://github.com/nxxis)
+
 ## What is here
 
 - A verified download of the organizer archive (SHA-256 checked before extraction). The recordings stay in ignored `data/`, not Git or the update zip.
@@ -13,7 +19,7 @@ A reproducible starting line for the BR41N.IO Stroke Rehab track. We use the org
 
 ## Get running
 
-Python 3.10+ and a system `libarchive` library are needed for the RAR reader (for example, `libarchive13` on Debian/Ubuntu). From the repository root:
+Python 3.11+ and a system `libarchive` library are needed for the RAR reader (for example, `libarchive13` on Debian/Ubuntu). From the repository root:
 
 ```bash
 python -m venv .venv
@@ -204,12 +210,6 @@ present, and test-run stimulation is contingent on earlier decoding. There
 are no precise feedback timestamps in this dataset. Do not use this audit to
 select 6.5 s and then report its score as an independent validation result.
 
-## Active team
-
-- [Anna Sokolova](https://github.com/ZyntZ)
-- [Jason Wang](https://github.com/wjason00)
-- [Sudip Sharma](https://github.com/nxxis)
-
 ## Training-only negative controls
 
 `stroke-rehab controls` reads `configs/negative_controls.json` and only the six
@@ -354,3 +354,23 @@ and P3 the layout is the same in both sessions, so the 16-column result is the
 valid one and is slightly higher. Three of the six targets are decoded with a
 model from the LATER session, which could not happen in practice. Scores on
 the target training runs are in the CSV.
+
+## Pull-request sanity checks
+
+Run `pytest -q` and `python tools/repo_preflight.py` locally before opening a
+pull request. The tracked `Sanity checks` workflow runs the same source-policy and data-free
+tests on Python 3.11 and 3.13; hosted runs are not verified here. Preflight rejects staged MAT/RAR files, serialized estimators, cache
+folders and notebook error outputs. It does not download organizer data;
+training-only analyses must still be rerun locally before numerical changes
+are reviewed. Inspect `git diff --cached --stat` before pushing a PR.
+
+## Training-only physiology companion (review of PR #1)
+
+The compact [C3/C4 mu-power notebook](notebooks/03_mu_power.ipynb) and
+[reproduction instructions](analysis/mu_power/README.md) report the fixed
+8–13 Hz task-to-baseline contrast for all 80 trials in each training run.
+The montage identifies C3/C4 as columns 5/9. The analysis never opens test
+recordings and does not improve or select the decoder. Outputs are rebuilt
+locally under ignored `results/mu_power/`; the notebook contains no saved
+outputs. Windows include [2, 3.5) s and [2, 8) s after trigger; the cue is
+at 2 s. Feedback onset is unknown, including for the shorter window.

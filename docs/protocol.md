@@ -20,6 +20,20 @@ The power baseline and CSP were fixed before examining test outcomes within the 
 
 `stroke-rehab audit` fits the same fixed CSP pipeline separately on 2.5–3.5 s and 4.5–6.5 s windows. It does **not** replace the selected main model, and no best window is selected based on test performance. The original dataset documentation says training delivers visual + functional electrical stimulation (FES) feedback, while test feedback is contingent on correct decoding. Late test windows can therefore carry consequences of earlier correct/incorrect detection. This creates a feedback confound; late-window offline accuracy should not be sold as a pure pre-feedback intention-decoding score. The early window is a diagnostic, not guaranteed to precede every feedback event: precise feedback timestamps are not included.
 
+## Timing and physiology guardrails
+
+The original offline timing audit filters the complete continuous recording
+in both directions before cutting an epoch. Samples after the decision can
+therefore affect its early-window features. It is not a causal or necessarily
+feedback-free benchmark. The separate one-pass causal replay addresses the
+backward-filtering issue, but missing per-trial feedback timestamps still
+prevent a feedback-free interpretation.
+
+The training-only [mu-power protocol](../analysis/mu_power/README.md)
+compares within-trial spectral power; it is not a classifier score. PRE and
+POST are repeated recordings from three participants, not six independent
+patients or proof of improved clinical outcomes.
+
 ## How these metrics differ from the organizer's table
 
 The organizer reports `CSP+LDA` and `PCA+TVLDA` accuracies in `overview.pdf`. We report one fixed-window prediction per trial from a different model and implementation. Their referenced paper describes averaging classification accuracy over multiple time steps, then taking a maximum over a feedback period. We have **not** reproduced that protocol and do not claim our scores improve on it. Nor can offline `sosfiltfilt` be put directly into a real-time stimulator.
