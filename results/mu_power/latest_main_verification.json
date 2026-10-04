@@ -1,7 +1,7 @@
 {
-  "checked_at_utc": "2026-10-04T22:22:27.039664+00:00",
-  "source_commit": "df5792c54044eb9bd1b5aca9dd5b277f5b58785a",
-  "upstream_commit": "45d5b91a17d94554a7483bd458a83f59605da6d8",
+  "checked_at_utc": "2026-10-04T22:25:50.121073+00:00",
+  "source_commit": "4d82e98119188931d55c9410fdb27b90aa80c3c8",
+  "upstream_commit": "483ac87b98ad385664b11986382e53a8c69abd2e",
   "method": "Identical module/notebook hashes verified against isolated overnight reproduction",
   "notebook": {
     "file": "03_mu_power.ipynb",
@@ -145,5 +145,8 @@
     ],
     "inputs_unchanged": true
   },
-  "boundaries": "Physiology uses training EEG only; frozen classifier reproduction separately reuses exposed tests. No accuracy improvement or treatment benefit claimed."
+  "boundaries": "Physiology uses training EEG only; frozen classifier reproduction separately reuses exposed tests. No accuracy improvement or treatment benefit claimed.",
+  "analysis_unchanged_from": "45d5b91a17d94554a7483bd458a83f59605da6d8",
+  "latest_delta": "README repositioning and local repository preflight; no analysis/CSV/notebook change",
+  "preflight_passed": true
 }

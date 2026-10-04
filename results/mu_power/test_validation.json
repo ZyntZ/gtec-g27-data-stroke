@@ -1,9 +1,9 @@
 {
-  "checked_at_utc": "2026-10-04T22:22:27.039664+00:00",
-  "source_commit": "df5792c54044eb9bd1b5aca9dd5b277f5b58785a",
-  "upstream_commit": "45d5b91a17d94554a7483bd458a83f59605da6d8",
+  "checked_at_utc": "2026-10-04T22:25:50.110834+00:00",
+  "source_commit": "4d82e98119188931d55c9410fdb27b90aa80c3c8",
+  "upstream_commit": "483ac87b98ad385664b11986382e53a8c69abd2e",
   "pytest_exit_code": 0,
-  "tests_passed": 39,
+  "tests_passed": 42,
   "scope": "All synthetic tests on latest Anna main plus this physiology contribution",
   "runtime": {
     "python": "3.13.14",
@@ -23,5 +23,8 @@
     "model_training_on_organiser_data": false,
     "tests_passed": 34
   },
-  "scientific_validation": false
+  "scientific_validation": false,
+  "analysis_unchanged_from": "45d5b91a17d94554a7483bd458a83f59605da6d8",
+  "latest_delta": "README repositioning and local repository preflight; no analysis/CSV/notebook change",
+  "preflight_passed": true
 }
