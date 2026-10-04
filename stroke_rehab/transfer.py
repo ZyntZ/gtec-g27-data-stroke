@@ -4,8 +4,8 @@ The model is fitted on the training run of the SAME patient's other session and
 applied to the target run; no test run is ever used for fitting. Every run is recentered by its own covariance average,
 without labels; the target run is recentered causally, starting from its first
 trial. Channels are matched by NAME through `montage.layout_for`, because the
-two P1 sessions use different electrode layouts. `columns_as_stored` skips that
-matching and shows what the mismatch costs.
+two P1 sessions appear to use different electrode layouts. `columns_as_stored`
+skips that matching for comparison.
 """
 from pathlib import Path
 import csv

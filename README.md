@@ -251,8 +251,8 @@ labels are read by this command.
 ## Pull-request sanity checks
 
 Run `pytest -q` and `python tools/repo_preflight.py` locally before opening a
-pull request. The tracked `Sanity checks` workflow runs the same source-policy and data-free
-tests on Python 3.11 and 3.13; hosted runs are not verified here. Preflight rejects staged MAT/RAR files, serialized estimators, cache
+pull request. There is no hosted CI workflow in this repository; these checks
+run only when someone runs them. Preflight rejects staged MAT/RAR files, serialized estimators, cache
 folders and notebook error outputs. It does not download organizer data;
 training-only analyses must still be rerun locally before numerical changes
 are reviewed. Inspect `git diff --cached --stat` before pushing a PR.
@@ -389,8 +389,10 @@ layouts (FCz C5 C3 C1 Cz C2 C4 C6 CP1 CP2), matched by name;
 | P3 POST | 72/80 | 75/80 |
 | Pooled | 417/480 (86.9%) | 393/480 (81.9%) |
 
-For P1 the stored columns belong to different electrodes in the two sessions,
-which is why transfer fails there until channels are matched by name. For P2
+For P1, transfer is near chance with columns as stored and recovers when
+channels are matched by name, which is consistent with a channel-order
+mismatch between the two sessions; other differences between those recordings
+(such as the different recording setup) are not ruled out. For P2
 and P3 the layout is the same in both sessions, so the 16-column result is the
 valid one. Three of the six targets are decoded with a model from the LATER
 session, which could not happen in practice. Scores on the target training
