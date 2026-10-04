@@ -113,5 +113,10 @@
   },
   "main_integration_receipt": "main_integration_check.json",
   "current_saved_csv_checks": 19,
-  "new_regression_tests": 15
+  "new_regression_tests": 15,
+  "collaborator_source_review": {
+    "head": "a3382b7e053ed8cdb9c9d06dba3bd0c9c7293fa2",
+    "changes": "Transfer fits source training only; per-file mu columns follow inferred montage, still needs acquisition metadata",
+    "numerical_reproduction": false
+  }
 }
