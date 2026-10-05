@@ -11,5 +11,74 @@
       "after_sha256": "9a99e76f09a325008445992aee9031d2b7ba5ebe9c0ddbb4925018e440bf4d6c"
     }
   },
-  "choice_identities_unchanged": 24
+  "choice_identities_unchanged": 24,
+  "stacked_reproduction": {
+    "checked_at_utc": "2026-10-05T08:19:48.591306+00:00",
+    "source_commit": "f65e5a2ddf1fd2fbc87a2e6f7e4f74d4f42bd50c",
+    "source_sha256": {
+      "stroke_rehab/early_selection.py": "530516d054d4b079faad2ccdbde5578051dd0bc8b614c6ac3fad5a6b7d8d1e7b",
+      "stroke_rehab/comparison.py": "d2850134cf722bef47196c9eecb1c20f983801a9f625f0f99132b61cc4a3f95a",
+      "stroke_rehab/riemann.py": "51d5d858e3b8eeb64347426e0e2238c40d3fbc9affeaa7b8ac23fb7639bef5f4",
+      "stroke_rehab/models.py": "1c2564c0ec945fa81c1c374d589a7e638c88fad961a93a285df5b5db322382be",
+      "stroke_rehab/data.py": "1759401e31fc41c2accc439adc387e1086bd1e7380f39fbcf9b3917967b3cc68",
+      "stroke_rehab/features.py": "fba7d9a2bf19cc1900486eb9df1367b5f60e4907d5d4d7ae14b8dfd39c90fba2",
+      "stroke_rehab/forward_calibration.py": "75ede1bbad727280df9a23ed901952c0b6458c470bb2a777c7ddd9e1dffd7b19",
+      "configs/early_selection.json": "6e5e1dbbe1157fc9d5b801f8119770ad7e21ad5ce6273dbfdb80d28b5d116048"
+    },
+    "input_sha256": {
+      "P1_pre_training.mat": "6a2b29ef701d3e839f9ce5e81a9e5df6458130e252a4d94465ecdf249b43c889",
+      "P1_post_training.mat": "88cdaa8214c015d39c8f18f68db8b02c6b46cfffaaeabe2f081d7f582f017732",
+      "P2_pre_training.mat": "7296aa803d488d6a8f1d1bd0621c1c011c561ac0dc8867c17256bc4a0ed4b93c",
+      "P2_post_training.mat": "fcb480909f6e2c4b81ce0fcebaca242e2ad4d5dc3163d205f74e3a1c45c845bb",
+      "P3_pre_training.mat": "247a1a5d585f60da71412892e3f70f10d59c6505cf079d7bb54f78cf779faeed",
+      "P3_post_training.mat": "ac47b77cf0d954f4287685d5cf81ffccf611befa1d9e1f3f21c42856afe2140c"
+    },
+    "output_sha256": {
+      "early_predictions.csv": "cf97f1b6028bb901d3e83699c90edb5f5bef8193b0ece5c5a2e0fb60f40f776a",
+      "early_summary.csv": "6537946f768ef26eea9337cff9ef20b8e90f601f43e796bab956cc3d07d5891d",
+      "early_inner_predictions.csv": "9a99e76f09a325008445992aee9031d2b7ba5ebe9c0ddbb4925018e440bf4d6c",
+      "early_choices.json": "1d70be9dd5af63d1f643f803d8acce4d842f768786d42a6beaeb0aada872a785"
+    },
+    "original_input_and_output_hashes_match": true,
+    "outer_predictions": 1920,
+    "inner_predictions": 1080,
+    "choices": 24,
+    "scope": "Actual PR7 tree with PR8 fail-closed decoder and latest main07d725f; no changed numerical choices or independent validation",
+    "complete_suite_passed": 105,
+    "repository_preflight": "pass",
+    "git_diff_check": "pass"
+  },
+  "benchmark_branch_reproduction": {
+    "checked_at_utc": "2026-10-05T08:29:53.794252+00:00",
+    "source_commit": "561e114132d861c5733cee128f771e67942fcbee",
+    "source_sha256": {
+      "stroke_rehab/early_selection.py": "530516d054d4b079faad2ccdbde5578051dd0bc8b614c6ac3fad5a6b7d8d1e7b",
+      "stroke_rehab/comparison.py": "d2850134cf722bef47196c9eecb1c20f983801a9f625f0f99132b61cc4a3f95a",
+      "stroke_rehab/riemann.py": "51d5d858e3b8eeb64347426e0e2238c40d3fbc9affeaa7b8ac23fb7639bef5f4",
+      "stroke_rehab/models.py": "1c2564c0ec945fa81c1c374d589a7e638c88fad961a93a285df5b5db322382be",
+      "stroke_rehab/data.py": "1759401e31fc41c2accc439adc387e1086bd1e7380f39fbcf9b3917967b3cc68",
+      "stroke_rehab/features.py": "fba7d9a2bf19cc1900486eb9df1367b5f60e4907d5d4d7ae14b8dfd39c90fba2",
+      "stroke_rehab/forward_calibration.py": "75ede1bbad727280df9a23ed901952c0b6458c470bb2a777c7ddd9e1dffd7b19",
+      "configs/early_selection.json": "6e5e1dbbe1157fc9d5b801f8119770ad7e21ad5ce6273dbfdb80d28b5d116048"
+    },
+    "input_sha256": {
+      "P1_pre_training.mat": "6a2b29ef701d3e839f9ce5e81a9e5df6458130e252a4d94465ecdf249b43c889",
+      "P1_post_training.mat": "88cdaa8214c015d39c8f18f68db8b02c6b46cfffaaeabe2f081d7f582f017732",
+      "P2_pre_training.mat": "7296aa803d488d6a8f1d1bd0621c1c011c561ac0dc8867c17256bc4a0ed4b93c",
+      "P2_post_training.mat": "fcb480909f6e2c4b81ce0fcebaca242e2ad4d5dc3163d205f74e3a1c45c845bb",
+      "P3_pre_training.mat": "247a1a5d585f60da71412892e3f70f10d59c6505cf079d7bb54f78cf779faeed",
+      "P3_post_training.mat": "ac47b77cf0d954f4287685d5cf81ffccf611befa1d9e1f3f21c42856afe2140c"
+    },
+    "output_sha256": {
+      "early_predictions.csv": "cf97f1b6028bb901d3e83699c90edb5f5bef8193b0ece5c5a2e0fb60f40f776a",
+      "early_summary.csv": "6537946f768ef26eea9337cff9ef20b8e90f601f43e796bab956cc3d07d5891d",
+      "early_inner_predictions.csv": "9a99e76f09a325008445992aee9031d2b7ba5ebe9c0ddbb4925018e440bf4d6c",
+      "early_choices.json": "1d70be9dd5af63d1f643f803d8acce4d842f768786d42a6beaeb0aada872a785"
+    },
+    "input_and_output_hashes_match_pr7_stack": true,
+    "outer_predictions": 1920,
+    "inner_predictions": 1080,
+    "choices": 24,
+    "scope": "Actual PR6 integrated branch, same numerical outcomes as the original exposed-tail audit"
+  }
 }

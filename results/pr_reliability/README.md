@@ -2,7 +2,7 @@
 
 `verification.json` identifies this integration's executed source, inputs,
 unchanged numerical outputs and test/preflight results. It supersedes no
-historical receipt: the older `results/overnight/` files identify their own
+historical receipt: `combined_early_parity.json` records the older stream wrapper, and the `results/overnight/` files identify their own
 dated source snapshots. `early_provenance_pr7_snapshot.json` likewise describes
 PR7 before the Riemannian implementation changed; `early_provenance.json`
 describes a real rerun of the combined tree.

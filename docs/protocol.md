@@ -188,3 +188,61 @@ These checks can describe robustness of a signal pattern, not establish lesion
 side or rehabilitation benefit. In 31 stroke patients, artifact reduction
 changed measured ERD and reduced optimistic decoder accuracy, illustrating why
 accuracy alone cannot certify motor-cortical origin. [López-Larraz et al., 2018](https://pmc.ncbi.nlm.nih.gov/articles/PMC6180341/).
+
+
+## Organizer scoring clarification — 5 October 2026
+
+The organizer reply supplied by the team on 5 October clarifies the published
+reference statistic: fit using the training/calibration MAT file, then evaluate
+the corresponding test MAT file. All calibration trials may be used, and
+feedback-period EEG is permitted. For a correctness matrix indexed by time and
+trial, average across trials first, then take the maximum across time:
+`peak_accuracy = correctness.mean(axis=1).max()`. Averaging each trial's best
+time would be a different, incorrect statistic. Declare the evaluated time
+range/grid and retained trial IDs; the reference material describes the original
+windows, and the reply imposes no strict additional window.
+
+Only the video is required; the reply adds no specific instructions. This is
+team-supplied clarification, not a separately retrieved message. It does not
+provide per-trial FES timestamps or confirm the acquisition montage. Feedback
+permission does not establish motor-intent specificity or clinical benefit.
+The archive's test runs have already been inspected. Peak time-point accuracy
+is the permitted descriptive reference statistic, not independent validation
+of a model or a test-chosen decision time. Existing fixed-window/fixed-time
+analyses remain separate results and are not exact reproductions of that peak
+statistic. The early chronological comparison retains its frozen +3.5 s cutoff.
+
+
+## Channel contract and sensor/source interpretation
+
+| Field | Current contract |
+|:--|:--|
+| Signal/order | `y` is samples × 16 EEG columns; the loader preserves their stored order. No per-channel type metadata are supplied. |
+| Sampling rate | `fs=256 Hz`, verified in all 12 organizer recordings. |
+| Names | `montage.layout_for(path)` assigns the signal-inferred layouts below; g.tec has not confirmed these labels. |
+| Units | Amplitudes remain as recorded; physical amplitude units are unconfirmed. |
+| Reference | Acquisition reference is unconfirmed; no verified rereferencing is introduced. |
+| Position source | `montage.GRID` is a 2-D schematic in 10–10 electrode steps, not measured 3-D positions in metres or millimetres. |
+| Orientation/clinical side | Signal topology cannot distinguish mirrored layouts. Affected-hand/lesion-side metadata are unavailable in the supplied organizer reply. |
+
+Current inferred name order:
+
+- P1 POST: `FC3 FCz FC4 C5 C3 C1 Cz C2 C4 C6 CP3 CP1 CPz CP2 CP4 Pz`.
+- P1 PRE: `FC5 FC1 FCz FC2 FC6 C5 C3 C1 Cz C2 C4 C6 CP1 CP5 CP2 CP6` (includes the hypothesized CP5/CP1 swap).
+- Other files use the default paper hypothesis: `FC5 FC1 FCz FC2 FC6 C5 C3 C1 Cz C2 C4 C6 CP5 CP1 CP2 CP6`.
+
+A consistently ordered within-run CSP/covariance decoder can operate without
+anatomical channel names. That statement does not extend to name-matched
+transfer or a geometry-aware encoder: `transfer.py` aligns columns using these
+inferred names. The Foundation Challenge's official REVE probe maps
+`meta['ch_names']` into positions and passes them to its encoder, so uncertain
+labels would also change that geometry. [Official REVE probe](https://github.com/neural-interfaces26/2026-competition/blob/main/tracks/bci_decoding/solvers/reve_probe.py).
+
+Scalp power/covariance patterns are sensor measurements, not localized cortical
+sources or lesion labels. Source estimation needs a head forward model,
+electrode geometry and consistent reference assumptions. Public-template
+modelling without individual MRI is possible, but its anatomy and alignment
+remain assumptions. [MNE template-MRI forward tutorial](https://mne.tools/stable/auto_tutorials/forward/35_eeg_no_mri.html). A later adult-template source-feature comparison would keep the classifier
+and held-out sessions fixed and report geometry uncertainty. It is a separate
+hypothesis, not an experiment performed here; neonatal meshes and restricted
+subject anatomy are not competition assets.

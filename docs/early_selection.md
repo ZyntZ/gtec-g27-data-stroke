@@ -1,4 +1,7 @@
 # One fixed early decision with chronological model selection
+At 60 calibration trials, the selected policy scores **75/120** versus
+**82/120** for fixed CSP. P2 PRE falls from **13/20** to **8/20**. Selection
+underperforms the fixed baseline; this is not a validated prospective policy.
 
 This extends the merged forward-calibration audit with a **selection policy**.
 At 60 calibration labels, selection scores **75/120** versus **82/120** for

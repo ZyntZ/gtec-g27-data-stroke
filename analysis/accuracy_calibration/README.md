@@ -1,6 +1,6 @@
 # Accuracy and calibration track
 
-Start with [the results report](../../results/accuracy_calibration/REPORT.html), [the fixed protocol](PROTOCOL.md) and [the verification/research handoff](../../results/overnight/MORNING_REPORT.md). This is a separate draft model-track contribution; team acceptance and the organizer's numerical scoring contract remain separate. The physiology notebook is reviewed in PR #1.
+Start with [the results report](../../results/accuracy_calibration/REPORT.html), [the fixed protocol](PROTOCOL.md) and [the historical verification/research handoff](../../results/overnight/MORNING_REPORT.md). This is a draft model-track contribution in PR6; team acceptance remains separate. The physiology notebook is incorporated in main. The newly supplied organizer clarification is recorded in [the shared protocol](../../docs/protocol.md#organizer-scoring-clarification--5-october-2026); this historical study uses one fixed-window decision, not peak time-point accuracy.
 
 Anna's team baseline reproduced **433/480 (90.2%)** exactly in all six sessions, counts 74,74,66,79,70,70. The new common causal-window CSP baseline also scored **433/480**, with different session counts; the training-selected pipeline scored **428/480 (89.2%)**. The same [2.5,6.5) s window and 80-trial denominators are used, but the new models have causal trial-local filtering and different covariance/CSP processing.
 
@@ -8,9 +8,11 @@ Riemannian features gave the strongest nested training **accuracy**, **437/480 (
 
 The fixed causal CSP baseline is better on training probability scores: mean Brier 0.083978 versus 0.098683 and mean log loss 0.297291 versus 0.343823 for Riemannian (lower is better). Its training accuracy is 422/480 versus 437/480. Riemannian improves two sessions, ties one and loses two trials in each of the remaining three. This compares complete pipelines, including bands and classifier, rather than geometry alone.
 
-The 10/20/40-label calibration points use random balanced subsets sampled across the complete training run, not chronological calibration prefixes. Their min–max bars describe subset variability, not confidence intervals. The same exposed tests score every subset.
-
 The +6.5 s endpoint is an EEG cutoff. Delivered Riemannian decision latency and streaming export are unverified. The six verified local streaming models use the separate early continuous-filter CSP pipeline.
+
+The 10/20/40-label points use five nested random, class-balanced subsets sampled across the full training run. These retrospective label budgets are not chronological calibration prefixes. The same exposed test run is reused; bars show subset minimum–maximum, not confidence intervals.
+
+The checked-in HTML, PNG and SVG files are review conveniences: HTML embeds PNGs for offline reading, standalone PNGs support previews, and SVGs permit vector reuse. CSVs, saved memberships/settings and predictions provide the numerical evidence; generated graphics add no independent validation.
 
 ## Reproduce
 
