@@ -1,0 +1,17 @@
+{
+  "budgets": [
+    10,
+    20,
+    40,
+    60
+  ],
+  "decision_times_s": [
+    2.0,
+    3.5,
+    4.25,
+    6.5
+  ],
+  "validation_start_0based": 60,
+  "validation_stop_0based": 80,
+  "window_s": 1.0
+}

@@ -251,8 +251,10 @@ labels are read by this command.
 ## Pull-request sanity checks
 
 Run `pytest -q` and `python tools/repo_preflight.py` locally before opening a
-pull request. There is no hosted CI workflow in this repository; these checks
-run only when someone runs them. Preflight rejects staged MAT/RAR files, serialized estimators, cache
+pull request. The tracked `Synthetic sanity checks` workflow runs the same
+synthetic tests and staged-file preflight on Python 3.11 and 3.13; data-dependent
+analyses must still be run locally. Hosted execution has not been verified in this
+snapshot. Preflight rejects staged MAT/RAR files, serialized estimators, cache
 folders and notebook error outputs. It does not download organizer data;
 training-only analyses must still be rerun locally before numerical changes
 are reviewed. Inspect `git diff --cached --stat` before pushing a PR.
@@ -397,3 +399,31 @@ and P3 the layout is the same in both sessions, so the 16-column result is the
 valid one. Three of the six targets are decoded with a model from the LATER
 session, which could not happen in practice. Scores on the target training
 runs are in the CSV.
+
+## Training-only forward calibration and latency sensitivity
+
+[`stroke-rehab forward-calibration`](docs/forward_calibration.md) uses **only
+six training recordings**: first 10/20/40/60 labelled trials for calibration
+and the **same later trials 61–80** for all accuracy comparisons. Four fixed,
+causally filtered one-second windows end at +2, +3.5, +4.25 or +6.5 s.
+A pre-instruction window acts as a negative control. Both existing decoder
+families are evaluated without reading test files; they use different band
+banks, so this is a *pipeline* comparison, not a pure algorithm ablation.
+The [figure](results/forward_calibration/forward_calibration.png),
+[per-run scores](results/forward_calibration/forward_calibration_summary.csv),
+[per-trial decisions](results/forward_calibration/forward_calibration_predictions.csv)
+and [input hashes](results/forward_calibration/forward_calibration_provenance.json)
+are reproducible with:
+
+```bash
+stroke-rehab forward-calibration --data-dir data/stroke-rehab
+stroke-rehab plot-forward-calibration
+```
+
+At 60 calibration trials, early +3.5 s scores are **82/120 CSP** and
+**75/120 Riemannian** on six later training tails; the pre-instruction +2 s
+control is 55/120 and 47/120. At +4.25 s they are 99/120 and 102/120,
+respectively. The six tails belong to **three people**, with only 20 scored
+trials per session. Feedback timing is not recorded per trial; later gains
+cannot be attributed to improved motor intent. Neither family should be
+selected on the same exposed test runs or called a clinical improvement.
