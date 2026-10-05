@@ -69,8 +69,10 @@ above would test encoder/decoder interaction; offline stroke EEG does not
 identify that mechanism. Keep the simulator, EEG benchmark and clinical
 interpretations separate.
 
-Affected-hand metadata are unavailable according to the organizer reply relayed
-on 5 October. Exploring ERD/ERS asymmetry is reasonable, but clinical side
+The screenshot reviewed on 5 October shows Sebastian (g.tec) confirming that
+affected-hand metadata are unavailable and suggesting possible ERD/ERS inference.
+The relative screenshot dates do not establish an absolute posting date.
+Exploring ERD/ERS asymmetry is reasonable, but clinical side
 inference would need independent validation and a confirmed montage. Artifact
 and compensatory activity can affect both measured ERD and apparent decoder
 performance. [Primary stroke artifact study](https://pmc.ncbi.nlm.nih.gov/articles/PMC6180341/).

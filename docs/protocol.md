@@ -170,9 +170,11 @@ timestamps and the organizers' scoring contract establish a valid endpoint.
 
 ## Missing clinical side and exploratory ERD/ERS
 
-On 5 October 2026, the organizer reply relayed by the team stated that affected
-hand/lesion hemisphere information is unavailable. A further suggestion was
-that experienced analysts might infer it from ERD/ERS. Keep this suggestion as
+The Discord screenshot supplied on 5 October 2026 shows Sebastian (g.tec)
+stating that affected-hand/lesion hemisphere information is unavailable, and
+suggesting that experienced analysts might infer it from ERD/ERS. The screenshot
+shows relative message dates; 5 October is the source-review date, not a verified
+posting date. Keep the inference suggestion as
 a hypothesis: neither the left/right trial label nor a larger power decrease
 is a clinical lesion label. Do not add inferred patient-side metadata, flip
 hemispheres, or call a channel ipsilesional/contralesional from these data.
