@@ -1,0 +1,116 @@
+{
+  "scope": "Exploratory reanalysis of already-exposed training and test CSVs; NOT a blind or clinical result",
+  "selection": "Pool trials 61-80 across six training runs after 60 calibration labels; maximize training accuracy; earliest time breaks ties",
+  "model": "filterbank_csp_shrinkage_lda",
+  "candidate_times_s": [
+    3.5,
+    4.25,
+    6.5
+  ],
+  "training_correct_of_120": {
+    "3.5": 82,
+    "4.25": 99,
+    "6.5": 99
+  },
+  "locked_time_s": 4.25,
+  "training_correct_at_lock": 99,
+  "training_trials": 120,
+  "test_correct_at_lock": 407,
+  "test_trials": 480,
+  "test_accuracy_at_lock": 0.8479166666666667,
+  "test_correct_at_fixed_early": 358,
+  "test_accuracy_at_fixed_early": 0.7458333333333333,
+  "test_pooled_posthoc_peak_time_s": 4.25,
+  "test_pooled_posthoc_peak_correct": 407,
+  "test_sum_of_session_posthoc_peaks_correct": 427,
+  "per_session": [
+    {
+      "patient": "P1",
+      "session": "post",
+      "training_tail_correct_at_lock": 20,
+      "training_tail_trials": 20,
+      "test_correct_at_lock": 67,
+      "test_correct_at_fixed_early": 73,
+      "test_posthoc_peak_correct": 75
+    },
+    {
+      "patient": "P1",
+      "session": "pre",
+      "training_tail_correct_at_lock": 17,
+      "training_tail_trials": 20,
+      "test_correct_at_lock": 72,
+      "test_correct_at_fixed_early": 71,
+      "test_posthoc_peak_correct": 75
+    },
+    {
+      "patient": "P2",
+      "session": "post",
+      "training_tail_correct_at_lock": 17,
+      "training_tail_trials": 20,
+      "test_correct_at_lock": 73,
+      "test_correct_at_fixed_early": 59,
+      "test_posthoc_peak_correct": 79
+    },
+    {
+      "patient": "P2",
+      "session": "pre",
+      "training_tail_correct_at_lock": 13,
+      "training_tail_trials": 20,
+      "test_correct_at_lock": 64,
+      "test_correct_at_fixed_early": 52,
+      "test_posthoc_peak_correct": 64
+    },
+    {
+      "patient": "P3",
+      "session": "post",
+      "training_tail_correct_at_lock": 16,
+      "training_tail_trials": 20,
+      "test_correct_at_lock": 65,
+      "test_correct_at_fixed_early": 56,
+      "test_posthoc_peak_correct": 68
+    },
+    {
+      "patient": "P3",
+      "session": "pre",
+      "training_tail_correct_at_lock": 16,
+      "training_tail_trials": 20,
+      "test_correct_at_lock": 66,
+      "test_correct_at_fixed_early": 47,
+      "test_posthoc_peak_correct": 66
+    }
+  ],
+  "leave_one_patient_out_selection": [
+    {
+      "patient": "P1",
+      "selected_time_s": 6.5,
+      "training_correct_on_other_patients": 67,
+      "exploratory_test_correct": 123,
+      "test_trials": 160
+    },
+    {
+      "patient": "P2",
+      "selected_time_s": 4.25,
+      "training_correct_on_other_patients": 69,
+      "exploratory_test_correct": 137,
+      "test_trials": 160
+    },
+    {
+      "patient": "P3",
+      "selected_time_s": 4.25,
+      "training_correct_on_other_patients": 67,
+      "exploratory_test_correct": 131,
+      "test_trials": 160
+    }
+  ],
+  "caveats": [
+    "The test timecourse has been inspected before: no independent confirmatory evaluation.",
+    "The 60-trial models choose time, but the published test curve uses 80-trial fits.",
+    "The three participants, not 480 trials, are the independent population units.",
+    "Late windows may include visual or electrical feedback; improved classification is not evidence of motor recovery.",
+    "Aggregate test timecourses cannot support paired trial-level uncertainty estimates."
+  ],
+  "input_sha256": {
+    "training_csv": "3772a68d367e9eb4ed5d281609523bef80f5c65b5793391a88e77cac2eea7dcc",
+    "test_csv": "dff06a4504d76f6ed40587da465306ac557c83ed283510ec4ad862b9341cac65"
+  }
+}

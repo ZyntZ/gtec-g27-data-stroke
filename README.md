@@ -162,6 +162,19 @@ period should be presented as a deployable real-time decision or clinical
 benefit. The pre-existing 433/480 offline multi-second model has a different
 preprocessing and decision rule and must not be labeled organizer-comparable.
 
+## Training-locked organizer decision time (exploratory)
+
+[`python -m analysis.training_locked_endpoint --output results/locked_endpoint/summary.json`](docs/training_locked_endpoint.md)
+selects one common endpoint using only training-run trials 61–80 (after 60 calibration
+trials) and compares the choice with the already-exposed, 80-calibration-trial test
+timecourse. Among shared 3.5/4.25/6.5-second endpoints, 4.25 seconds wins by
+earliest-tie rule (99/120 training tail, 407/480 exposed test). This matches the
+pooled test-selected peak **only in these data**. P1 is worse than the fixed
+3.5-second rule (139/160 versus 144/160); a test-selected session-by-session
+peak (427/480) is not a deployable or untouched-test score. The audit does not
+claim motor intent specificity or rehabilitation benefit. Details and a data-free
+regression test are in the linked protocol.
+
 ## First held-out run
 
 Selection is based on training-run CV alone. One final prediction is made for each test trial from **2.5–6.5 seconds after trigger onset**; the instruction is given at **2 seconds**. Numbers below are from the committed `results/session_results.csv`, seed 27.
