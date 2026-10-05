@@ -18,6 +18,7 @@ results/mu_power/
 presentation/
 *.pptx
 *.gif
+!results/decision_clock/decision_clock.gif
 video_script*.md
 *.pyc
 .DS_Store
