@@ -67,6 +67,16 @@ def main(argv=None):
     plot_time.add_argument("--csv", default="results/decision_time.csv")
     plot_time.add_argument("--output", default="results/decision_time.png")
     plot_time.add_argument("--theme", choices=("light", "dark"), default="light")
+    cue = sub.add_parser("cue-audit", help="Training-only visual-cue confound control")
+    cue.add_argument("--data-dir", default="data/stroke-rehab")
+    cue.add_argument("--output", default="results/cue_audit.csv")
+    cue.add_argument("--folds", type=int, default=5)
+    cue.add_argument("--purge", type=int, default=1)
+    prequential = sub.add_parser("prequential", help="Training-only sequential prediction with pre-cue and label-only controls")
+    prequential.add_argument("--data-dir", default="data/stroke-rehab")
+    prequential.add_argument("--output", default="results/prequential_summary.csv")
+    prequential.add_argument("--warmup", type=int, default=20)
+    prequential.add_argument("--chunk-samples", type=int, default=512)
     forward = sub.add_parser("forward-calibration", help="Training-only causal forward validation at fixed calibration budgets")
     forward.add_argument("--config", default="configs/forward_calibration.json")
     forward.add_argument("--data-dir", default="data/stroke-rehab")
@@ -175,6 +185,9 @@ def main(argv=None):
     elif args.command == "transfer":
         from .transfer import run_transfer
         run_transfer(args.data_dir, args.output)
+    elif args.command == "cue-audit":
+        from .cue_audit import run_cue_audit
+        print(f"Wrote {len(run_cue_audit(args.data_dir, args.output, folds=args.folds, purge=args.purge))} training-only cue-control rows")
     elif args.command == "forward-calibration":
         from .forward_calibration import run_forward_calibration
         import json
@@ -187,6 +200,11 @@ def main(argv=None):
             validation_stop=design["validation_stop_0based"],
             window_s=design["window_s"])
         print(f"Training-only: {len(predictions)} decisions, {len(summary)} session/model/time/budget rows")
+    elif args.command == "prequential":
+        from .prequential import run_prequential
+        rows = run_prequential(args.data_dir, args.output, warmup=args.warmup,
+                               chunk_samples=args.chunk_samples)
+        print(f"Wrote {len(rows)} training-only, sequential session/method scores")
     elif args.command == "plot-forward-calibration":
         from .forward_plot import plot_forward_calibration
         print(plot_forward_calibration(args.csv, args.output))
