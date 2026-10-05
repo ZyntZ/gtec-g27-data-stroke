@@ -9,7 +9,6 @@ import numpy as np
 from scipy.linalg import eigh
 from scipy.signal import butter, sosfilt, sosfilt_zi, sosfiltfilt
 from sklearn.base import BaseEstimator, ClassifierMixin
-from sklearn.covariance import oas
 from sklearn.linear_model import LogisticRegression
 from sklearn.pipeline import make_pipeline
 from sklearn.preprocessing import StandardScaler
@@ -46,7 +45,8 @@ def window_covariances(trials, fs, window):
     lo, hi = round(window[0] * fs), round(window[1] * fs)
     if not 0 <= lo < hi <= trials.shape[2]:
         raise ValueError("Window outside the eight-second trial")
-    return np.array([[oas(band[lo:hi])[0] for band in trial] for trial in trials])
+    return np.array([[oas_from_covariance(np.cov(band[lo:hi].T, bias=True), hi - lo)
+                      for band in trial] for trial in trials])
 
 
 def _apply(matrix, function):
@@ -88,10 +88,18 @@ def tangent_vector(covariance, reference):
 class RecenteredTangentSpace(BaseEstimator, ClassifierMixin):
     """Input: trial x band x channel x channel covariances, in recording order.
 
-    `predict` treats its input as one chronological stream: each band's
-    reference starts at the training mean (weighted as `prior_trials` trials)
-    and moves toward every incoming trial before that trial is classified. No
-    labels and no later trials are used. `adapt=False` keeps the training mean.
+    Each band has a reference covariance. It starts at the training mean
+    (weighted as `prior_trials` trials) and moves toward every incoming trial
+    before that trial is classified. No labels and no later trials are used.
+    `adapt=False` keeps the training mean.
+
+    The adaptation state is explicit: `references_` and `n_seen_`.
+    - `predict(X)` is stateless. It scores X as one fresh chronological stream
+      from the training reference and leaves the stored state untouched, so
+      repeated calls and cross-validation give the same answer.
+    - `predict_next(trial)` and `predict_stream(X)` are stateful. They advance
+      the stored state, so feeding a run trial by trial, in chunks, or all at
+      once gives identical decisions. Call `reset()` before a new run.
     """
 
     def __init__(self, C=0.01, prior_trials=8, adapt=True):
@@ -109,18 +117,71 @@ class RecenteredTangentSpace(BaseEstimator, ClassifierMixin):
                              for c, m in zip(trial, self.means_)]) for trial in X])
         self.model_ = make_pipeline(
             StandardScaler(), LogisticRegression(C=self.C, max_iter=3000)).fit(features, y)
+        return self.reset()
+
+    def reset(self):
+        """Return the adaptation state to the training reference (start of a run)."""
+        self.references_ = [m.copy() for m in self.means_]
+        self.n_seen_ = 0
         return self
 
-    def predict(self, X):
+    def _check(self, X, ndim):
         X = np.asarray(X)
-        if X.ndim != 4 or X.shape[1] != len(self.means_):
+        if X.ndim != ndim or X.shape[-3] != len(self.means_):
             raise ValueError("Covariance input does not match fitted bands")
-        references = [m.copy() for m in self.means_]
-        features = []
-        for i, trial in enumerate(X):
-            if self.adapt:
-                step = 1.0 / (self.prior_trials + i + 1)
-                references = [geodesic(m, c, step) for m, c in zip(references, trial)]
-            features.append(np.concatenate([tangent_vector(c, m)
-                                            for c, m in zip(trial, references)]))
-        return self.model_.predict(np.array(features))
+        return X
+
+    def _step(self, references, n_seen, trial):
+        """One trial: updated references, updated count, feature vector."""
+        if self.adapt:
+            step = 1.0 / (self.prior_trials + n_seen + 1)
+            references = [geodesic(m, c, step) for m, c in zip(references, trial)]
+        features = np.concatenate([tangent_vector(c, m)
+                                   for c, m in zip(trial, references)])
+        return references, n_seen + 1, features
+
+    def _fresh_features(self, X):
+        references, n_seen, rows = self.means_, 0, []
+        for trial in self._check(X, 4):
+            references, n_seen, features = self._step(references, n_seen, trial)
+            rows.append(features)
+        return np.array(rows)
+
+    def predict(self, X):
+        return self.model_.predict(self._fresh_features(X))
+
+    def decision_function(self, X):
+        return self.model_.decision_function(self._fresh_features(X))
+
+    def _advance(self, trial):
+        self.references_, self.n_seen_, features = self._step(
+            self.references_, self.n_seen_, self._check(trial, 3))
+        return features[None, :]
+
+    def predict_next(self, trial):
+        """Classify one band x channel x channel trial and advance the state."""
+        return self.model_.predict(self._advance(trial))[0]
+
+    def decision_next(self, trial):
+        """Signed score for one trial (positive favours `classes_[1]`); advances the state."""
+        return float(self.model_.decision_function(self._advance(trial))[0])
+
+    def predict_stream(self, X):
+        """Classify the next trials of the current run, continuing from the stored state."""
+        return np.array([self.predict_next(trial) for trial in self._check(X, 4)])
+
+
+def oas_from_covariance(covariance, n_samples):
+    """OAS shrinkage of a mean-centred sample covariance (divided by n_samples).
+
+    Same estimator as `sklearn.covariance.oas`, computed from the covariance
+    alone so a stream can keep running sums instead of the EEG samples.
+    """
+    n_features = len(covariance)
+    mu = np.trace(covariance) / n_features
+    alpha = np.mean(covariance ** 2)
+    denominator = (n_samples + 1.0) * (alpha - mu ** 2 / n_features)
+    shrinkage = 1.0 if denominator == 0 else min((alpha + mu ** 2) / denominator, 1.0)
+    shrunk = (1.0 - shrinkage) * covariance
+    shrunk.flat[::n_features + 1] += shrinkage * mu
+    return shrunk
