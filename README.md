@@ -1,6 +1,6 @@
 # Stroke Rehab / G27
 
-A reproducible starting line for the BR41N.IO Stroke Rehab track. We use the organizer's EEG recordings, keep training and test runs separate, and measure what our decoder actually does on **80 held-out trials per session**. Three active collaborators, six sessions, no mystery score.
+A reproducible starting line for the BR41N.IO Stroke Rehab track. We use the organizer's EEG recordings, keep training and test runs separate, and report 80 test-run decisions per session. These public test runs have already informed development, so they are **not a fresh blind evaluation**. Three active collaborators, six sessions, no mystery score.
 
 ## Critical research review
 
@@ -224,6 +224,25 @@ pre-instruction** power probe; both are scored on shuffled and contiguous
 training scores, **not a new test score**, an online classifier, or evidence
 that the feedback effect is solved. See [the evaluation contract](docs/protocol.md).
 
+## Jury figure: same-tail accuracy versus decision time
+
+The slide-ready [PNG](results/jury_tradeoff/same_tail_tradeoff.png),
+[SVG](results/jury_tradeoff/same_tail_tradeoff.svg), and machine-readable
+[per-run counts](results/jury_tradeoff/same_tail_counts.csv) use one fixed CSP
+pipeline fitted on the first **60 training trials** of each session and score
+exactly the **same training trials 61–80** at each observation endpoint.
+Training-only totals: 55/120 before instruction (+2 s), 82/120 at +3.5 s,
+and 99/120 at +4.25 s. The later gain is concentrated in P2 POST and P3;
+it does **not** establish motor-intent specificity, rehabilitation benefit or
+prospective superiority. Training includes feedback; the nominal +3.5 s
+boundary is not a measured stimulation onset. Six runs represent just three
+patients. This chart is distinct from the organizer's peak-on-test metric.
+
+Rebuild it from the saved per-trial CSV with `python analysis/jury_tradeoff.py`.
+The script rejects duplicate or mismatched trial IDs, inconsistent labels and
+incorrect correctness flags before plotting. To reproduce the upstream scores
+from the organizer archive first, run `stroke-rehab forward-calibration`.
+
 ## Causal training-only replay
 
 `stroke-rehab causal-train` reads `configs/causal_training.json`, replays only
@@ -245,6 +264,14 @@ A separately fitted complete training-run decoder can produce causal
 The earliest feature interval ends at 3.5 s; 64-sample chunking can add up
 to 0.25 s of acquisition delay. The reported per-chunk processing times are
 machine-dependent replay measurements, **not** validated device latency.
+`CausalTrialDecoder` now fails closed after any invalid chunk or classifier
+exception: it emits no decision and rejects later chunks, because processed EEG
+and filter state cannot safely be retried. Reconstruct the decoder and replay
+from a known run boundary. This is a research safeguard, not certified medical
+software and not permission to actuate electrical stimulation. The
+training-only recheck found a maximum observed +3.746 s chunk-delivered
+latency across the six files for the nominal +3.5 s endpoint; there is no
+validated wall-clock or hardware latency guarantee.
 
 | Training run | Causal, blocked out-of-fold correct / 80 |
 |:--|--:|
@@ -305,6 +332,8 @@ decoder = CausalSpatialDecoder(model, candidate=metadata["candidate"],
 # Supply EEG chunks in sample order and each *true* trigger sample index on arrival.
 # event = decoder.process(chunk, onsets=[trigger_sample] if cue_in_chunk else [])
 # A non-None event has onset_sample, decision_sample and predicted label (+1/-1).
+# Any EEG, feature or prediction error makes the decoder terminal; restart from
+# a known run boundary rather than retrying the already consumed EEG chunk.
 ```
 
 | Training session | Nested selection | Fixed power | Fixed CSP 1 pair | Fixed CSP 2 pairs |
@@ -390,8 +419,8 @@ labels are read by this command.
 ## Pull-request sanity checks
 
 Run `pytest -q` and `python tools/repo_preflight.py` locally before opening a
-pull request. No workflow file is tracked in this snapshot; these are local
-checks. Data-dependent analyses must also be run locally. Preflight rejects
+pull request. The tracked `.github/workflows/verify.yml` also runs data-free
+CI checks; neither the local nor hosted checks certify EEG-dependent results. Data-dependent analyses must also be run locally. Preflight rejects
 staged MAT/RAR files, serialized estimators, cache
 folders and notebook error outputs. It does not download organizer data;
 training-only analyses must still be rerun locally before numerical changes

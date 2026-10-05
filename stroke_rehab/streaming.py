@@ -145,11 +145,17 @@ class DecisionEvent:
     label: int  # Predicted left (+1) or right (-1), never the known trial label.
 
 
+class PowerDecoderFailedError(RuntimeError):
+    """Terminal decoder error: reconstruct and replay from a known run boundary."""
+
+
 class CausalTrialDecoder:
     """Inference-only wrapper around an already fitted, training-only estimator.
 
     Signal and filter state are initialized for every run. Do not pass an
     estimator fit on the held-out recording or reuse this object across runs.
+    A processing or classifier error invalidates the run: a partly consumed EEG
+    chunk cannot be retried safely. Never use this decoder to actuate FES.
     """
 
     def __init__(self, fitted_estimator, *, fs=256, channels=16, window=(2.5, 3.5)):
@@ -157,15 +163,27 @@ class CausalTrialDecoder:
         check_is_fitted(fitted_estimator)
         self.model = fitted_estimator
         self.stream = CausalPowerStream(fs=fs, channels=channels, window=window)
+        self.failed = False
 
     def process(self, chunk, *, onsets=()):
-        event = self.stream.process(chunk, onsets=onsets)
-        if event is None:
-            return None
-        predicted = int(self.model.predict(event.features[None, :])[0])
-        if predicted not in (-1, 1):
-            raise ValueError("Decoder must predict -1 (right) or +1 (left)")
-        return DecisionEvent(event.onset_sample, event.decision_sample, predicted)
+        if self.failed:
+            raise PowerDecoderFailedError(
+                "Decoder is terminal after a processing failure; reconstruct and "
+                "replay EEG from a known run boundary")
+        try:
+            event = self.stream.process(chunk, onsets=onsets)
+            if event is None:
+                return None
+            prediction = np.asarray(self.model.predict(event.features[None, :]))
+            if prediction.shape != (1,) or prediction[0] not in (-1, 1):
+                raise ValueError("Decoder must return one -1 (right) or +1 (left) label")
+            return DecisionEvent(event.onset_sample, event.decision_sample,
+                                 int(prediction[0]))
+        except Exception as error:
+            self.failed = True
+            raise PowerDecoderFailedError(
+                "Decoder processing failed; reconstruct and replay EEG from a known "
+                "run boundary. The failed chunk cannot be retried") from error
 
 
 def replay_decisions(recording, fitted_estimator, *, chunk_samples=64, window=(2.5, 3.5)):

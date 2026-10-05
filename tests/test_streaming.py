@@ -6,7 +6,7 @@ from scipy.signal import sosfilt
 
 from stroke_rehab.data import Recording
 from stroke_rehab.streaming import (CausalPowerStream, CausalTrialDecoder,
-                                     replay_decisions, replay_features)
+                                     PowerDecoderFailedError, replay_decisions, replay_features)
 
 
 def fake_recording():
@@ -105,3 +105,68 @@ def test_replay_features_never_use_cue_label_values():
     other, other_offsets, _ = replay_features(changed)
     np.testing.assert_array_equal(first, other)
     np.testing.assert_array_equal(offsets, other_offsets)
+
+
+def test_classifier_error_is_terminal_and_requires_fresh_replay(monkeypatch):
+    from sklearn.dummy import DummyClassifier
+
+    rec = fake_recording()
+    X, _, _ = replay_features(rec)
+    model = DummyClassifier(strategy="constant", constant=1).fit(
+        np.vstack([X[0], X[0] + 1]), np.array([-1, 1]))
+    decoder = CausalTrialDecoder(model)
+    original_predict = model.predict
+
+    def fail(_):
+        raise RuntimeError("classifier failed")
+
+    monkeypatch.setattr(model, "predict", fail)
+    chunks = [rec.signal[i:i + 64] for i in range(0, len(rec.signal), 64)]
+    for i, chunk in enumerate(chunks):
+        if i == rec.onsets[0] // 64:
+            cues = [int(rec.onsets[0])]
+        else:
+            cues = []
+        if (i + 1) * 64 >= rec.onsets[0] + 3.5 * rec.fs:
+            with pytest.raises(PowerDecoderFailedError, match="failed") as error:
+                decoder.process(chunk, onsets=cues)
+            assert isinstance(error.value.__cause__, RuntimeError)
+            break
+        assert decoder.process(chunk, onsets=cues) is None
+    assert decoder.failed
+    monkeypatch.setattr(model, "predict", original_predict)
+    with pytest.raises(PowerDecoderFailedError, match="terminal"):
+        decoder.process(chunks[i])  # A repaired model cannot make stale state safe.
+    fresh, _ = replay_decisions(rec, model)
+    assert len(fresh) == 1 and fresh[0].label == 1
+
+
+@pytest.mark.parametrize("bad_output", [[0], [1, -1], [], [float("nan")]])
+def test_invalid_classifier_output_never_emits_a_decision(monkeypatch, bad_output):
+    from sklearn.dummy import DummyClassifier
+
+    rec = fake_recording()
+    X, _, _ = replay_features(rec)
+    model = DummyClassifier(strategy="constant", constant=1).fit(
+        np.vstack([X[0], X[0] + 1]), np.array([-1, 1]))
+    monkeypatch.setattr(model, "predict", lambda _: bad_output)
+    decoder = CausalTrialDecoder(model)
+    with pytest.raises(PowerDecoderFailedError, match="failed"):
+        for i in range(0, len(rec.signal), 64):
+            decoder.process(rec.signal[i:i + 64],
+                            onsets=[int(rec.onsets[0])] if i <= rec.onsets[0] < i + 64 else [])
+    assert decoder.failed
+
+
+def test_invalid_eeg_chunk_makes_decoder_terminal():
+    from sklearn.dummy import DummyClassifier
+
+    rec = fake_recording()
+    X, _, _ = replay_features(rec)
+    model = DummyClassifier(strategy="constant", constant=1).fit(
+        np.vstack([X[0], X[0] + 1]), np.array([-1, 1]))
+    decoder = CausalTrialDecoder(model)
+    with pytest.raises(PowerDecoderFailedError, match="failed"):
+        decoder.process(np.full((64, 16), np.nan))
+    with pytest.raises(PowerDecoderFailedError, match="terminal"):
+        decoder.process(rec.signal[:64])

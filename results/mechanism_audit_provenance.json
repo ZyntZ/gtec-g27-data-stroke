@@ -11,8 +11,8 @@
   "source_sha256": {
     "mechanism_audit.py": "4622e7e23d4a77ee55966c2038446ef612b63c7d635d501d6d3ed43ebb8bff6e",
     "prequential.py": "ee9c16fc10e9d86479c0ea731819d5dd439b6efd4579ebcbf4830821ad6ba383",
-    "streaming.py": "f4ce3f58662a79b7a19111c88b980530cfba986d043ef63bf83784e937103245",
-    "spatial.py": "6f1983f4c2e1a28137c2540b6e268c717ec3937c661e64ecface070546fe1ce3",
+    "streaming.py": "78a1b69df360ba0348a2c4a9562a7269f5b2ba01afadb9f76ce3db2866d2606a",
+    "spatial.py": "182c90b1dbacb0840fed73b50bebd7c83180c9979150e509725a950266d5c6ab",
     "cue_audit.py": "ff0cb5b092f36bfc5ff37c0a61c8317eb95ef2cc0bce393540d6fc0ac2d052bd",
     "data.py": "1759401e31fc41c2accc439adc387e1086bd1e7380f39fbcf9b3917967b3cc68",
     "features.py": "fba7d9a2bf19cc1900486eb9df1367b5f60e4907d5d4d7ae14b8dfd39c90fba2"

@@ -9,7 +9,8 @@ from sklearn.exceptions import NotFittedError
 
 from stroke_rehab.data import Recording
 from stroke_rehab.spatial import (
-    CausalCovarianceStream, CausalSpatialDecoder, CovarianceCSP, replay_covariances)
+    CausalCovarianceStream, CausalSpatialDecoder, SpatialDecoderFailedError,
+    CovarianceCSP, replay_covariances)
 
 
 def recording():
@@ -94,3 +95,56 @@ def test_csp_recovers_known_covariance_axis_and_decoder_timing():
 def test_unfitted_decoder_fails():
     with pytest.raises(NotFittedError):
         CausalSpatialDecoder(CovarianceCSP())
+
+
+def test_spatial_decoder_error_is_terminal_not_retriable(monkeypatch):
+    from sklearn.dummy import DummyClassifier
+
+    rec = recording()
+    # A fitted estimator suffices to exercise the inference failure boundary.
+    model = DummyClassifier(strategy="constant", constant=1).fit(
+        np.array([[0], [1]]), [-1, 1])
+    decoder = CausalSpatialDecoder(model)
+    def fail(_):
+        raise RuntimeError("predict failed")
+    monkeypatch.setattr(model, "predict", fail)
+    for i in range(0, len(rec.signal), 64):
+        chunk = rec.signal[i:i + 64]
+        cues = [73] if i <= 73 < i + 64 else []
+        if i + 64 >= 73 + 3.5 * rec.fs:
+            with pytest.raises(SpatialDecoderFailedError, match="failed") as error:
+                decoder.process(chunk, onsets=cues)
+            assert isinstance(error.value.__cause__, RuntimeError)
+            break
+        assert decoder.process(chunk, onsets=cues) is None
+    assert decoder.failed
+    with pytest.raises(SpatialDecoderFailedError, match="terminal"):
+        decoder.process(rec.signal[i:i + 64])
+
+
+@pytest.mark.parametrize("bad_output", [[0], [1, -1], [], [float("nan")]])
+def test_spatial_decoder_rejects_invalid_labels(monkeypatch, bad_output):
+    from sklearn.dummy import DummyClassifier
+
+    rec = recording()
+    model = DummyClassifier(strategy="constant", constant=1).fit(
+        np.array([[0], [1]]), [-1, 1])
+    decoder = CausalSpatialDecoder(model)
+    monkeypatch.setattr(model, "predict", lambda _: bad_output)
+    with pytest.raises(SpatialDecoderFailedError, match="failed"):
+        for i in range(0, len(rec.signal), 64):
+            decoder.process(rec.signal[i:i + 64],
+                            onsets=[73] if i <= 73 < i + 64 else [])
+    assert decoder.failed
+
+
+def test_spatial_decoder_bad_eeg_fails_closed():
+    from sklearn.dummy import DummyClassifier
+
+    model = DummyClassifier(strategy="constant", constant=1).fit(
+        np.array([[0], [1]]), [-1, 1])
+    decoder = CausalSpatialDecoder(model)
+    with pytest.raises(SpatialDecoderFailedError, match="failed"):
+        decoder.process(np.full((64, 16), np.inf))
+    with pytest.raises(SpatialDecoderFailedError, match="terminal"):
+        decoder.process(recording().signal[:64])

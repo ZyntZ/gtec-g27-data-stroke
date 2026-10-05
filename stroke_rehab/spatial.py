@@ -175,12 +175,18 @@ class SpatialDecision:
     label: int  # Prediction, not the known trial label.
 
 
+class SpatialDecoderFailedError(RuntimeError):
+    """Terminal decoder error; the consumed EEG stream cannot be retried."""
+
+
 class CausalSpatialDecoder:
     """Inference-only, run-local spatial decoder with a fitted sklearn model.
 
     Construct a *new* decoder per continuous run; the filter starts at zero.
     Incoming EEG and onset samples never include future observations. No
-    reference to labels or recording data is stored in this object.
+    reference to labels or recording data is stored in this object. An error
+    makes the decoder terminal until reconstructed from a known run boundary.
+    This research decoder must not actuate stimulation.
     """
 
     def __init__(self, fitted_estimator, *, candidate="causal_csp_1pair",
@@ -191,16 +197,28 @@ class CausalSpatialDecoder:
         self.model = fitted_estimator
         self.candidate = candidate
         self.stream = CausalCovarianceStream(fs, channels, window)
+        self.failed = False
 
     def process(self, chunk, *, onsets=()):
-        event = self.stream.process(chunk, onsets=onsets)
-        if event is None:
-            return None
-        features = event.covariance[None, :]
-        if self.candidate == "causal_power":
-            power = np.diagonal(features, axis1=-2, axis2=-1)
-            features = np.log(np.maximum(power, 1e-12)).reshape(1, -1)
-        label = int(self.model.predict(features)[0])
-        if label not in (-1, 1):
-            raise ValueError("Expected -1 (right) or +1 (left) prediction")
-        return SpatialDecision(event.onset_sample, event.decision_sample, label)
+        if self.failed:
+            raise SpatialDecoderFailedError(
+                "Decoder is terminal after a processing failure; reconstruct and "
+                "replay EEG from a known run boundary")
+        try:
+            event = self.stream.process(chunk, onsets=onsets)
+            if event is None:
+                return None
+            features = event.covariance[None, :]
+            if self.candidate == "causal_power":
+                power = np.diagonal(features, axis1=-2, axis2=-1)
+                features = np.log(np.maximum(power, 1e-12)).reshape(1, -1)
+            prediction = np.asarray(self.model.predict(features))
+            if prediction.shape != (1,) or prediction[0] not in (-1, 1):
+                raise ValueError("Expected one -1 (right) or +1 (left) prediction")
+            return SpatialDecision(event.onset_sample, event.decision_sample,
+                                   int(prediction[0]))
+        except Exception as error:
+            self.failed = True
+            raise SpatialDecoderFailedError(
+                "Decoder processing failed; reconstruct and replay EEG from a known "
+                "run boundary. The failed chunk cannot be retried") from error
