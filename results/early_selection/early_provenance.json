@@ -1,0 +1,57 @@
+{
+  "scope": "Retrospective training-only selection; exposed tails; no new independent validation",
+  "design": {
+    "budgets": [
+      10,
+      20,
+      40,
+      60
+    ],
+    "decision_time_s": 3.5,
+    "window_s": 1.0,
+    "validation_start_0based": 60,
+    "validation_stop_0based": 80,
+    "inner_initial_trials": 10,
+    "inner_step_trials": 10,
+    "selection_metric": "pooled_inner_balanced_accuracy",
+    "tie_and_no_inner_fold": "filterbank_csp_shrinkage_lda"
+  },
+  "design_sha256": "1a79d713f5947023034c93170e7c8d862828d8f023833ccde7a3d76bae75dee4",
+  "source_commit": "9d834f9615c71808087426841ecdfab40d82c015",
+  "source_commit_scope": "Base commit at execution; source_sha256 identifies executed working-tree files",
+  "source_hash_encoding": "SHA256 of UTF-8 source bytes with CRLF normalized to LF",
+  "input_sha256": {
+    "P1_pre_training.mat": "6a2b29ef701d3e839f9ce5e81a9e5df6458130e252a4d94465ecdf249b43c889",
+    "P1_post_training.mat": "88cdaa8214c015d39c8f18f68db8b02c6b46cfffaaeabe2f081d7f582f017732",
+    "P2_pre_training.mat": "7296aa803d488d6a8f1d1bd0621c1c011c561ac0dc8867c17256bc4a0ed4b93c",
+    "P2_post_training.mat": "fcb480909f6e2c4b81ce0fcebaca242e2ad4d5dc3163d205f74e3a1c45c845bb",
+    "P3_pre_training.mat": "247a1a5d585f60da71412892e3f70f10d59c6505cf079d7bb54f78cf779faeed",
+    "P3_post_training.mat": "ac47b77cf0d954f4287685d5cf81ffccf611befa1d9e1f3f21c42856afe2140c"
+  },
+  "source_sha256": {
+    "stroke_rehab/early_selection.py": "530516d054d4b079faad2ccdbde5578051dd0bc8b614c6ac3fad5a6b7d8d1e7b",
+    "stroke_rehab/comparison.py": "d2850134cf722bef47196c9eecb1c20f983801a9f625f0f99132b61cc4a3f95a",
+    "stroke_rehab/riemann.py": "1a025056045846b16264ff52c9dd626c308f448193204a53f7a29c64e80f5a5b",
+    "stroke_rehab/models.py": "1c2564c0ec945fa81c1c374d589a7e638c88fad961a93a285df5b5db322382be",
+    "stroke_rehab/data.py": "1759401e31fc41c2accc439adc387e1086bd1e7380f39fbcf9b3917967b3cc68",
+    "stroke_rehab/features.py": "fba7d9a2bf19cc1900486eb9df1367b5f60e4907d5d4d7ae14b8dfd39c90fba2",
+    "stroke_rehab/forward_calibration.py": "75ede1bbad727280df9a23ed901952c0b6458c470bb2a777c7ddd9e1dffd7b19",
+    "configs/early_selection.json": "6e5e1dbbe1157fc9d5b801f8119770ad7e21ad5ce6273dbfdb80d28b5d116048"
+  },
+  "output_sha256": {
+    "early_predictions.csv": "cf97f1b6028bb901d3e83699c90edb5f5bef8193b0ece5c5a2e0fb60f40f776a",
+    "early_summary.csv": "6537946f768ef26eea9337cff9ef20b8e90f601f43e796bab956cc3d07d5891d",
+    "early_inner_predictions.csv": "9a99e76f09a325008445992aee9031d2b7ba5ebe9c0ddbb4925018e440bf4d6c",
+    "early_choices.json": "1d70be9dd5af63d1f643f803d8acce4d842f768786d42a6beaeb0aada872a785"
+  },
+  "runtime": {
+    "python": "3.13.14",
+    "numpy": "1.26.4",
+    "scipy": "1.16.3",
+    "sklearn": "1.8.0"
+  },
+  "label_access": "Fit and inner selection use only trial IDs within the specified prefix",
+  "adaptation": "Riemannian reference resets at the start of each validation block; skipped gap EEG is not used for reference adaptation",
+  "feedback": "Early post-cue; per-trial FES onset unavailable; not certified feedback-free",
+  "latency": "EEG cutoff at +3.5 s; hardware/transport and delivered latency not measured"
+}

@@ -27,7 +27,16 @@ def test_frozen_audit_receipts_are_self_consistent():
     assert len(provenance["source_sha256"]) == 4
     for source, digest in provenance["source_sha256"].items():
         assert len(digest) == 64
-        assert hashlib.sha256((ROOT / "stroke_rehab" / source).read_bytes()).hexdigest() == digest
+        # Git may check text out with CRLF on Windows. The original receipt
+        # identifies historical LF source, not a requirement to freeze code.
+        current = hashlib.sha256((ROOT / "stroke_rehab" / source).read_bytes().replace(b"\r\n", b"\n")).hexdigest()
+        if current != digest:
+            parity = json.loads((OUT / "stream_parity.json").read_text())
+            assert parity["source_sha256"][source] == current
+            assert parity["historical_source_sha256"] == provenance["source_sha256"]
+            assert parity["prediction_rows_matched"] == 3840
+            assert parity["summary_rows_matched"] == 192
+            assert parity["input_sha256"] == provenance["input_sha256"]
     assert all(n.endswith("_training.mat") and len(digest) == 64
                for n, digest in provenance["input_sha256"].items())
     assert all(r["validation_trial_1based"] in map(str, range(61, 81))

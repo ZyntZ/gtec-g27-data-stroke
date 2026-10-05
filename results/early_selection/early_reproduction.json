@@ -1,0 +1,15 @@
+{
+  "scope": "Same frozen training-only configuration before and after receipt/reporting fixes; no new model search",
+  "source_base_commit": "9d834f9615c71808087426841ecdfab40d82c015",
+  "prediction_bytes_unchanged": {
+    "early_predictions.csv": {
+      "before_sha256": "cf97f1b6028bb901d3e83699c90edb5f5bef8193b0ece5c5a2e0fb60f40f776a",
+      "after_sha256": "cf97f1b6028bb901d3e83699c90edb5f5bef8193b0ece5c5a2e0fb60f40f776a"
+    },
+    "early_inner_predictions.csv": {
+      "before_sha256": "9a99e76f09a325008445992aee9031d2b7ba5ebe9c0ddbb4925018e440bf4d6c",
+      "after_sha256": "9a99e76f09a325008445992aee9031d2b7ba5ebe9c0ddbb4925018e440bf4d6c"
+    }
+  },
+  "choice_identities_unchanged": 24
+}

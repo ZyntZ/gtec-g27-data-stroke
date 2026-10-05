@@ -11,6 +11,7 @@ import csv
 import hashlib
 import json
 import platform
+import subprocess
 from pathlib import Path
 
 import numpy as np
@@ -25,6 +26,8 @@ from .forward_calibration import training_files, validate_design
 SELECTED = "training_selected"
 MAJORITY = "calibration_majority"
 STRATEGIES = (*MODELS, SELECTED, MAJORITY)
+INNER_FIELDS = ("patient", "session", "calibration_trials", "model",
+                "fit_stop_trial_1based", "validation_trial_1based", "true_label", "predicted_label")
 
 
 def balanced_accuracy(labels, predictions):
@@ -45,9 +48,17 @@ def choose_model(inner_predictions, labels):
     if set(labels.tolist()) != {-1, 1}:
         return MODELS[0], {}, "fixed_fallback_no_two_class_inner_validation"
     scores = {name: balanced_accuracy(labels, inner_predictions[name]) for name in MODELS}
-    # MODELS order makes the tie explicit and stable.
-    chosen = max(MODELS, key=lambda name: scores[name])
-    return chosen, scores, "chronological_inner_balanced_accuracy"
+    # Compare exact integer cross-products with the common denominator
+    # 2 * n_left * n_right; rounding cannot turn a mathematical tie into a win.
+    left, right = int(np.sum(labels == 1)), int(np.sum(labels == -1))
+    numerators = {name: (int(np.sum(np.asarray(inner_predictions[name])[labels == 1] == 1)) * right
+                         + int(np.sum(np.asarray(inner_predictions[name])[labels == -1] == -1)) * left)
+                  for name in MODELS}
+    tied = numerators[MODELS[0]] == numerators[MODELS[1]]
+    chosen = max(MODELS, key=lambda name: numerators[name])
+    reason = ("fixed_csp_exact_inner_balanced_accuracy_tie" if tied
+              else "chronological_inner_balanced_accuracy")
+    return chosen, scores, reason
 
 
 def score_recording(recording, patient, stage, *, budgets=(10, 20, 40, 60),
@@ -130,6 +141,8 @@ def score_recording(recording, patient, stage, *, budgets=(10, 20, 40, 60),
 
 def summarize(predictions):
     grouped = {}
+    majority = {(r["patient"], r["session"], r["calibration_trials"]): r["predicted_label"]
+                for r in predictions if r["strategy"] == MAJORITY}
     for row in predictions:
         key = (row["patient"], row["session"], row["strategy"], row["calibration_trials"])
         grouped.setdefault(key, []).append(row)
@@ -145,6 +158,9 @@ def summarize(predictions):
                            balanced_accuracy=balanced_accuracy(labels, answers),
                            left_recall=float(np.mean(answers[labels == 1] == 1)),
                            right_recall=float(np.mean(answers[labels == -1] == -1)),
+                           predicted_left_fraction=float(np.mean(answers == 1)),
+                           calibration_majority_agreement=float(np.mean(
+                               answers == majority[(patient, stage, n)])),
                            left_trials=int(np.sum(labels == 1)), right_trials=int(np.sum(labels == -1))))
     return output
 
@@ -154,9 +170,14 @@ def _hash(path):
         return hashlib.file_digest(stream, "sha256").hexdigest()
 
 
-def _write(path, rows):
+def _source_hash(path):
+    """Text-source receipt independent of checkout CRLF conversion."""
+    return hashlib.sha256(Path(path).read_bytes().replace(b"\r\n", b"\n")).hexdigest()
+
+
+def _write(path, rows, fieldnames=None):
     with Path(path).open("w", encoding="utf-8", newline="") as stream:
-        writer = csv.DictWriter(stream, fieldnames=list(rows[0]))
+        writer = csv.DictWriter(stream, fieldnames=fieldnames or list(rows[0]))
         writer.writeheader()
         writer.writerows(rows)
 
@@ -187,24 +208,37 @@ def run(data_root, output_dir, design):
     summary = summarize(predictions)
     _write(out / "early_predictions.csv", predictions)
     _write(out / "early_summary.csv", summary)
-    _write(out / "early_inner_predictions.csv", inner)
-    (out / "early_choices.json").write_text(json.dumps(choices, indent=2) + "\n", encoding="utf-8")
+    _write(out / "early_inner_predictions.csv", inner, INNER_FIELDS)
+    (out / "early_choices.json").write_text(json.dumps(choices, indent=2) + "\n", encoding="utf-8", newline="\n")
     source_root = Path(__file__).resolve().parents[1]
+    try:
+        source_commit = subprocess.check_output(
+            ["git", "rev-parse", "HEAD"], cwd=source_root, text=True, stderr=subprocess.DEVNULL).strip()
+    except (OSError, subprocess.CalledProcessError):
+        source_commit = None
     metadata = dict(scope="Retrospective training-only selection; exposed tails; no new independent validation",
                     design=design, design_sha256=hashlib.sha256(json.dumps(design, sort_keys=True).encode()).hexdigest(),
+                    source_commit=source_commit,
+                    source_commit_scope="Base commit at execution; source_sha256 identifies executed working-tree files",
+                    source_hash_encoding="SHA256 of UTF-8 source bytes with CRLF normalized to LF",
                     input_sha256=hashes,
-                    source_sha256={str(p.relative_to(source_root)).replace('\\', '/'): _hash(p)
+                    source_sha256={str(p.relative_to(source_root)).replace('\\', '/'): _source_hash(p)
                                    for p in (Path(__file__), source_root / "stroke_rehab/comparison.py",
                                              source_root / "stroke_rehab/riemann.py", source_root / "stroke_rehab/models.py",
-                                             source_root / "stroke_rehab/data.py")},
-                    output_sha256={p.name: _hash(p) for p in out.glob("early_*.csv")},
+                                             source_root / "stroke_rehab/data.py",
+                                             source_root / "stroke_rehab/features.py",
+                                             source_root / "stroke_rehab/forward_calibration.py",
+                                             source_root / "configs/early_selection.json")},
+                    output_sha256={name: _hash(out / name) for name in
+                                   ("early_predictions.csv", "early_summary.csv",
+                                    "early_inner_predictions.csv", "early_choices.json")},
                     runtime=dict(python=platform.python_version(), numpy=np.__version__,
                                  scipy=scipy.__version__, sklearn=sklearn.__version__),
                     label_access="Fit and inner selection use only trial IDs within the specified prefix",
                     adaptation="Riemannian reference resets at the start of each validation block; skipped gap EEG is not used for reference adaptation",
                     feedback="Early post-cue; per-trial FES onset unavailable; not certified feedback-free",
                     latency="EEG cutoff at +3.5 s; hardware/transport and delivered latency not measured")
-    (out / "early_provenance.json").write_text(json.dumps(metadata, indent=2) + "\n", encoding="utf-8")
+    (out / "early_provenance.json").write_text(json.dumps(metadata, indent=2) + "\n", encoding="utf-8", newline="\n")
     return predictions, summary, choices
 
 
