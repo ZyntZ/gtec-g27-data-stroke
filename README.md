@@ -117,6 +117,39 @@ motor imagery, safety of functional electrical stimulation, clinical recovery
 or prospective accuracy. In particular, feedback during the early EEG window
 has **not** been ruled out.
 
+## Organizer scoring clarification: peak across average test trials
+
+The organizer confirmed the baseline scoring operation: train on the paired
+training `.mat`, classify the paired test `.mat`, average **binary correctness
+across all test trials at each time**, then take the maximum over times. The
+feedback phase may be scored and all training trials may be used for
+calibration. The hackathon deliverable is a video. Their reply does **not**
+supply their exact feature extraction, temporal sampling grid, or a new
+unseen recording; these six test files have already been inspected here.
+
+Run `python -m stroke_rehab.organizer_metric --reference-csv results/decision_time.csv`
+(after `stroke-rehab download`) for a separate, illustrative comparison using
+the repository's **causal CSP + LDA** with one fit per time point and a fixed
+one-second window. The optional historical-parity gate checked all 138
+recording/time pairs against the pre-existing `decision_time.csv`.
+[Protocol and limitations](docs/organizer_metric.md),
+[extractable session values](results/organizer_metric/organizer_metric_summary.csv),
+[pooled summary](results/organizer_metric/organizer_metric_aggregate.csv), and
+[the six-panel figure](results/organizer_metric/organizer_metric_timecourse.png).
+
+| Quantity on six already-exposed test runs | Correct / 480 | Interpretation |
+|:--|--:|:--|
+| Fixed +3.50 s on every run | 358 | Illustrative early decision (not a new blind score) |
+| One maximum of the pooled curve | 407 | Post-hoc selection of one common time: +4.25 s |
+| Sum of six run-specific maxima | 427 | Post-hoc selection of a different time per run |
+
+These are **different summaries of the same predictions**, not three model
+improvements. This pipeline is not the organizer's published CSP/TVLDA
+implementation. No per-trial oracle, retroactively chosen time, or feedback
+period should be presented as a deployable real-time decision or clinical
+benefit. The pre-existing 433/480 offline multi-second model has a different
+preprocessing and decision rule and must not be labeled organizer-comparable.
+
 ## First held-out run
 
 Selection is based on training-run CV alone. One final prediction is made for each test trial from **2.5–6.5 seconds after trigger onset**; the instruction is given at **2 seconds**. Numbers below are from the committed `results/session_results.csv`, seed 27.

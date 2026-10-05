@@ -1,0 +1,2 @@
+sessions,test_trials,grid_points,fixed_time_s,fixed_correct,fixed_accuracy,pooled_peak_time_s,pooled_peak_correct,pooled_peak_accuracy,sum_of_session_peaks_correct,sum_of_session_peaks_accuracy,all_peaks_posthoc
+6,480,23,3.5,358,0.7458333333333333,4.25,407,0.8479166666666667,427,0.8895833333333333,True
