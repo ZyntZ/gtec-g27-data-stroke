@@ -10,6 +10,10 @@ We analyze the BR41N.IO Stroke Rehab recordings for **three participants, two se
 
 *First 60 training trials calibrate each model; trials 61–80 per session are scored at each time. Six sessions belong to three people. The +3.5 s feedback boundary comes from a diagram, not recorded functional electrical stimulation (FES) onsets. [Data and methods](docs/forward_calibration.md) · [Figure source and counts](results/jury_tradeoff/same_tail_counts.csv).*
 
+![Animated: training-only accuracy as the decision time moves through the trial](results/decision_clock/decision_clock.gif)
+
+*The same design swept through the whole trial in 0.25 s steps: one causal 1 s window ending at each decision time, six training runs, trials 61–80. It passes through the same 82/120 and 99/120 as the figure above. Grey lines are single sessions. The +3.5 s boundary is assumed from the protocol diagram, and feedback is present in training runs, so the rise after it is not evidence of cleaner motor intent. [Counts](results/decision_clock/decision_clock_counts.csv) · [static final frame](results/decision_clock/decision_clock.png) · `python analysis/decision_clock.py`.*
+
 ## Start here
 
 | Need | Read or run |

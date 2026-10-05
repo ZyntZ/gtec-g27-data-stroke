@@ -32,6 +32,15 @@ python analysis/jury_tradeoff.py    # checks saved trial IDs/labels; writes PNG,
 
 The figure uses the fixed one-pair 8–30 Hz filter-bank CSP pipeline: first **60** labelled training trials are fitted separately per session, then **trials 61–80** are scored once per fixed one-second interval. The four intervals end at +2.0, +3.5, +4.25 and +6.5 s from attention trigger; the +2.0 s control is **before** the imagery instruction. Causal filtering is applied to the continuous run; all four times use the same 120 trial IDs and true labels. The script checks one decision per `(patient, session, time, trial)`, fixed budgets, label identity and correctness before drawing [`same_tail_tradeoff.png`](../results/jury_tradeoff/same_tail_tradeoff.png). Numerical table: [`same_tail_counts.csv`](../results/jury_tradeoff/same_tail_counts.csv). Full [design, model-family comparison and caveats](forward_calibration.md).
 
+### Animated version
+
+```bash
+python analysis/decision_clock.py --data-dir data/stroke-rehab   # training runs only; recompute, then draw
+python analysis/decision_clock.py                                # draw from the saved counts, no EEG needed
+```
+
+[`decision_clock.gif`](../results/decision_clock/decision_clock.gif) sweeps the same design through the trial: same model, same 60 calibration trials, same trials 61–80, with the one-second window ending every 0.25 s from +1.0 to +8.0 s. The script refuses to draw unless the pooled counts at +2.0, +3.5, +4.25 and +6.5 s equal the static figure's 55, 82, 99 and 99 of 120. It reads no test recording. Counts: [`decision_clock_counts.csv`](../results/decision_clock/decision_clock_counts.csv); the final frame is saved as a PNG for viewers that do not animate. The same caveats apply: feedback is present in training runs and its onset is not recorded.
+
 | Session | +2.0 s control | +3.5 s early | +4.25 s later | +6.5 s later |
 |:--|--:|--:|--:|--:|
 | P1 PRE | 8/20 | 17/20 | 17/20 | 12/20 |
