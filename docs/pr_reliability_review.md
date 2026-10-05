@@ -18,7 +18,7 @@ An independent review was requested with `gpt-6-astra` at Ultra effort and compl
 
 The source fingerprint failure was reproduced before repair. The current
 verification commands and exact execution evidence are recorded in
-`results/pr_reliability/verification.json`. Automated pull-request, push and
+`results/pr_reliability/verification.json`. Local verification passed 127 tests with one optional module skipped. GitHub verified all 130 tests with the optional accuracy dependencies, plus preflight and the published-arithmetic check on `d1a84f2`. Automated pull-request, push and
 merge-queue checks run the full data-free suite, repository preflight and
 published-result arithmetic validator. They do not download participant EEG
 or fit new clinical models. A workflow passing on one branch does not imply

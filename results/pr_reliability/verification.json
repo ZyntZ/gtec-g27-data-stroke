@@ -91,15 +91,24 @@
     "summary": "2 passed in 2.18s",
     "scope": "Rechecked after retaining the newest PR6 early receipt"
   },
-  "pdf_verified": {
-    "pages": 1,
-    "render_reviewed": true,
-    "path": "output/pdf/g27_pr_reliability_review.pdf",
-    "sha256": "247f0636eb4ddd4b0e4b1a949b7f43172a6819f2b57bb7063685331a4af13040"
-  },
   "checks_source_sha256_lf": {
     "tests/test_forward_artifacts.py": "58798006b6c32957c2612ab02c292156ab7858466d2432608d666c68883d7fa4",
     "analysis/reproduce_stream.py": "3c94bb09ad4f5d10137f2bd73426a6466ba28fb9c7b7195b2000cc1be64148e6",
     ".github/workflows/verify.yml": "97a833241efb7018757becdbe5f861ebefd147526fc04639c3020948a1a46161"
-  }
+  },
+  "hosted_checks": {
+    "summary": "130 passed in 35.78s",
+    "head_sha": "d1a84f256e185059df760520c4123643c8330f92",
+    "event": "push",
+    "conclusion": "success",
+    "url": "https://github.com/ZyntZ/gtec-g27-data-stroke/actions/runs/37285776524",
+    "scope": "Source and frozen-artifact tests, repository preflight, published arithmetic; no raw EEG numerical rerun in CI"
+  },
+  "pdf_verified": {
+    "pages": 1,
+    "render_reviewed": true,
+    "path": "output/pdf/g27_pr_reliability_review.pdf",
+    "sha256": "0de843fc97fa90614734c3b123168545c3290a5d42388bd832ed12a81bb49450"
+  },
+  "source_inventory_scope": "All package source fingerprints were checked against the actual rerun; this is a source inventory, not a claim that every package module was executed."
 }

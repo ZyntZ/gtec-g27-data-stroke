@@ -61,7 +61,10 @@ def build():
           "All 24 early choices, 1,920 outer and 1,080 inner predictions match; "
           "3,840 historical forward predictions and 192 summaries reproduce. "
           "Automated checks run on pull requests, pushes and merge groups without raw EEG. "
-          "Hosted workflow execution is reported separately from these local checks."),
+          + (f"GitHub: {receipt['hosted_checks']['summary']} on "
+             f"{receipt['hosted_checks']['head_sha'][:7]} (Python 3.11, optional accuracy dependencies installed)."
+             if 'hosted_checks' in receipt else
+             "Hosted workflow execution is reported separately from these local checks.")),
         p("Scientific result and limits", heading),
         p("At 60 calibration labels and +3.5 seconds, fixed CSP scores <b>82/120</b> "
           "versus <b>75/120</b> for selection; P2 PRE falls from 13/20 to 8/20. "
