@@ -1,3 +1,5 @@
+> Archived source snapshots: this dated handoff and FINAL_CHECKS.json describe their recorded execution bases. They do not certify the current combined tree. See [the integration checks](../pr_reliability/verification.json) and [the review](../../docs/pr_reliability_review.md).
+
 # G27 verification and research handoff — 4–5 October 2026
 
 Historical handoff for the named snapshots below. Its test counts, notebook/export checks and fixed-montage parity do not certify the final integrated branch. Current integrated checks are recorded in the `current_stack_checks` entry of [FINAL_CHECKS.json](FINAL_CHECKS.json).

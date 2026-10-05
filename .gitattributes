@@ -4,3 +4,4 @@
 *.json text eol=lf
 .gitattributes text eol=lf
 results/**/*.csv -text
+*.pdf binary

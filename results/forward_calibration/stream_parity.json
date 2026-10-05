@@ -1,5 +1,5 @@
 {
-  "checked_at_utc": "2026-10-05T08:32:49.192653+00:00",
+  "checked_at_utc": "2026-10-05T08:33:25.910202+00:00",
   "scope": "Frozen historical scores reproduced; covariance API parity, not clinical validation",
   "prediction_rows_matched": 3840,
   "summary_rows_matched": 192,
@@ -168,5 +168,9 @@
       "final_references_match": true,
       "decision_scores_match": true
     }
-  ]
+  ],
+  "output_sha256_lf": {
+    "forward_calibration_predictions.csv": "2b6cf18397ee408048238de9005ba10d90a8e064e4afb4e046690bf28a5edf26",
+    "forward_calibration_summary.csv": "5502ab7c15ef87c1c8a5309677ad03b07c5c6569493c57ae661cd10a2a004c87"
+  }
 }
