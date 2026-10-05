@@ -1,0 +1,4 @@
+strategy,sessions,test_correct,test_trials,test_accuracy
+train_selected_full,6,388,480,0.8083333333333333
+train_selected_early,6,347,480,0.7229166666666667
+fixed_3p5,6,358,480,0.7458333333333333

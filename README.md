@@ -4,6 +4,8 @@ A reproducible starting line for the BR41N.IO Stroke Rehab track. We use the org
 
 ## Critical research review
 
+The [training-locked decision-time audit](docs/locked_time.md) selects a causal one-second CSP endpoint from calibration trials only: 388/480 exploratory test decisions, versus 427/480 when each session peak is selected after inspecting test labels. These are reused public test runs, not blind scores or clinical endpoints.
+
 Current-main integration checks are recorded in
 [`results/pr_reliability/verification.json.current_stack_checks`](results/pr_reliability/verification.json):
 main `0413792`, PR6 and PR9 pass 136 tests with optional accuracy dependencies,
