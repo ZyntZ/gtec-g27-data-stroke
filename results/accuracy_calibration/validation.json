@@ -1,0 +1,47 @@
+{
+  "checked_at_utc": "2026-10-05T10:23:07.736617+00:00",
+  "status": "pass",
+  "checks": {
+    "metric_domains_valid": true,
+    "expected_sessions_and_families": true,
+    "team_baseline_six_sessions_match": true,
+    "team_baseline_433_of_480": true,
+    "all_new_train_and_test_counts_80": true,
+    "oof_trial_coverage": true,
+    "oof_labels_and_probabilities_valid": true,
+    "oof_family_labels_identical": true,
+    "oof_metrics_reproduce": true,
+    "subset_memberships_complete": true,
+    "exact_balanced_subset_counts": true,
+    "nested_subsets": true,
+    "all_requested_calibration_budgets": true,
+    "calibration_curve_arithmetic": true,
+    "full_calibration_endpoint_matches_selected": true,
+    "full_calibration_subset_matches_frozen_model": true,
+    "full_choice_matches_training_receipt": true,
+    "reliability_bins_account_for_80_trials": true,
+    "pre_post_transfer_only_pre_training_labels": true
+  },
+  "inputs_sha256": {
+    "baseline_reproduction.csv": "96454b776c13dd803e3adca46b960e0646998bba7a2457dcabe2968a261ca908",
+    "calibration_curves.csv": "8ddf173f78a78852e5f0e46b9739caaa79e402e0446712a817659002033785e5",
+    "calibration_subsets.csv": "fa68f8d263d34cf0a1c16565bed2cfbac7bbe94af697cf7219fce2b9dc995ddc",
+    "exploratory_test_accuracy.csv": "1ba4f0f92f3b4586271b34d2da8350088d99b1327caaaad6cc98f2eb8bf86b1e",
+    "nested_training_cv.csv": "9b27aab33a167749c6778162e8fabcf5d2f53e16c4ae0ccddede5497e8831f93",
+    "nxxis_reference_reproduction.csv": "75599f41b2a8515a1aca2d3dd53d3ca88dc7dd0bc2b25821534d088d45b4a8ac",
+    "pre_post_transfer.csv": "71e355835b1bfb97c0cd93a16b56f25b341c88d61f189440567da14e88424640",
+    "probability_reliability.csv": "2ee2ab477cb5c4f78142b50ed4475a84b2e0556f378f93667e1ea1aa481360eb",
+    "training_oof_predictions.csv": "99467bdaeab9f8c40f104a47a500a15dbfb510a6b2f2065490413899c13028d8",
+    "selection_training_only.json": "f4ff773cdf1079e24abdcb37df6c5e71e67f696bea81ddc924a8037d6582259c"
+  },
+  "validator_sha256": "c0ee65d8dede31493f6f34a5ccf1ed918067071025b1050a0f16523db7d69bcd",
+  "test_execution": "Not run by this validator; see ../overnight/FINAL_CHECKS.json for separate dated test evidence",
+  "scope": "Published CSV arithmetic and consistency only; no recording hashes rechecked, model fitting, test prediction replay or scientific validation",
+  "pooled_correct": {
+    "CSP-baseline": 433,
+    "FBCSP": 423,
+    "Riemann": 446,
+    "TV-CSP": 427,
+    "selected": 428
+  }
+}

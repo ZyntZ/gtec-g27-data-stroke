@@ -1,0 +1,7 @@
+session,train_trials,correct,trials,accuracy,previous_accuracy,matches_previous
+P1_pre,80,74,80,0.925,0.925,True
+P1_post,80,74,80,0.925,0.925,True
+P2_pre,80,66,80,0.825,0.825,True
+P2_post,80,79,80,0.9875,0.9875,True
+P3_pre,80,70,80,0.875,0.875,True
+P3_post,80,70,80,0.875,0.875,True

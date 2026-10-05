@@ -1,0 +1,7 @@
+# Canonical source text; numerical CSV receipts retain their exact written bytes.
+*.py text eol=lf
+*.md text eol=lf
+*.json text eol=lf
+.gitattributes text eol=lf
+results/**/*.csv -text
+*.pdf binary

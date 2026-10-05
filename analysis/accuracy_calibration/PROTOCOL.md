@@ -1,0 +1,53 @@
+# Accuracy and calibration protocol
+
+This implements the accuracy track Anna proposed, as attributed by Jason on 4 October 2026. It is a bounded comparison, not confirmation of a team-wide role allocation or a clinical result. The public test scores were already visible before this work. All resulting test comparisons are exploratory, including any improvement over the previous result.
+
+## Two baselines with different purposes
+
+1. Reproduce **Anna's ZyntZ team baseline** using unchanged `stroke_rehab.experiment.evaluate_all`: three bands 8–12, 12–20, 20–30 Hz, fourth-order continuous zero-phase filtering, **[2.5,6.5) s** features, regularized CSP with two eigenvectors at each end per band, ridge 0.01, standardizer and shrinkage LDA. Five-fold stratified training-run CV, seed 27, chooses between bandpower and CSP; CSP wins all six. All sessions contain 80 training and 80 test trials. Compare every result field with committed `results/session_results.csv`. Expected result: 433/480, session counts 74,74,66,79,70,70. A separately reproduced Sudip/nxxis result (444/479 over [2.5,8) s) is retained as a reference receipt, not the team baseline.
+2. Establish a common fixed **8–30 Hz CSP+shrinkage LDA** baseline for the new comparison. Every session uses **80 training and 80 separate test trials**, 40 per class. All new models use **[2.5,6.5) s** features, cue at +2 s and **EEG cutoff +6.5 s**. Delivered decision latency, including inference and transport, is unmeasured. Reset a fourth-order one-pass Butterworth filter for every trial and warm it using samples from **[0,2.5) s**. Initialize its state to the first sample. No signal at or after +6.5 s or from another trial can enter a feature. This is the same feature window/count as the team baseline, but a different filtering and covariance/CSP contract; comparison with it concerns combined pipeline differences, not isolated algorithm effects.
+
+Raw channels remain in the supplied reference; no rereferencing, trial rejection or anatomical inference is added. Every finite recording must contain sixteen channels at 256 Hz and eighty uninterrupted eight-second label blocks. A label is one trial, never 2,048 independent samples.
+
+## Small training-only comparison
+
+The fixed order is FBCSP with 2 or 4 spatial filters per band; Riemannian tangent-space logistic regression C=0.01 or 0.1; and time-resolved CSP+shrinkage LDA with 2 or 4 filters per band. All use 8–12, 12–20 and 20–30 Hz. OAS covariance is estimated independently per trial. CSP, Riemannian reference means, scalers and classifiers are fitted again inside every fold.
+
+FBCSP and Riemannian models use the full four-second window. The time-resolved model fits separate CSP and LDA models in four adjacent one-second windows [2.5,3.5), [3.5,4.5), [4.5,5.5), [5.5,6.5), then averages their posterior probabilities. It is a small time-varying ensemble, **not a reproduction of the supplied PCA+TVLDA paper**. Its final prediction uses all four windows, hence the same +6.5 s EEG cutoff as the common baseline. The separately verified early [2.5,3.5) s streaming exports use the existing continuous-filter CSP pipeline; they do not verify streaming inference for these Riemannian models.
+
+Outer evaluation is five chronological 16-trial validation blocks. Remove one immediately adjacent training trial on each available side. Outer fits therefore have 62 trials for interior blocks and 63 at the ends. Each training trial is predicted once. Inside an outer fitting partition, choose settings using three shuffled stratified trial folds, seed 27. The `selected` row chooses among all six candidates within each inner loop; family rows choose within their two settings. This makes the outer scores estimates of the complete setting/family selection rule on unseen training blocks, rather than the maximum of their outer scores. The final full-training choice uses the same three-fold selector. Accuracy decides; fixed candidate order breaks ties. Report balanced accuracy, Brier score and log loss too. The selected model can differ across outer folds; saved fold choices make that explicit.
+
+`--stage train` reads only the six `*_training.mat` files and writes `selection_training_only.json` before any new test evaluation. Selection is training-only, but previous human exposure to test results still prevents a fresh held-out claim. The hash receipt establishes execution order, not prospective preregistration.
+
+## Calibration burden and probability reliability
+
+Calibration here means **labelled target-session trials**, not fitting a probability calibrator. Every curve evaluates the same **80 separate test trials**. At 10, 20 and 40 labels, fit on five random, balanced training subsets sampled across the full run (half per hand), seeds 27–31. Subsets are nested within each seed. Select settings inside that subset alone: two stratified folds at 10 labels, three otherwise. No unused target training labels or test labels select the model. Save exact zero-based trial indices and chosen settings. Plot means with bars spanning the full minimum/maximum across these five overlapping subsets; also save their SD in the CSV. These bars describe subset variability, **not patient uncertainty or a confidence interval**. These retrospective random, balanced subsets use labels to construct the budget; they are not chronological prefixes or a prospective acquisition-time experiment.
+
+At 80 labels, use the frozen full-training choice, all trials in their original order, and one fit. Its score must equal the full-session selected row.
+
+At **0 target labels**, train on the **320 training trials from the other two participants**, both sessions each. Exclude both sessions of the target participant and every source test run. Choose settings with two leave-one-source-participant-out folds (160 fit / 160 validation), then refit on 320 source trials. This point is source-only transfer; 10–80 are target-only fits. The curve describes two explicitly different fitting regimes, not a single fine-tuning algorithm. A participant's POST source data may be included here: this is a retrospective unseen-participant benchmark, not a historical PRE deployment simulation. A separate PRE→POST test addresses that chronology.
+
+Probability reliability uses the full-training selected model's exposed-test probabilities in five fixed bins [0,.2), [.2,.4), [.4,.6), [.6,.8), [.8,1]. Show trial counts, mean P(left), observed left fraction and per-session Brier/log loss. Do not fit calibration from those test outcomes. No claim of calibrated clinical feedback follows from eighty test trials.
+
+## PRE → POST transfer
+
+These cross-run fits and the zero-label source pooling assume consistent channel
+identity/order across recordings. [PR #3](https://github.com/ZyntZ/gtec-g27-data-stroke/pull/3)
+now raises a possible layout difference from signal topology. This is a hypothesis,
+not verified acquisition metadata; if true, the transfer scores also reflect
+channel mismatch. Do not interpret a poor transfer cell solely as physiological
+session drift, or change channel names/order using that hypothesis as ground truth.
+
+Select the model and settings using that participant's **80 PRE training trials only**. Fit once on those trials and score the **80 POST test trials**. No PRE test labels, POST training labels or POST-based settings are used. Report three patient cells separately. This differs from the original transfer script, which pools source training and test labels and also considers POST→PRE.
+
+## Interpretation and finish condition
+
+Both the common four-second and legacy windows overlap documented feedback, beginning nominally around +3.5 s. Causal filtering prevents future-sample leakage; it does not remove cue, FES, visual feedback or other class-related artifacts already present. Separate per-trial feedback timestamps and an untouched run/participant are needed for a clean pre-feedback decoding claim. Accuracy and lower calibration burden alone do not establish stroke recovery, therapeutic efficacy or safe feedback. There are three participants and six repeated sessions; pooled trial scores are descriptive.
+
+Finish this pass with six-session baseline parity, nested training comparison, exact 0/10/20/40/80 curves, probability reliability, optional PRE→POST, machine-readable predictions/settings/counts and visually inspected figures. Stop after these checks; no adaptive test-based search. Organizer scoring/submission requirements are a separate source-backed note; their numerical scoring contract remains unconfirmed.
+
+## Next independent comparison — proposed, not executed
+
+Freeze the Riemannian family and fixed causal CSP baseline before obtaining untouched later runs or participants. Preserve this six-session study and its known test exposure as development evidence. For each permitted calibration run, use the same retained trial IDs and training budget, the same causal [2.5,6.5) s feature window and fixed band construction already specified above. Select Riemannian C only from the declared training grid; keep baseline CSP fixed. Fit every learned transform within the allowed calibration data. Save candidate source/runtime hashes and settings before opening evaluation labels.
+
+Evaluate both frozen pipelines once on identical untouched trial IDs. Report correct/trials, balanced accuracy, Brier score and log loss per participant/session, retaining failures and exclusions. Use people or sessions as the units for uncertainty, not 480 supposedly independent people. A geometry-only question would require a different controlled experiment because these complete pipelines also differ in bands and classifier. Timing comparisons must separately measure last EEG sample, chunk arrival and delivered prediction. Actual per-trial feedback markers are needed for a clean pre-feedback claim. No untouched evaluation data are available in this package; this protocol is the next credible test, not a completed improvement.

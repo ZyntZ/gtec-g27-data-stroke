@@ -91,3 +91,30 @@ transmission, or stimulation latency. With only three participants and no
 per-trial FES timestamps, no gain over competing teams or rehabilitation
 benefit can be established by these results. For a video, show the
 post-hoc peak **and** the fixed-time curve with these qualifications.
+
+## Combined-source execution
+
+After integrating main `0413792`, the early/streaming changes and PR9, the
+organizer calculation was actually rerun with
+`python -m stroke_rehab.organizer_metric --reference-csv results/decision_time.csv`.
+All three numerical CSVs remain byte-identical to update03, and all twelve raw
+recording hashes match. The active receipt records the executed source; the
+original upstream receipt is retained as
+`organizer_metric_provenance_update03_snapshot.json` and describes that earlier
+source only. Source fingerprints normalize CRLF to LF; input and output hashes
+retain raw bytes, with numerical CSVs protected from Git text conversion.
+The guard requires all six calculation sources and all four output files.
+Exact execution and full combined checks are indexed by the current integration
+record; regeneration is not a new method, score improvement or blind evaluation.
+
+## PR7 component receipt reuse after current-main integration
+
+The PR7 component integrates main `0413792` and retains the PR8 terminal-error fix.
+Its active organizer and stream receipts come from an actual run of the combined
+PR6 calculation sources at `5037fab`. Every recorded source dependency and output
+fingerprint is identical here; the full component suite checks those identities.
+There was no independent refit of identical models in the PR7 checkout. The original
+update03 organizer receipt and this component's earlier stream receipt are kept
+as clearly named snapshots. Source hashes normalize CRLF to LF; raw input/output
+bytes remain unchanged. This reuse establishes execution equivalence for the
+declared calculation, not independent scientific validation.

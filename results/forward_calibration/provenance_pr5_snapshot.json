@@ -1,0 +1,49 @@
+{
+  "scope": "Training runs only; already-exposed dataset; exploratory",
+  "design": "Prefix calibration, fixed later validation tail; no test files",
+  "input_sha256": {
+    "P1_pre_training.mat": "6a2b29ef701d3e839f9ce5e81a9e5df6458130e252a4d94465ecdf249b43c889",
+    "P1_post_training.mat": "88cdaa8214c015d39c8f18f68db8b02c6b46cfffaaeabe2f081d7f582f017732",
+    "P2_pre_training.mat": "7296aa803d488d6a8f1d1bd0621c1c011c561ac0dc8867c17256bc4a0ed4b93c",
+    "P2_post_training.mat": "fcb480909f6e2c4b81ce0fcebaca242e2ad4d5dc3163d205f74e3a1c45c845bb",
+    "P3_pre_training.mat": "247a1a5d585f60da71412892e3f70f10d59c6505cf079d7bb54f78cf779faeed",
+    "P3_post_training.mat": "ac47b77cf0d954f4287685d5cf81ffccf611befa1d9e1f3f21c42856afe2140c"
+  },
+  "source_sha256": {
+    "forward_calibration.py": "75ede1bbad727280df9a23ed901952c0b6458c470bb2a777c7ddd9e1dffd7b19",
+    "comparison.py": "d2850134cf722bef47196c9eecb1c20f983801a9f625f0f99132b61cc4a3f95a",
+    "riemann.py": "53704e895a0f88832ce6196954cc759fa694edd4da8ba0eb8c356f915957ccfd",
+    "models.py": "1c2564c0ec945fa81c1c374d589a7e638c88fad961a93a285df5b5db322382be"
+  },
+  "runtime": {
+    "python": "3.11.15",
+    "numpy": "2.4.6",
+    "scipy": "1.17.1",
+    "scikit_learn": "1.9.1"
+  },
+  "model_order": [
+    "filterbank_csp_shrinkage_lda",
+    "filterbank_riemann_recentered"
+  ],
+  "budget_prefixes": [
+    10,
+    20,
+    40,
+    60
+  ],
+  "decision_time_s": [
+    2.0,
+    3.5,
+    4.25,
+    6.5
+  ],
+  "one_second_window": 1.0,
+  "validation_trial_1based": [
+    61,
+    80
+  ],
+  "calibration_label_access": "Only labels strictly before the validation tail",
+  "online_adaptation": "Target covariance reference updates without labels, in trial order",
+  "feedback": "Onset per trial unknown; early decisions are not verified feedback-free",
+  "interpretation": "Three participants / six correlated sessions; no clinical benefit inference"
+}

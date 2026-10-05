@@ -1,0 +1,270 @@
+{
+  "checked_at_utc": "2026-10-05T08:33:26.155696+00:00",
+  "execution_base_commit": "5a356b3fd072e8ddedfef9c98a270482423d5d35",
+  "scope": "Actual combined-tree reproduction; retrospective training data only; no new scientific validation",
+  "early_output_sha256": {
+    "early_predictions.csv": "cf97f1b6028bb901d3e83699c90edb5f5bef8193b0ece5c5a2e0fb60f40f776a",
+    "early_summary.csv": "6537946f768ef26eea9337cff9ef20b8e90f601f43e796bab956cc3d07d5891d",
+    "early_inner_predictions.csv": "9a99e76f09a325008445992aee9031d2b7ba5ebe9c0ddbb4925018e440bf4d6c",
+    "early_choices.json": "1d70be9dd5af63d1f643f803d8acce4d842f768786d42a6beaeb0aada872a785"
+  },
+  "input_sha256": {
+    "P1_pre_training.mat": "6a2b29ef701d3e839f9ce5e81a9e5df6458130e252a4d94465ecdf249b43c889",
+    "P1_post_training.mat": "88cdaa8214c015d39c8f18f68db8b02c6b46cfffaaeabe2f081d7f582f017732",
+    "P2_pre_training.mat": "7296aa803d488d6a8f1d1bd0621c1c011c561ac0dc8867c17256bc4a0ed4b93c",
+    "P2_post_training.mat": "fcb480909f6e2c4b81ce0fcebaca242e2ad4d5dc3163d205f74e3a1c45c845bb",
+    "P3_pre_training.mat": "247a1a5d585f60da71412892e3f70f10d59c6505cf079d7bb54f78cf779faeed",
+    "P3_post_training.mat": "ac47b77cf0d954f4287685d5cf81ffccf611befa1d9e1f3f21c42856afe2140c"
+  },
+  "early_choices": 24,
+  "early_outer_predictions": 1920,
+  "early_inner_predictions": 1080,
+  "early_all_output_bytes_unchanged": true,
+  "early_recording_hashes_unchanged": true,
+  "source_sha256_lf": {
+    "stroke_rehab/__init__.py": "d103b936caf1139fdb385f70eab550d9395ae74030d1266d826804634f9f1b49",
+    "stroke_rehab/audit.py": "2cd9c0df4dd52031f0672da3f41b38d0d83ea21fa03732ae31bb114e97860ecf",
+    "stroke_rehab/causal_experiment.py": "8056bad77eca6f75d2c2aae8ee3a47849e65ac022689c7301e338a30b30be8a3",
+    "stroke_rehab/cli.py": "1325dce93cf2e2c61c2bd0656158c5f5fdbe94b0a2af5f5261f0519164901ccc",
+    "stroke_rehab/comparison.py": "d2850134cf722bef47196c9eecb1c20f983801a9f625f0f99132b61cc4a3f95a",
+    "stroke_rehab/controls.py": "5138428dede76ad5a78b6b5821e7dbd550c2ca3cadac6661933c88a12db18f96",
+    "stroke_rehab/cue_audit.py": "ff0cb5b092f36bfc5ff37c0a61c8317eb95ef2cc0bce393540d6fc0ac2d052bd",
+    "stroke_rehab/data.py": "1759401e31fc41c2accc439adc387e1086bd1e7380f39fbcf9b3917967b3cc68",
+    "stroke_rehab/diagnostics.py": "7b879ff554132de4f35675dac6ae7ecbb61696fd705436429e62c26b8ebdf33a",
+    "stroke_rehab/download.py": "32fe74bd4e56ce404b91e30623c0c9d4ab343a896d09e6e6f4080c3e0383c1dc",
+    "stroke_rehab/early_selection.py": "530516d054d4b079faad2ccdbde5578051dd0bc8b614c6ac3fad5a6b7d8d1e7b",
+    "stroke_rehab/experiment.py": "8b9583e0546b15a9001d0153551f0e2e7997063f1e106890b5969c1bd4211230",
+    "stroke_rehab/features.py": "fba7d9a2bf19cc1900486eb9df1367b5f60e4907d5d4d7ae14b8dfd39c90fba2",
+    "stroke_rehab/forward_calibration.py": "75ede1bbad727280df9a23ed901952c0b6458c470bb2a777c7ddd9e1dffd7b19",
+    "stroke_rehab/forward_plot.py": "dda28895264c46505cc0ae0747c90597c495f364b74cfaaacbeffe9fcea74b2e",
+    "stroke_rehab/inventory.py": "15505eb4f734fa5706989a5afe0be113f106e7b2bfb68a5dd530eefc3d1db581",
+    "stroke_rehab/lateralization.py": "d597c8dc0e07a291a72e8a3304f2935643d5d851b173f23d954c5b68c5b14256",
+    "stroke_rehab/mechanism_audit.py": "4622e7e23d4a77ee55966c2038446ef612b63c7d635d501d6d3ed43ebb8bff6e",
+    "stroke_rehab/models.py": "1c2564c0ec945fa81c1c374d589a7e638c88fad961a93a285df5b5db322382be",
+    "stroke_rehab/montage.py": "9e0b8f600b2451542bad29265a71be34f44e686f2d4dce2fe5f4beab6f2d54b0",
+    "stroke_rehab/nested.py": "f4a95bc52c6086dfa70b215349f1728ebab64d88ee614e0ff79a62ffc0dd6ddd",
+    "stroke_rehab/plotting.py": "b7d9550f0418e512ba2b25472a197bb25165615925c5ce8f02e09fc187beeae5",
+    "stroke_rehab/prequential.py": "ee9c16fc10e9d86479c0ea731819d5dd439b6efd4579ebcbf4830821ad6ba383",
+    "stroke_rehab/riemann.py": "51d5d858e3b8eeb64347426e0e2238c40d3fbc9affeaa7b8ac23fb7639bef5f4",
+    "stroke_rehab/riemann_stream.py": "b5aa0518e1264addfa8295fdc0db6bbb68a5881bdb2f74b08ef176aeac498f7c",
+    "stroke_rehab/spatial.py": "6f1983f4c2e1a28137c2540b6e268c717ec3937c661e64ecface070546fe1ce3",
+    "stroke_rehab/streaming.py": "f4ce3f58662a79b7a19111c88b980530cfba986d043ef63bf83784e937103245",
+    "stroke_rehab/timing.py": "77a0215d5b76ada1ab28849320702b939844766c11dba12577668fb97d2e5f9c",
+    "stroke_rehab/transfer.py": "27d0ad13433de44603453d82da39e539de6be9b5ee0b5822038d09c4c39847ad"
+  },
+  "forward_prediction_rows": 3840,
+  "forward_summary_rows": 192,
+  "stream_parity_receipt_sha256": "49877e19813cdfc5f2bdc7cbb6d73ccac9a611121a42ebe406d05c0aeef789a3",
+  "validation_scope": "Training recordings only; no test MAT opened; workflow execution reported separately",
+  "independent_review": {
+    "requested_model": "gpt-6-astra",
+    "requested_effort": "ultra",
+    "completed": true,
+    "actual_runtime_identity": "not independently exposed by agent metadata",
+    "scope": "read-only immutable published-source and Anna-comment review; root executed verification"
+  },
+  "tests": {
+    "command": "python -m pytest -q",
+    "returncode": 0,
+    "summary": "127 passed, 1 skipped in 100.31s (0:01:40)",
+    "environment": "Python 3.13; optional accuracy module checked separately by hosted workflow"
+  },
+  "current_candidate_source_hashes_match_executed_reproduction": true,
+  "reviewed_pr6_base_commit": "e5f8898dcfa0946012df54f505b74caa09dac67f",
+  "checks_execution_base_commit": "f279adc4b1dcfaf0f4a1b52af83de9185121540f",
+  "checks_at_utc": "2026-10-05T08:43:22.676707+00:00",
+  "preflight": {
+    "command": "python tools/repo_preflight.py",
+    "returncode": 0,
+    "summary": "Repository preflight passed: no tracked raw data, caches or failed notebooks",
+    "environment": "Python 3.13; optional accuracy module checked separately by hosted workflow"
+  },
+  "published_arithmetic": {
+    "command": "python analysis/accuracy_calibration/validate.py",
+    "returncode": 0,
+    "summary": "{\n  \"status\": \"pass\",\n  \"checks\": {\n    \"metric_domains_valid\": true,\n    \"expected_sessions_and_families\": true,\n    \"team_baseline_six_sessions_match\": true,\n    \"team_baseline_433_of_480\": true,\n    \"all_new_train_and_test_counts_80\": true,\n    \"oof_trial_coverage\": true,\n    \"oof_labels_and_probabilities_valid\": true,\n    \"oof_family_labels_identical\": true,\n    \"oof_metrics_reproduce\": true,\n    \"subset_memberships_complete\": true,\n    \"exact_balanced_subset_counts\": true,\n    \"nested_subsets\": true,\n    \"all_requested_calibration_budgets\": true,\n    \"calibration_curve_arithmetic\": true,\n    \"full_calibration_endpoint_matches_selected\": true,\n    \"full_calibration_subset_matches_frozen_model\": true,\n    \"full_choice_matches_training_receipt\": true,\n    \"reliability_bins_account_for_80_trials\": true,\n    \"pre_post_transfer_only_pre_training_labels\": true\n  }\n}",
+    "environment": "Python 3.13; optional accuracy module checked separately by hosted workflow"
+  },
+  "final_artifact_checks": {
+    "command": "python -m pytest -q tests/test_early_artifacts.py tests/test_forward_artifacts.py",
+    "returncode": 0,
+    "summary": "2 passed in 2.18s",
+    "scope": "Rechecked after retaining the newest PR6 early receipt"
+  },
+  "checks_source_sha256_lf": {
+    "tests/test_forward_artifacts.py": "58798006b6c32957c2612ab02c292156ab7858466d2432608d666c68883d7fa4",
+    "analysis/reproduce_stream.py": "3c94bb09ad4f5d10137f2bd73426a6466ba28fb9c7b7195b2000cc1be64148e6",
+    ".github/workflows/verify.yml": "97a833241efb7018757becdbe5f861ebefd147526fc04639c3020948a1a46161"
+  },
+  "hosted_checks": {
+    "summary": "130 passed in 35.78s",
+    "head_sha": "d1a84f256e185059df760520c4123643c8330f92",
+    "event": "push",
+    "conclusion": "success",
+    "url": "https://github.com/ZyntZ/gtec-g27-data-stroke/actions/runs/37285776524",
+    "scope": "Source and frozen-artifact tests, repository preflight, published arithmetic; no raw EEG numerical rerun in CI"
+  },
+  "pdf_verified": {
+    "pages": 1,
+    "render_reviewed": true,
+    "path": "output/pdf/g27_pr_reliability_review.pdf",
+    "sha256": "0de843fc97fa90614734c3b123168545c3290a5d42388bd832ed12a81bb49450"
+  },
+  "source_inventory_scope": "All package source fingerprints were checked against the actual rerun; this is a source inventory, not a claim that every package module was executed.",
+  "historical_snapshot_scope": "Top-level early/forward fields and hosted/PDF evidence describe the pre-update03 integration only; current_stack_checks describes the latest combined execution.",
+  "current_stack_checks": {
+    "started_at_utc": "2026-10-05T10:12:29.567576+00:00",
+    "execution_base_commit": "5037fabb243da6ac0b7e0a08772856e305c12443",
+    "current_main": "041379211a8efe3d6234ef75fb2b53a19bf96a9d",
+    "integrated_pr9": "173a3a3c89af73afa8e47c59e1564f58b858e281",
+    "commands": [
+      {
+        "name": "organizer_metric",
+        "command": "python -m stroke_rehab.organizer_metric --data-dir C:\\Users\\jason\\Documents\\ChatGPT\\Competitions\\gtec-g27-stroke\\data\\stroke-rehab --reference-csv results/decision_time.csv",
+        "returncode": 0,
+        "seconds": 7.12,
+        "output": "Saved 138 time points and 6 session peak/fixed summaries"
+      },
+      {
+        "name": "forward_stream_reproduction",
+        "command": "python analysis/reproduce_stream.py --data-dir C:\\Users\\jason\\Documents\\ChatGPT\\Competitions\\gtec-g27-stroke\\data\\stroke-rehab",
+        "returncode": 0,
+        "seconds": 41.05,
+        "output": "MATCH forward_calibration_predictions.csv 3840\nMATCH forward_calibration_summary.csv 192\nSTREAM MATCH P1 pre\nSTREAM MATCH P1 post\nSTREAM MATCH P2 pre\nSTREAM MATCH P2 post\nSTREAM MATCH P3 pre\nSTREAM MATCH P3 post\nSAVED stream_parity.json"
+      },
+      {
+        "name": "full_combined_tests",
+        "command": "python -m pytest -q",
+        "returncode": 0,
+        "seconds": 22.46,
+        "output": "........................................................................ [ 52%]\n................................................................         [100%]\n136 passed in 21.34s"
+      },
+      {
+        "name": "combined_preflight",
+        "command": "python tools/repo_preflight.py",
+        "returncode": 0,
+        "seconds": 0.17,
+        "output": "Repository preflight passed: no tracked raw data, caches or failed notebooks"
+      },
+      {
+        "name": "published_arithmetic",
+        "command": "python analysis/accuracy_calibration/validate.py",
+        "returncode": 0,
+        "seconds": 0.15,
+        "output": "{\n  \"status\": \"pass\",\n  \"checks\": {\n    \"metric_domains_valid\": true,\n    \"expected_sessions_and_families\": true,\n    \"team_baseline_six_sessions_match\": true,\n    \"team_baseline_433_of_480\": true,\n    \"all_new_train_and_test_counts_80\": true,\n    \"oof_trial_coverage\": true,\n    \"oof_labels_and_probabilities_valid\": true,\n    \"oof_family_labels_identical\": true,\n    \"oof_metrics_reproduce\": true,\n    \"subset_memberships_complete\": true,\n    \"exact_balanced_subset_counts\": true,\n    \"nested_subsets\": true,\n    \"all_requested_calibration_budgets\": true,\n    \"calibration_curve_arithmetic\": true,\n    \"full_calibration_endpoint_matches_selected\": true,\n    \"full_calibration_subset_matches_frozen_model\": true,\n    \"full_choice_matches_training_receipt\": true,\n    \"reliability_bins_account_for_80_trials\": true,\n    \"pre_post_transfer_only_pre_training_labels\": true\n  }\n}"
+      }
+    ],
+    "organizer_metric": {
+      "numerical_outputs_byte_identical": true,
+      "output_sha256": {
+        "organizer_metric_timecourse.csv": "dff06a4504d76f6ed40587da465306ac557c83ed283510ec4ad862b9341cac65",
+        "organizer_metric_summary.csv": "83ed75ecfa0030ff654de7cffa03ef588b2866d67c160276e60467dab6ad7e85",
+        "organizer_metric_aggregate.csv": "74b9bdc3f56ecd09abc1e19ebe0794944bec61ce2f90ade119c5cfbd63fe8521"
+      },
+      "input_sha256": {
+        "P1_pre_training.mat": "6a2b29ef701d3e839f9ce5e81a9e5df6458130e252a4d94465ecdf249b43c889",
+        "P1_pre_test.mat": "67932a40769002a7c15a8ce138562fb4ecbab9f6d5a92c99c310a76a9ae61bac",
+        "P1_post_training.mat": "88cdaa8214c015d39c8f18f68db8b02c6b46cfffaaeabe2f081d7f582f017732",
+        "P1_post_test.mat": "91faebdc77e73ce0b90917b3a0a42e50b5cf3da3aaa333c38672450fe603e840",
+        "P2_pre_training.mat": "7296aa803d488d6a8f1d1bd0621c1c011c561ac0dc8867c17256bc4a0ed4b93c",
+        "P2_pre_test.mat": "a7486f171e98ff5e362ac05983165771c9fd5ed9b964e79d0a495692a03994f9",
+        "P2_post_training.mat": "fcb480909f6e2c4b81ce0fcebaca242e2ad4d5dc3163d205f74e3a1c45c845bb",
+        "P2_post_test.mat": "d177cae4a56b06168df85db2e7b72df514b938f7198df91578c613454fcb3f21",
+        "P3_pre_training.mat": "247a1a5d585f60da71412892e3f70f10d59c6505cf079d7bb54f78cf779faeed",
+        "P3_pre_test.mat": "bccab42d93f4b1d5a9760bec9e6f88c6e7175aab5c239478cc7258e11179641c",
+        "P3_post_training.mat": "ac47b77cf0d954f4287685d5cf81ffccf611befa1d9e1f3f21c42856afe2140c",
+        "P3_post_test.mat": "73fcb2e93d4fa4d7db3a82f1e7e9389a55152a7dc9ab990819775610af984ccf"
+      },
+      "source_sha256_lf": {
+        "organizer_metric.py": "233a83ebca7ad737c8944008a26c36c8e6d1a78e9db50ab96b2b184be1d61cdc",
+        "comparison.py": "d2850134cf722bef47196c9eecb1c20f983801a9f625f0f99132b61cc4a3f95a",
+        "models.py": "1c2564c0ec945fa81c1c374d589a7e638c88fad961a93a285df5b5db322382be",
+        "riemann.py": "51d5d858e3b8eeb64347426e0e2238c40d3fbc9affeaa7b8ac23fb7639bef5f4",
+        "features.py": "fba7d9a2bf19cc1900486eb9df1367b5f60e4907d5d4d7ae14b8dfd39c90fba2",
+        "data.py": "1759401e31fc41c2accc439adc387e1086bd1e7380f39fbcf9b3917967b3cc68"
+      },
+      "reference_csv_sha256": "5c922793181e1d7b8dd285baeec1efb69e82a0fd0b91498a3a8ac09096f655bb",
+      "scope": "Six training and six already-inspected test recordings; exploratory frozen CSP time grid, no new selection"
+    },
+    "forward_stream": {
+      "receipt_sha256_lf": "4a248c0031c37c20e2f453b39dc5e3ead5a380aa4c8c3456b54bf6ce51d41233",
+      "scope": "Training recordings only; six runs, 3840 predictions, 192 summaries, twelve parity checks, six raw 80-trial replays"
+    },
+    "source_sha256_lf": {
+      "stroke_rehab/audit.py": "2cd9c0df4dd52031f0672da3f41b38d0d83ea21fa03732ae31bb114e97860ecf",
+      "stroke_rehab/causal_experiment.py": "8056bad77eca6f75d2c2aae8ee3a47849e65ac022689c7301e338a30b30be8a3",
+      "stroke_rehab/cli.py": "1325dce93cf2e2c61c2bd0656158c5f5fdbe94b0a2af5f5261f0519164901ccc",
+      "stroke_rehab/comparison.py": "d2850134cf722bef47196c9eecb1c20f983801a9f625f0f99132b61cc4a3f95a",
+      "stroke_rehab/controls.py": "5138428dede76ad5a78b6b5821e7dbd550c2ca3cadac6661933c88a12db18f96",
+      "stroke_rehab/cue_audit.py": "ff0cb5b092f36bfc5ff37c0a61c8317eb95ef2cc0bce393540d6fc0ac2d052bd",
+      "stroke_rehab/data.py": "1759401e31fc41c2accc439adc387e1086bd1e7380f39fbcf9b3917967b3cc68",
+      "stroke_rehab/diagnostics.py": "7b879ff554132de4f35675dac6ae7ecbb61696fd705436429e62c26b8ebdf33a",
+      "stroke_rehab/download.py": "32fe74bd4e56ce404b91e30623c0c9d4ab343a896d09e6e6f4080c3e0383c1dc",
+      "stroke_rehab/early_selection.py": "530516d054d4b079faad2ccdbde5578051dd0bc8b614c6ac3fad5a6b7d8d1e7b",
+      "stroke_rehab/experiment.py": "8b9583e0546b15a9001d0153551f0e2e7997063f1e106890b5969c1bd4211230",
+      "stroke_rehab/features.py": "fba7d9a2bf19cc1900486eb9df1367b5f60e4907d5d4d7ae14b8dfd39c90fba2",
+      "stroke_rehab/forward_calibration.py": "75ede1bbad727280df9a23ed901952c0b6458c470bb2a777c7ddd9e1dffd7b19",
+      "stroke_rehab/forward_plot.py": "dda28895264c46505cc0ae0747c90597c495f364b74cfaaacbeffe9fcea74b2e",
+      "stroke_rehab/inventory.py": "15505eb4f734fa5706989a5afe0be113f106e7b2bfb68a5dd530eefc3d1db581",
+      "stroke_rehab/lateralization.py": "d597c8dc0e07a291a72e8a3304f2935643d5d851b173f23d954c5b68c5b14256",
+      "stroke_rehab/mechanism_audit.py": "4622e7e23d4a77ee55966c2038446ef612b63c7d635d501d6d3ed43ebb8bff6e",
+      "stroke_rehab/models.py": "1c2564c0ec945fa81c1c374d589a7e638c88fad961a93a285df5b5db322382be",
+      "stroke_rehab/montage.py": "9e0b8f600b2451542bad29265a71be34f44e686f2d4dce2fe5f4beab6f2d54b0",
+      "stroke_rehab/nested.py": "f4a95bc52c6086dfa70b215349f1728ebab64d88ee614e0ff79a62ffc0dd6ddd",
+      "stroke_rehab/organizer_metric.py": "233a83ebca7ad737c8944008a26c36c8e6d1a78e9db50ab96b2b184be1d61cdc",
+      "stroke_rehab/plotting.py": "b7d9550f0418e512ba2b25472a197bb25165615925c5ce8f02e09fc187beeae5",
+      "stroke_rehab/prequential.py": "ee9c16fc10e9d86479c0ea731819d5dd439b6efd4579ebcbf4830821ad6ba383",
+      "stroke_rehab/riemann.py": "51d5d858e3b8eeb64347426e0e2238c40d3fbc9affeaa7b8ac23fb7639bef5f4",
+      "stroke_rehab/riemann_stream.py": "b5aa0518e1264addfa8295fdc0db6bbb68a5881bdb2f74b08ef176aeac498f7c",
+      "stroke_rehab/spatial.py": "6f1983f4c2e1a28137c2540b6e268c717ec3937c661e64ecface070546fe1ce3",
+      "stroke_rehab/streaming.py": "f4ce3f58662a79b7a19111c88b980530cfba986d043ef63bf83784e937103245",
+      "stroke_rehab/timing.py": "77a0215d5b76ada1ab28849320702b939844766c11dba12577668fb97d2e5f9c",
+      "stroke_rehab/transfer.py": "27d0ad13433de44603453d82da39e539de6be9b5ee0b5822038d09c4c39847ad",
+      "stroke_rehab/__init__.py": "d103b936caf1139fdb385f70eab550d9395ae74030d1266d826804634f9f1b49"
+    },
+    "checks_source_sha256_lf": {
+      "tests/test_forward_artifacts.py": "d07a651f6277ee3b23df23a5baa3f1210f4b7a8a790948b925cb74ce2311dce3",
+      "tests/test_organizer_metric.py": "6de959d3f578fe03fdc03d00aa739ecc176f5272efbf5cebf4e7a62ada772bb6",
+      "analysis/reproduce_stream.py": "c9a67e7975b860f21b844adef7e21cf9bf61b756e0625c20cab84288402e2f79",
+      ".github/workflows/verify.yml": "97a833241efb7018757becdbe5f861ebefd147526fc04639c3020948a1a46161"
+    },
+    "finished_at_utc": "2026-10-05T10:13:40.603605+00:00",
+    "scope": "Current main0413792 + PR6 + PR9 combined execution; organizer scoring reuses already-inspected test recordings, forward replay uses training recordings only",
+    "independent_review": {
+      "requested_model": "gpt-6-astra",
+      "requested_effort": "ultra",
+      "completed": true,
+      "reviewed_source_commit": "5037fabb243da6ac0b7e0a08772856e305c12443",
+      "actual_runtime_identity": "not independently exposed by agent metadata",
+      "scope": "Read-only consequential integration/source review; root executed numerical reproduction and checks",
+      "final_record_check": "At9b147c2 all recorded package/check/shared-receipt hashes match; historical opening and PR7 reuse wording corrected following review. No further source/model defect found."
+    },
+    "figure_checked": {
+      "path": "results/organizer_metric/organizer_metric_timecourse.png",
+      "render_reviewed": true
+    },
+    "final_integration_checks": {
+      "checked_at_utc": "2026-10-05T10:22:43.889970+00:00",
+      "execution_base_commit": "9b147c2a12b16e246364bf59b5219cb16c5a3b91",
+      "integrated_pr7": "c3ab95df3e0dd3caeb8a7ee709214b700f5df667",
+      "commands": [
+        {
+          "command": "python -m pytest -q",
+          "returncode": 0,
+          "output": "........................................................................ [ 52%]\n................................................................         [100%]\n136 passed in 22.38s"
+        },
+        {
+          "command": "python tools/repo_preflight.py",
+          "returncode": 0,
+          "output": "Repository preflight passed: no tracked raw data, caches or failed notebooks"
+        },
+        {
+          "command": "python analysis/accuracy_calibration/validate.py",
+          "returncode": 0,
+          "output": "{\n  \"status\": \"pass\",\n  \"checks\": {\n    \"metric_domains_valid\": true,\n    \"expected_sessions_and_families\": true,\n    \"team_baseline_six_sessions_match\": true,\n    \"team_baseline_433_of_480\": true,\n    \"all_new_train_and_test_counts_80\": true,\n    \"oof_trial_coverage\": true,\n    \"oof_labels_and_probabilities_valid\": true,\n    \"oof_family_labels_identical\": true,\n    \"oof_metrics_reproduce\": true,\n    \"subset_memberships_complete\": true,\n    \"exact_balanced_subset_counts\": true,\n    \"nested_subsets\": true,\n    \"all_requested_calibration_budgets\": true,\n    \"calibration_curve_arithmetic\": true,\n    \"full_calibration_endpoint_matches_selected\": true,\n    \"full_calibration_subset_matches_frozen_model\": true,\n    \"full_choice_matches_training_receipt\": true,\n    \"reliability_bins_account_for_80_trials\": true,\n    \"pre_post_transfer_only_pre_training_labels\": true\n  }\n}"
+        }
+      ],
+      "all_calculation_sources_identical_to_actual_reproduction": true
+    }
+  }
+}

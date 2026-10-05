@@ -1,0 +1,272 @@
+{
+  "source_commit": "1edae10a422d62a33e052b481af0a8b67e5404a3",
+  "upstream_commit": "45d5b91a17d94554a7483bd458a83f59605da6d8",
+  "scope": "Frozen pipeline reproduction only; no new settings selected on exposed tests",
+  "runtime": {
+    "python": "3.13.14",
+    "numpy": "1.26.4",
+    "scipy": "1.16.3",
+    "sklearn": "1.8.0",
+    "pandas": "2.3.3"
+  },
+  "inputs": [
+    {
+      "file": "P1_post_test.mat",
+      "sha256": "91faebdc77e73ce0b90917b3a0a42e50b5cf3da3aaa333c38672450fe603e840"
+    },
+    {
+      "file": "P1_post_training.mat",
+      "sha256": "88cdaa8214c015d39c8f18f68db8b02c6b46cfffaaeabe2f081d7f582f017732"
+    },
+    {
+      "file": "P1_pre_test.mat",
+      "sha256": "67932a40769002a7c15a8ce138562fb4ecbab9f6d5a92c99c310a76a9ae61bac"
+    },
+    {
+      "file": "P1_pre_training.mat",
+      "sha256": "6a2b29ef701d3e839f9ce5e81a9e5df6458130e252a4d94465ecdf249b43c889"
+    },
+    {
+      "file": "P2_post_test.mat",
+      "sha256": "d177cae4a56b06168df85db2e7b72df514b938f7198df91578c613454fcb3f21"
+    },
+    {
+      "file": "P2_post_training.mat",
+      "sha256": "fcb480909f6e2c4b81ce0fcebaca242e2ad4d5dc3163d205f74e3a1c45c845bb"
+    },
+    {
+      "file": "P2_pre_test.mat",
+      "sha256": "a7486f171e98ff5e362ac05983165771c9fd5ed9b964e79d0a495692a03994f9"
+    },
+    {
+      "file": "P2_pre_training.mat",
+      "sha256": "7296aa803d488d6a8f1d1bd0621c1c011c561ac0dc8867c17256bc4a0ed4b93c"
+    },
+    {
+      "file": "P3_post_test.mat",
+      "sha256": "73fcb2e93d4fa4d7db3a82f1e7e9389a55152a7dc9ab990819775610af984ccf"
+    },
+    {
+      "file": "P3_post_training.mat",
+      "sha256": "ac47b77cf0d954f4287685d5cf81ffccf611befa1d9e1f3f21c42856afe2140c"
+    },
+    {
+      "file": "P3_pre_test.mat",
+      "sha256": "bccab42d93f4b1d5a9760bec9e6f88c6e7175aab5c239478cc7258e11179641c"
+    },
+    {
+      "file": "P3_pre_training.mat",
+      "sha256": "247a1a5d585f60da71412892e3f70f10d59c6505cf079d7bb54f78cf779faeed"
+    }
+  ],
+  "stages": [
+    {
+      "name": "inventory",
+      "status": "complete",
+      "command": [
+        "python",
+        "-m",
+        "stroke_rehab.cli",
+        "inventory",
+        "--data-dir",
+        "<local organiser data>"
+      ],
+      "exit_code": 0,
+      "seconds": 4.5,
+      "comparisons": [
+        {
+          "file": "data_inventory.csv",
+          "reproduced_sha256": "47d5020d8aa5f92cbd5510ddbe91dca7a2a68fe36ccc7a3890176f8b6a794bc7",
+          "status": "match",
+          "reference_sha256": "47d5020d8aa5f92cbd5510ddbe91dca7a2a68fe36ccc7a3890176f8b6a794bc7",
+          "rows": 12
+        }
+      ]
+    },
+    {
+      "name": "baseline",
+      "status": "complete",
+      "command": [
+        "python",
+        "-m",
+        "stroke_rehab.cli",
+        "run",
+        "--data-dir",
+        "<local organiser data>"
+      ],
+      "exit_code": 0,
+      "seconds": 19.164,
+      "comparisons": [
+        {
+          "file": "session_results.csv",
+          "reproduced_sha256": "0d0c0a5b473aa11e1f0fb1906a3fd4c335fba21a0f50b8231ee5670a37896ae9",
+          "status": "match",
+          "reference_sha256": "0d0c0a5b473aa11e1f0fb1906a3fd4c335fba21a0f50b8231ee5670a37896ae9",
+          "rows": 6
+        }
+      ]
+    },
+    {
+      "name": "timing_audit",
+      "status": "complete",
+      "command": [
+        "python",
+        "-m",
+        "stroke_rehab.cli",
+        "audit",
+        "--data-dir",
+        "<local organiser data>"
+      ],
+      "exit_code": 0,
+      "seconds": 14.803,
+      "comparisons": [
+        {
+          "file": "timing_audit.csv",
+          "reproduced_sha256": "c471c912867e5cb30bbf35ca5c4ab520f24a8c02994b574aa7f895376adfd9f6",
+          "status": "match",
+          "reference_sha256": "c471c912867e5cb30bbf35ca5c4ab520f24a8c02994b574aa7f895376adfd9f6",
+          "rows": 12
+        }
+      ]
+    },
+    {
+      "name": "diagnostics",
+      "status": "complete",
+      "command": [
+        "python",
+        "-m",
+        "stroke_rehab.cli",
+        "diagnose",
+        "--data-dir",
+        "<local organiser data>"
+      ],
+      "exit_code": 0,
+      "seconds": 13.159,
+      "comparisons": [
+        {
+          "file": "train_diagnostics.csv",
+          "reproduced_sha256": "9011d71275df2d721d2a5dd6df4ef9112dc728bf09569e2d758a00446965556a",
+          "status": "match",
+          "reference_sha256": "9011d71275df2d721d2a5dd6df4ef9112dc728bf09569e2d758a00446965556a",
+          "rows": 24
+        }
+      ]
+    },
+    {
+      "name": "causal_replay",
+      "status": "complete",
+      "command": [
+        "python",
+        "-m",
+        "stroke_rehab.cli",
+        "causal-train",
+        "--data-dir",
+        "<local organiser data>"
+      ],
+      "exit_code": 0,
+      "seconds": 14.527,
+      "comparisons": [
+        {
+          "file": "causal_train_cv.csv",
+          "reproduced_sha256": "071014d5204e37a9ce5cce70ebf66708c141050e0b1d3d6c4dfa555d1343b947",
+          "status": "match",
+          "reference_sha256": "071014d5204e37a9ce5cce70ebf66708c141050e0b1d3d6c4dfa555d1343b947",
+          "rows": 6
+        }
+      ]
+    },
+    {
+      "name": "nested_spatial",
+      "status": "complete",
+      "command": [
+        "python",
+        "-m",
+        "stroke_rehab.cli",
+        "nested-train",
+        "--data-dir",
+        "<local organiser data>"
+      ],
+      "exit_code": 0,
+      "seconds": 11.658,
+      "comparisons": [
+        {
+          "file": "causal_nested_summary.csv",
+          "reproduced_sha256": "a4bf54c7c148e34a8f4363a850655b357b3a35b1b3eaaa4b279cf5841f4b40bb",
+          "status": "match",
+          "reference_sha256": "a4bf54c7c148e34a8f4363a850655b357b3a35b1b3eaaa4b279cf5841f4b40bb",
+          "rows": 6
+        },
+        {
+          "file": "causal_nested_folds.csv",
+          "reproduced_sha256": "e07d8d07c260b49f8071d6833d60e130f6ad03426a27f28d6691cac69f595cdc",
+          "status": "match",
+          "reference_sha256": "e07d8d07c260b49f8071d6833d60e130f6ad03426a27f28d6691cac69f595cdc",
+          "rows": 30
+        }
+      ]
+    },
+    {
+      "name": "latency_audit",
+      "status": "complete",
+      "command": [
+        "python",
+        "-m",
+        "stroke_rehab.cli",
+        "latency-audit",
+        "--data-dir",
+        "<local organiser data>"
+      ],
+      "exit_code": 0,
+      "seconds": 19.895,
+      "comparisons": [
+        {
+          "file": "causal_latency_audit.csv",
+          "reproduced_sha256": "fa9fea5a1530e1476735463cd1cd01f9909aac5dac9defae32f0e4a641b46534",
+          "status": "match",
+          "reference_sha256": "fa9fea5a1530e1476735463cd1cd01f9909aac5dac9defae32f0e4a641b46534",
+          "rows": 24
+        }
+      ]
+    },
+    {
+      "name": "negative_controls",
+      "status": "complete",
+      "command": [
+        "python",
+        "-m",
+        "stroke_rehab.cli",
+        "controls",
+        "--data-dir",
+        "<local organiser data>"
+      ],
+      "exit_code": 0,
+      "seconds": 46.287,
+      "comparisons": [
+        {
+          "file": "training_negative_controls.csv",
+          "reproduced_sha256": "e2e69c5fbf5dbbdc73dce660cbb7e116bef37847f9894bcaeaf1d70b3cd63a56",
+          "status": "match",
+          "reference_sha256": "e2e69c5fbf5dbbdc73dce660cbb7e116bef37847f9894bcaeaf1d70b3cd63a56",
+          "rows": 12
+        }
+      ]
+    },
+    {
+      "name": "local_calibration_models",
+      "status": "complete",
+      "command": [
+        "python",
+        "-m",
+        "stroke_rehab.cli",
+        "calibrate-spatial",
+        "--data-dir",
+        "<local organiser data>"
+      ],
+      "exit_code": 0,
+      "seconds": 8.365,
+      "comparisons": []
+    }
+  ],
+  "inputs_unchanged": true,
+  "finished_stages": 9
+}

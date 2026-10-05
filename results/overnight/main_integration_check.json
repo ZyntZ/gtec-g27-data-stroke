@@ -1,0 +1,35 @@
+{
+  "checked_at_utc": "2026-10-04T23:21:08.942754+00:00",
+  "upstream_commit": "44d240ffc82c2088ea58537e81565f3acb736ca0",
+  "notebook_source_sha256": "f8fbec42aa504a3b716949333d8bb2c1d9882ff4f0ce8ce438abf70b405801a7",
+  "code_cells": 8,
+  "errors": 0,
+  "source_notebook_outputs_committed": false,
+  "executed_copy_ignored": true,
+  "csv_checks": [
+    {
+      "file": "mu_power/all_training_trial_mu.csv",
+      "status": "match",
+      "reference_sha256": "0ffa4e2fe7206c65f472f8026a320f8cca148ca4c6d5eccd497489f0eb43b265",
+      "actual_sha256": "0ffa4e2fe7206c65f472f8026a320f8cca148ca4c6d5eccd497489f0eb43b265",
+      "reference_source": "4285e85f095a1c78aa3daad408c73b75fd3575d4"
+    },
+    {
+      "file": "mu_power/p1_pre_training_trial_mu.csv",
+      "status": "match",
+      "reference_sha256": "04937ef759937b2abf6f153f24d746213439536501bc52731911af0765edaa3f",
+      "actual_sha256": "04937ef759937b2abf6f153f24d746213439536501bc52731911af0765edaa3f",
+      "reference_source": "4285e85f095a1c78aa3daad408c73b75fd3575d4"
+    },
+    {
+      "file": "mu_power/training_mu_summary.csv",
+      "status": "match",
+      "reference_sha256": "0a5b8919e894dbd9fb24fcfa332296a1cbbd8efcda9c99c223c30b447edc4619",
+      "actual_sha256": "0a5b8919e894dbd9fb24fcfa332296a1cbbd8efcda9c99c223c30b447edc4619",
+      "reference_source": "4285e85f095a1c78aa3daad408c73b75fd3575d4"
+    }
+  ],
+  "all_six_training_input_hashes_match_historical": true,
+  "montage": "Columns5/9 labelledC3/C4 by supplied montage; acquisition mapping remains unverified",
+  "scope": "Current compact main notebook and physiology numerical parity only; no new decoder fit or test replay"
+}

@@ -25,7 +25,7 @@ To change the protocol, copy the JSON design and pass `--config PATH`; this
 creates a different exploratory experiment and **does not inherit the
 committed result table**. The included four-panel plot expects exactly four
 decision endpoints; redesign the plot before using another number of stops. `--output-dir` keeps alternative results separate.
-No MAT or RAR files belong in a commit. CI runs synthetic tests and preflight
+No MAT or RAR files belong in a commit. Local checks run synthetic tests and preflight
 only; the data-dependent command runs locally after an organizer download.
 
 ## Evaluation contract

@@ -112,7 +112,22 @@ def test_saved_aggregate_and_source_receipt():
     assert len(summary) == 6 and len(times) == 138 and len(aggregate) == 1
     assert int(aggregate[0]['pooled_peak_correct']) <= int(aggregate[0]['sum_of_session_peaks_correct'])
     assert len(receipt['input_sha256']) == 12 and receipt['historical_timecourse_parity']
+    assert receipt['source_hash_normalization'] == 'CRLF to LF for source only; inputs and outputs use raw bytes'
+    assert set(receipt['source_sha256']) == {
+        'organizer_metric.py', 'comparison.py', 'models.py', 'riemann.py', 'features.py', 'data.py'}
+    assert set(receipt['output_sha256']) == {
+        'organizer_metric_timecourse.csv', 'organizer_metric_summary.csv',
+        'organizer_metric_aggregate.csv', 'organizer_metric_timecourse.png'}
     for name, digest in receipt['source_sha256'].items():
-        assert hashlib.sha256((root / 'stroke_rehab' / name).read_bytes()).hexdigest() == digest
+        assert hashlib.sha256((root / 'stroke_rehab' / name).read_bytes().replace(b'\r\n', b'\n')).hexdigest() == digest
     for name, digest in receipt['output_sha256'].items():
         assert hashlib.sha256((out / name).read_bytes()).hexdigest() == digest
+
+
+def test_source_receipts_survive_git_line_endings_without_normalizing_data(tmp_path):
+    lf = tmp_path / 'lf.py'
+    crlf = tmp_path / 'crlf.py'
+    lf.write_bytes(b'first\nsecond\n')
+    crlf.write_bytes(b'first\r\nsecond\r\n')
+    assert metric._source_digest(lf) == metric._source_digest(crlf)
+    assert metric._digest(lf) != metric._digest(crlf)

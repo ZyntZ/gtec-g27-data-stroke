@@ -4,6 +4,16 @@ A reproducible starting line for the BR41N.IO Stroke Rehab track. We use the org
 
 ## Critical research review
 
+Current-main integration checks are recorded in
+[`results/pr_reliability/verification.json.current_stack_checks`](results/pr_reliability/verification.json):
+main `0413792`, PR6 and PR9 pass 136 tests with optional accuracy dependencies,
+repository preflight and 19 published-result checks. An actual organizer scoring
+rerun preserves all three update03 CSVs and twelve input hashes; stream replay
+preserves 3,840 predictions/192 summaries and all six 80-trial runs. The early
+comparison still favors fixed CSP, 82/120 versus selection75/120. Earlier receipts,
+hosted checks and the one-page PDF retain their historical source scope. No
+independent accuracy improvement or main merge is implied.
+
 Treat accuracy as an instruction/feedback decoding result, not a motor-intent or clinical endpoint. The new training-only `stroke-rehab cue-audit` finds a strong immediate cue-period voltage signal in P1 POST (69/80, versus 40/80 before the instruction), an unresolved confound rather than a new test score. Reproduce it with `stroke-rehab cue-audit` after downloading the organizer archive; detailed conditions and all six per-run values are in `results/cue_audit.csv`. The existing held-out test runs have already been examined and are not a fresh blind set.
 
 ## Active team
@@ -365,10 +375,9 @@ labels are read by this command.
 ## Pull-request sanity checks
 
 Run `pytest -q` and `python tools/repo_preflight.py` locally before opening a
-pull request. The tracked `Synthetic sanity checks` workflow runs the same
-synthetic tests and staged-file preflight on Python 3.11 and 3.13; data-dependent
-analyses must still be run locally. Hosted execution has not been verified in this
-snapshot. Preflight rejects staged MAT/RAR files, serialized estimators, cache
+pull request. No workflow file is tracked in this snapshot; these are local
+checks. Data-dependent analyses must also be run locally. Preflight rejects
+staged MAT/RAR files, serialized estimators, cache
 folders and notebook error outputs. It does not download organizer data;
 training-only analyses must still be rerun locally before numerical changes
 are reviewed. Inspect `git diff --cached --stat` before pushing a PR.
@@ -395,6 +404,7 @@ stroke-rehab decision-time       # results/decision_time.csv
 stroke-rehab plot-decision-time  # results/decision_time.png (--theme dark for slides)
 stroke-rehab lateralize          # results/lateralization.csv
 stroke-rehab transfer            # results/transfer.csv
+stroke-rehab stream-check        # results/riemann_stream_check.csv
 ```
 
 **Read this first.** Every test-run number in this section is exploratory.
@@ -493,9 +503,9 @@ correlation (8–30 Hz, median over trials; no labels are used) for each layout.
 | P1 PRE (2 files) | −0.13, −0.12 | −0.81, −0.80 (−0.93 with columns 13/14 exchanged) | 50 Hz |
 | P2, P3 (8 files) | −0.15 to −0.23 | −0.88 to −0.93 | 50 Hz |
 
-- **Only the two P1 POST files follow `montage.png`.** They also carry a
+- **The signal-topology fit favors `montage.png` for the two P1 POST files.** They also carry a
   60 Hz notch where all others have 50 Hz, so that session used a different setup.
-- **The other ten follow the paper's layout.** In both P1 PRE files, columns
+- **The fit favors the paper's layout for the other ten files.** In both P1 PRE files, columns
   13 and 14 (CP5, CP1) fit clearly better exchanged; C3 and C4 are unaffected.
 - **Order, not only electrode set:** with the layout assigned to each file,
   none of the 120 possible two-channel swaps improves the fit in any file.
@@ -514,8 +524,8 @@ correlation (8–30 Hz, median over trials; no labels are used) for each layout.
   does not prove orientation. The organizer has not confirmed the mapping.
 
 Within-session decoding does not depend on channel names. Anything that names
-a hemisphere or moves a model between P1 sessions does: **C3/C4 are columns
-7/11 in ten files and 5/9 only in P1 POST.** `stroke_rehab.montage.layout_for`
+a hemisphere or moves a model between P1 sessions does: **The inferred layout assigns C3/C4 to columns
+7/11 in ten files and 5/9 in P1 POST; acquisition labels remain unconfirmed.** `stroke_rehab.montage.layout_for`
 returns the layout per file, and `analysis/mu_power/mu_pass.py` now uses it.
 The C3/C4 mu-power outputs produced earlier with columns 5/9 read FC6 and Cz
 in five of the six training runs and should not be used in slides.
@@ -526,6 +536,50 @@ both layouts). In the early window (2–3.5 s) no patient shows a PRE-to-POST
 change in contralateral-minus-ipsilateral power (all Mann–Whitney p > 0.07).
 The PRE-to-POST hemisphere flip for P1 in the earlier solo analysis came from
 applying the `montage.png` labels to P1 PRE and does not hold.
+
+### Streaming state of the Riemannian decoder
+
+The decoder's online adaptation used to restart inside every `predict` call,
+so predicting a run trial by trial gave different answers from predicting it
+at once. The state is now explicit (`references_`, `n_seen_`):
+
+- `predict(X)` is stateless: it scores X as one fresh run from the training
+  reference and does not touch the stored state.
+- `predict_next(trial)` / `predict_stream(X)` advance the stored state;
+  `reset()` returns it to the training reference at the start of a run.
+- `stroke_rehab/riemann_stream.py` adds a chunk-by-chunk path from raw EEG:
+  stateful one-pass filters, running covariance sums in place of buffered
+  samples, and one decision in the chunk that completes the window.
+
+`stroke-rehab stream-check` fits on each training run (causal filters,
+2.5–3.5 s) and compares three routes on the test run **without using its
+labels**: all trials at once, trial by trial, and raw EEG in 64-sample chunks.
+All three give the same decision on 480/480 trials; decisions arrive by
+3.74 s after the trigger. Earlier outputs are unchanged by the refactor:
+`model_comparison.csv`, `decision_time.csv`, `transfer.csv` and all 3,840
+forward-calibration predictions regenerate byte-for-byte (the
+forward-calibration provenance file records the new `riemann.py` hash).
+
+The same command scores the early causal window on training runs only, with
+the purged chronological folds used for the causal CSP study above:
+
+| Training run | Riemannian, 7 bands | Without adaptation | Riemannian, 3 team bands | Causal CSP 1 pair (from above) |
+|:--|--:|--:|--:|--:|
+| P1 PRE | 54/80 | 54/80 | 64/80 | 70/80 |
+| P1 POST | 76/80 | 76/80 | 75/80 | 76/80 |
+| P2 PRE | 33/80 | 29/80 | 39/80 | 46/80 |
+| P2 POST | 36/80 | 36/80 | 50/80 | 46/80 |
+| P3 PRE | 56/80 | 59/80 | 57/80 | 56/80 |
+| P3 POST | 38/80 | 39/80 | 43/80 | 46/80 |
+| Pooled | 293/480 | 293/480 | 328/480 | 340/480 |
+
+On this training-only evidence the Riemannian model is **not** the better
+early causal decoder: it trails fixed causal CSP by 47 trials with seven bands
+and by 12 with the team's three. Online adaptation makes no pooled difference
+within a training run. Its lead over CSP on the test runs appears with the
+longer 2.5–6.5 s window, which includes the assumed feedback phase. The
+three-band column was the only variant tried; it is a training-only
+observation, not a selected model.
 
 ### Cross-session transfer with name-matched channels
 
@@ -583,3 +637,28 @@ respectively. The six tails belong to **three people**, with only 20 scored
 trials per session. Feedback timing is not recorded per trial; later gains
 cannot be attributed to improved motor intent. Neither family should be
 selected on the same exposed test runs or called a clinical improvement.
+
+## Historical accuracy/calibration benchmark for review
+
+The [comparison report](results/accuracy_calibration/REPORT.html), [methods](analysis/accuracy_calibration/PROTOCOL.md) and [reproduction handoff](results/overnight/MORNING_REPORT.md) retain the earlier four-second calibration/transfer study and verification checks. Those pipelines, windows and exposed test scores are separate from the merged early chronological audit above. They are not interchangeable replications or fresh validation. The historical fixed-column physiology receipt predates the current conditional per-file montage and must not certify the revised anatomical labels.
+
+Latest integrated main snapshot: `07d725f` adds the chronological CSP/cue mechanism audit. The branch also incorporates the actual PR7/PR8 stack; active early source provenance is regenerated, and current combined checks are separated in `FINAL_CHECKS.json`. The original benchmark remains historical; the current protocol records the unavailable affected-hand metadata and limits ERD/ERS inference to exploratory asymmetry.
+
+
+## Review summary after stacked integration
+
+The fixed early comparison is a negative selection result: at 60 calibration
+trials, selected 75/120 versus fixed CSP 82/120, with P2 PRE 8/20 versus 13/20.
+No prospective improvement is established. The streaming decoder fails closed
+after any processing exception; its model rollback does not make EEG chunks
+retryable. Recovery requires reconstruction from a known run boundary.
+
+The historical 10/20/40-label graphics use random, balanced subsets across the
+full training run, not chronological calibration prefixes. PNG/SVG captions
+and the HTML report say this explicitly. The dated overnight records retain
+their original execution scopes; optional generated exports support review.
+
+The organizer clarification permits feedback-period EEG and all calibration
+trials. Its reference statistic is the maximum time-point mean trial accuracy;
+fixed-window/early scores remain different endpoints. The shared protocol
+records that contract, clinical-side limits and sensor/source correspondence.

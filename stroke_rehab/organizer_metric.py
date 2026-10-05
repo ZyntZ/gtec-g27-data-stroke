@@ -35,6 +35,11 @@ def _digest(path):
         return hashlib.file_digest(stream, "sha256").hexdigest()
 
 
+def _source_digest(path):
+    """Fingerprint source consistently across Git's Windows/Linux checkouts."""
+    return hashlib.sha256(Path(path).read_bytes().replace(b"\r\n", b"\n")).hexdigest()
+
+
 def peak_of_mean(correct, stops):
     """Max_t(mean_trial(correct[t, trial])); earliest endpoint wins exact ties.
 
@@ -285,7 +290,8 @@ def run(data_root, output_dir, *, reference_csv=None, stops=STOPS_S,
                    fixed_time_s=float(fixed_s), endpoints_s=list(stops),
                    window_s=WINDOW_S, model=MODEL, bands_hz=list(map(list, BANDS)),
                    input_sha256=hashes,
-                   source_sha256={name: _digest(root / name) for name in
+                   source_hash_normalization="CRLF to LF for source only; inputs and outputs use raw bytes",
+                   source_sha256={name: _source_digest(root / name) for name in
                                   ("organizer_metric.py", "comparison.py", "models.py",
                                    "riemann.py", "features.py", "data.py")},
                    output_sha256={name: _digest(out / name) for name in output_files},

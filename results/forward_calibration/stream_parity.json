@@ -1,0 +1,179 @@
+{
+  "checked_at_utc": "2026-10-05T10:13:17.660264+00:00",
+  "scope": "Frozen historical scores reproduced; covariance API parity, not clinical validation",
+  "prediction_rows_matched": 3840,
+  "summary_rows_matched": 192,
+  "input_sha256": {
+    "P1_pre_training.mat": "6a2b29ef701d3e839f9ce5e81a9e5df6458130e252a4d94465ecdf249b43c889",
+    "P1_post_training.mat": "88cdaa8214c015d39c8f18f68db8b02c6b46cfffaaeabe2f081d7f582f017732",
+    "P2_pre_training.mat": "7296aa803d488d6a8f1d1bd0621c1c011c561ac0dc8867c17256bc4a0ed4b93c",
+    "P2_post_training.mat": "fcb480909f6e2c4b81ce0fcebaca242e2ad4d5dc3163d205f74e3a1c45c845bb",
+    "P3_pre_training.mat": "247a1a5d585f60da71412892e3f70f10d59c6505cf079d7bb54f78cf779faeed",
+    "P3_post_training.mat": "ac47b77cf0d954f4287685d5cf81ffccf611befa1d9e1f3f21c42856afe2140c"
+  },
+  "historical_source_sha256": {
+    "forward_calibration.py": "75ede1bbad727280df9a23ed901952c0b6458c470bb2a777c7ddd9e1dffd7b19",
+    "comparison.py": "d2850134cf722bef47196c9eecb1c20f983801a9f625f0f99132b61cc4a3f95a",
+    "riemann.py": "1a025056045846b16264ff52c9dd626c308f448193204a53f7a29c64e80f5a5b",
+    "models.py": "1c2564c0ec945fa81c1c374d589a7e638c88fad961a93a285df5b5db322382be"
+  },
+  "source_sha256": {
+    "forward_calibration.py": "75ede1bbad727280df9a23ed901952c0b6458c470bb2a777c7ddd9e1dffd7b19",
+    "comparison.py": "d2850134cf722bef47196c9eecb1c20f983801a9f625f0f99132b61cc4a3f95a",
+    "riemann.py": "51d5d858e3b8eeb64347426e0e2238c40d3fbc9affeaa7b8ac23fb7639bef5f4",
+    "models.py": "1c2564c0ec945fa81c1c374d589a7e638c88fad961a93a285df5b5db322382be"
+  },
+  "source_hash_normalization": "CRLF to LF; raw recording hashes unchanged",
+  "additional_source_sha256_lf": {
+    "stroke_rehab/riemann_stream.py": "b5aa0518e1264addfa8295fdc0db6bbb68a5881bdb2f74b08ef176aeac498f7c",
+    "stroke_rehab/features.py": "fba7d9a2bf19cc1900486eb9df1367b5f60e4907d5d4d7ae14b8dfd39c90fba2",
+    "stroke_rehab/data.py": "1759401e31fc41c2accc439adc387e1086bd1e7380f39fbcf9b3917967b3cc68",
+    "stroke_rehab/spatial.py": "6f1983f4c2e1a28137c2540b6e268c717ec3937c661e64ecface070546fe1ce3",
+    "stroke_rehab/streaming.py": "f4ce3f58662a79b7a19111c88b980530cfba986d043ef63bf83784e937103245",
+    "analysis/reproduce_stream.py": "c9a67e7975b860f21b844adef7e21cf9bf61b756e0625c20cab84288402e2f79"
+  },
+  "runtime": {
+    "python": "3.13.14",
+    "numpy": "2.4.6",
+    "scipy": "1.16.3",
+    "scikit_learn": "1.8.0"
+  },
+  "stream_checks": [
+    {
+      "patient": "P1",
+      "session": "pre",
+      "adapt": true,
+      "trials": 20,
+      "batch_single_partition_labels_match": true,
+      "final_references_match": true,
+      "decision_scores_match": true,
+      "raw_training_replay_labels_match": true,
+      "raw_training_trials": 80,
+      "chunk_samples": 64,
+      "latest_chunk_decision_s": 3.7421875
+    },
+    {
+      "patient": "P1",
+      "session": "pre",
+      "adapt": false,
+      "trials": 20,
+      "batch_single_partition_labels_match": true,
+      "final_references_match": true,
+      "decision_scores_match": true
+    },
+    {
+      "patient": "P1",
+      "session": "post",
+      "adapt": true,
+      "trials": 20,
+      "batch_single_partition_labels_match": true,
+      "final_references_match": true,
+      "decision_scores_match": true,
+      "raw_training_replay_labels_match": true,
+      "raw_training_trials": 80,
+      "chunk_samples": 64,
+      "latest_chunk_decision_s": 3.72265625
+    },
+    {
+      "patient": "P1",
+      "session": "post",
+      "adapt": false,
+      "trials": 20,
+      "batch_single_partition_labels_match": true,
+      "final_references_match": true,
+      "decision_scores_match": true
+    },
+    {
+      "patient": "P2",
+      "session": "pre",
+      "adapt": true,
+      "trials": 20,
+      "batch_single_partition_labels_match": true,
+      "final_references_match": true,
+      "decision_scores_match": true,
+      "raw_training_replay_labels_match": true,
+      "raw_training_trials": 80,
+      "chunk_samples": 64,
+      "latest_chunk_decision_s": 3.72265625
+    },
+    {
+      "patient": "P2",
+      "session": "pre",
+      "adapt": false,
+      "trials": 20,
+      "batch_single_partition_labels_match": true,
+      "final_references_match": true,
+      "decision_scores_match": true
+    },
+    {
+      "patient": "P2",
+      "session": "post",
+      "adapt": true,
+      "trials": 20,
+      "batch_single_partition_labels_match": true,
+      "final_references_match": true,
+      "decision_scores_match": true,
+      "raw_training_replay_labels_match": true,
+      "raw_training_trials": 80,
+      "chunk_samples": 64,
+      "latest_chunk_decision_s": 3.74609375
+    },
+    {
+      "patient": "P2",
+      "session": "post",
+      "adapt": false,
+      "trials": 20,
+      "batch_single_partition_labels_match": true,
+      "final_references_match": true,
+      "decision_scores_match": true
+    },
+    {
+      "patient": "P3",
+      "session": "pre",
+      "adapt": true,
+      "trials": 20,
+      "batch_single_partition_labels_match": true,
+      "final_references_match": true,
+      "decision_scores_match": true,
+      "raw_training_replay_labels_match": true,
+      "raw_training_trials": 80,
+      "chunk_samples": 64,
+      "latest_chunk_decision_s": 3.7421875
+    },
+    {
+      "patient": "P3",
+      "session": "pre",
+      "adapt": false,
+      "trials": 20,
+      "batch_single_partition_labels_match": true,
+      "final_references_match": true,
+      "decision_scores_match": true
+    },
+    {
+      "patient": "P3",
+      "session": "post",
+      "adapt": true,
+      "trials": 20,
+      "batch_single_partition_labels_match": true,
+      "final_references_match": true,
+      "decision_scores_match": true,
+      "raw_training_replay_labels_match": true,
+      "raw_training_trials": 80,
+      "chunk_samples": 64,
+      "latest_chunk_decision_s": 3.71875
+    },
+    {
+      "patient": "P3",
+      "session": "post",
+      "adapt": false,
+      "trials": 20,
+      "batch_single_partition_labels_match": true,
+      "final_references_match": true,
+      "decision_scores_match": true
+    }
+  ],
+  "output_sha256_lf": {
+    "forward_calibration_predictions.csv": "2b6cf18397ee408048238de9005ba10d90a8e064e4afb4e046690bf28a5edf26",
+    "forward_calibration_summary.csv": "5502ab7c15ef87c1c8a5309677ad03b07c5c6569493c57ae661cd10a2a004c87"
+  }
+}

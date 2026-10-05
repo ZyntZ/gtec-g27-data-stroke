@@ -59,11 +59,12 @@
     "P3_post_training.mat": "ac47b77cf0d954f4287685d5cf81ffccf611befa1d9e1f3f21c42856afe2140c",
     "P3_post_test.mat": "73fcb2e93d4fa4d7db3a82f1e7e9389a55152a7dc9ab990819775610af984ccf"
   },
+  "source_hash_normalization": "CRLF to LF for source only; inputs and outputs use raw bytes",
   "source_sha256": {
-    "organizer_metric.py": "a4d2bd816598be176170c7bb9684502081b3456e83a5cde0af0d409f24a2b481",
+    "organizer_metric.py": "233a83ebca7ad737c8944008a26c36c8e6d1a78e9db50ab96b2b184be1d61cdc",
     "comparison.py": "d2850134cf722bef47196c9eecb1c20f983801a9f625f0f99132b61cc4a3f95a",
     "models.py": "1c2564c0ec945fa81c1c374d589a7e638c88fad961a93a285df5b5db322382be",
-    "riemann.py": "1a025056045846b16264ff52c9dd626c308f448193204a53f7a29c64e80f5a5b",
+    "riemann.py": "51d5d858e3b8eeb64347426e0e2238c40d3fbc9affeaa7b8ac23fb7639bef5f4",
     "features.py": "fba7d9a2bf19cc1900486eb9df1367b5f60e4907d5d4d7ae14b8dfd39c90fba2",
     "data.py": "1759401e31fc41c2accc439adc387e1086bd1e7380f39fbcf9b3917967b3cc68"
   },
@@ -71,13 +72,13 @@
     "organizer_metric_timecourse.csv": "dff06a4504d76f6ed40587da465306ac557c83ed283510ec4ad862b9341cac65",
     "organizer_metric_summary.csv": "83ed75ecfa0030ff654de7cffa03ef588b2866d67c160276e60467dab6ad7e85",
     "organizer_metric_aggregate.csv": "74b9bdc3f56ecd09abc1e19ebe0794944bec61ce2f90ade119c5cfbd63fe8521",
-    "organizer_metric_timecourse.png": "10c6341058ec93be4e2b5ba262cb3a7adb4b8a8d1639b6a820b81e747581b764"
+    "organizer_metric_timecourse.png": "4cea98d107ca06db2f3a87dcf93f25ab52100ab9dcc98b42e3bc3b5029f80cf0"
   },
   "historical_timecourse_parity": true,
   "runtime": {
-    "python": "3.13.7",
-    "numpy": "2.4.3",
-    "scipy": "1.17.1",
+    "python": "3.13.14",
+    "numpy": "2.4.6",
+    "scipy": "1.16.3",
     "sklearn": "1.8.0",
     "matplotlib": "3.10.8"
   },

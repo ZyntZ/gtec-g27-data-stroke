@@ -1,0 +1,13 @@
+{
+  "checked_at_utc": "2026-10-05T06:35:14.361963+00:00",
+  "scope": "Combined PR7 early protocol and PR5 companion stream code; retrospective implementation parity",
+  "early_base_commit": "117ded3f02fcf995811bf2b47ec46424cdd7dbda",
+  "choices_matched": 24,
+  "outer_predictions_matched": 1920,
+  "inner_predictions_matched": 1080,
+  "source_sha256_lf": {
+    "early_selection.py": "530516d054d4b079faad2ccdbde5578051dd0bc8b614c6ac3fad5a6b7d8d1e7b",
+    "riemann.py": "51d5d858e3b8eeb64347426e0e2238c40d3fbc9affeaa7b8ac23fb7639bef5f4",
+    "riemann_stream.py": "e8293281eefb0a61e2d8ea46d17fd54459be23eee62ee1cfc6be7a5e9d1a1a86"
+  }
+}
