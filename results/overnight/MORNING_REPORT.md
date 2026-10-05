@@ -1,3 +1,5 @@
+> Archived source snapshots: this dated handoff and FINAL_CHECKS.json describe their recorded execution bases. They do not certify the current combined tree. See [the integration checks](../pr_reliability/verification.json) and [the review](../../docs/pr_reliability_review.md).
+
 # G27 verification and research handoff — 4–5 October 2026
 
 Historical physiology PR [#1](https://github.com/ZyntZ/gtec-g27-data-stroke/pull/1) was ready at `8f44f8d` against main `483ac87` after 42 tests/preflight. Its implementation is now incorporated directly in main `44d240f`. The numerical pipeline, notebook execution and model-export checks are complete. The single training-only selection sensitivity is mixed and is not adopted as a universal upgrade.

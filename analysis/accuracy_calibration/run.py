@@ -236,7 +236,7 @@ def plots(out):
         ax.set(title=s.replace('_',' ').upper(),xlim=(0,80),ylim=(0,100),xticks=COUNTS); ax.grid(alpha=.15)
     fig.supxlabel('Target-session labelled calibration trials',y=.065); fig.supylabel('Exploratory test accuracy (%)')
     fig.suptitle('Calibration burden: 80 test trials; bars span the five subset scores',fontsize=13)
-    fig.text(.5,.018,'0: 320 source training trials. 10–40: target-only balanced subsets. 80: one full fit. Same exposed tests throughout.',ha='center',fontsize=9)
+    fig.text(.5,.018,'10–40: random balanced subsets, not chronological prefixes. Bars: min–max, not confidence intervals. Same exposed tests.',ha='center',fontsize=9)
     fig.tight_layout(rect=(.02,.12,1,.94))
     for ext in ('png','svg'): fig.savefig(out/f'calibration_curves.{ext}',dpi=180)
     plt.close(fig)

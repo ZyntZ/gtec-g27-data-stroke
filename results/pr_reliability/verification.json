@@ -1,0 +1,72 @@
+{
+  "checked_at_utc": "2026-10-05T08:33:26.155696+00:00",
+  "execution_base_commit": "5a356b3fd072e8ddedfef9c98a270482423d5d35",
+  "scope": "Actual combined-tree reproduction; retrospective training data only; no new scientific validation",
+  "early_output_sha256": {
+    "early_predictions.csv": "cf97f1b6028bb901d3e83699c90edb5f5bef8193b0ece5c5a2e0fb60f40f776a",
+    "early_summary.csv": "6537946f768ef26eea9337cff9ef20b8e90f601f43e796bab956cc3d07d5891d",
+    "early_inner_predictions.csv": "9a99e76f09a325008445992aee9031d2b7ba5ebe9c0ddbb4925018e440bf4d6c",
+    "early_choices.json": "1d70be9dd5af63d1f643f803d8acce4d842f768786d42a6beaeb0aada872a785"
+  },
+  "input_sha256": {
+    "P1_pre_training.mat": "6a2b29ef701d3e839f9ce5e81a9e5df6458130e252a4d94465ecdf249b43c889",
+    "P1_post_training.mat": "88cdaa8214c015d39c8f18f68db8b02c6b46cfffaaeabe2f081d7f582f017732",
+    "P2_pre_training.mat": "7296aa803d488d6a8f1d1bd0621c1c011c561ac0dc8867c17256bc4a0ed4b93c",
+    "P2_post_training.mat": "fcb480909f6e2c4b81ce0fcebaca242e2ad4d5dc3163d205f74e3a1c45c845bb",
+    "P3_pre_training.mat": "247a1a5d585f60da71412892e3f70f10d59c6505cf079d7bb54f78cf779faeed",
+    "P3_post_training.mat": "ac47b77cf0d954f4287685d5cf81ffccf611befa1d9e1f3f21c42856afe2140c"
+  },
+  "early_choices": 24,
+  "early_outer_predictions": 1920,
+  "early_inner_predictions": 1080,
+  "early_all_output_bytes_unchanged": true,
+  "early_recording_hashes_unchanged": true,
+  "source_sha256_lf": {
+    "stroke_rehab/__init__.py": "d103b936caf1139fdb385f70eab550d9395ae74030d1266d826804634f9f1b49",
+    "stroke_rehab/audit.py": "2cd9c0df4dd52031f0672da3f41b38d0d83ea21fa03732ae31bb114e97860ecf",
+    "stroke_rehab/causal_experiment.py": "8056bad77eca6f75d2c2aae8ee3a47849e65ac022689c7301e338a30b30be8a3",
+    "stroke_rehab/cli.py": "1325dce93cf2e2c61c2bd0656158c5f5fdbe94b0a2af5f5261f0519164901ccc",
+    "stroke_rehab/comparison.py": "d2850134cf722bef47196c9eecb1c20f983801a9f625f0f99132b61cc4a3f95a",
+    "stroke_rehab/controls.py": "5138428dede76ad5a78b6b5821e7dbd550c2ca3cadac6661933c88a12db18f96",
+    "stroke_rehab/cue_audit.py": "ff0cb5b092f36bfc5ff37c0a61c8317eb95ef2cc0bce393540d6fc0ac2d052bd",
+    "stroke_rehab/data.py": "1759401e31fc41c2accc439adc387e1086bd1e7380f39fbcf9b3917967b3cc68",
+    "stroke_rehab/diagnostics.py": "7b879ff554132de4f35675dac6ae7ecbb61696fd705436429e62c26b8ebdf33a",
+    "stroke_rehab/download.py": "32fe74bd4e56ce404b91e30623c0c9d4ab343a896d09e6e6f4080c3e0383c1dc",
+    "stroke_rehab/early_selection.py": "530516d054d4b079faad2ccdbde5578051dd0bc8b614c6ac3fad5a6b7d8d1e7b",
+    "stroke_rehab/experiment.py": "8b9583e0546b15a9001d0153551f0e2e7997063f1e106890b5969c1bd4211230",
+    "stroke_rehab/features.py": "fba7d9a2bf19cc1900486eb9df1367b5f60e4907d5d4d7ae14b8dfd39c90fba2",
+    "stroke_rehab/forward_calibration.py": "75ede1bbad727280df9a23ed901952c0b6458c470bb2a777c7ddd9e1dffd7b19",
+    "stroke_rehab/forward_plot.py": "dda28895264c46505cc0ae0747c90597c495f364b74cfaaacbeffe9fcea74b2e",
+    "stroke_rehab/inventory.py": "15505eb4f734fa5706989a5afe0be113f106e7b2bfb68a5dd530eefc3d1db581",
+    "stroke_rehab/lateralization.py": "d597c8dc0e07a291a72e8a3304f2935643d5d851b173f23d954c5b68c5b14256",
+    "stroke_rehab/mechanism_audit.py": "4622e7e23d4a77ee55966c2038446ef612b63c7d635d501d6d3ed43ebb8bff6e",
+    "stroke_rehab/models.py": "1c2564c0ec945fa81c1c374d589a7e638c88fad961a93a285df5b5db322382be",
+    "stroke_rehab/montage.py": "9e0b8f600b2451542bad29265a71be34f44e686f2d4dce2fe5f4beab6f2d54b0",
+    "stroke_rehab/nested.py": "f4a95bc52c6086dfa70b215349f1728ebab64d88ee614e0ff79a62ffc0dd6ddd",
+    "stroke_rehab/plotting.py": "b7d9550f0418e512ba2b25472a197bb25165615925c5ce8f02e09fc187beeae5",
+    "stroke_rehab/prequential.py": "ee9c16fc10e9d86479c0ea731819d5dd439b6efd4579ebcbf4830821ad6ba383",
+    "stroke_rehab/riemann.py": "51d5d858e3b8eeb64347426e0e2238c40d3fbc9affeaa7b8ac23fb7639bef5f4",
+    "stroke_rehab/riemann_stream.py": "b5aa0518e1264addfa8295fdc0db6bbb68a5881bdb2f74b08ef176aeac498f7c",
+    "stroke_rehab/spatial.py": "6f1983f4c2e1a28137c2540b6e268c717ec3937c661e64ecface070546fe1ce3",
+    "stroke_rehab/streaming.py": "f4ce3f58662a79b7a19111c88b980530cfba986d043ef63bf83784e937103245",
+    "stroke_rehab/timing.py": "77a0215d5b76ada1ab28849320702b939844766c11dba12577668fb97d2e5f9c",
+    "stroke_rehab/transfer.py": "27d0ad13433de44603453d82da39e539de6be9b5ee0b5822038d09c4c39847ad"
+  },
+  "forward_prediction_rows": 3840,
+  "forward_summary_rows": 192,
+  "stream_parity_receipt_sha256": "49877e19813cdfc5f2bdc7cbb6d73ccac9a611121a42ebe406d05c0aeef789a3",
+  "validation_scope": "Training recordings only; no test MAT opened; workflow execution reported separately",
+  "independent_review": {
+    "requested_model": "gpt-6-astra",
+    "requested_effort": "ultra",
+    "completed": true,
+    "actual_runtime_identity": "not independently exposed by agent metadata",
+    "scope": "read-only immutable published-source and Anna-comment review; root executed verification"
+  },
+  "tests": {
+    "command": "python -m pytest -q",
+    "returncode": 0,
+    "summary": "127 passed, 1 skipped in 46.69s",
+    "environment": "Python 3.13, plugin autoload disabled; optional accuracy dependency checked separately by hosted workflow"
+  }
+}

@@ -17,7 +17,7 @@
     "tie_and_no_inner_fold": "filterbank_csp_shrinkage_lda"
   },
   "design_sha256": "1a79d713f5947023034c93170e7c8d862828d8f023833ccde7a3d76bae75dee4",
-  "source_commit": "5a356b3fd072e8ddedfef9c98a270482423d5d35",
+  "source_commit": "9d834f9615c71808087426841ecdfab40d82c015",
   "source_commit_scope": "Base commit at execution; source_sha256 identifies executed working-tree files",
   "source_hash_encoding": "SHA256 of UTF-8 source bytes with CRLF normalized to LF",
   "input_sha256": {
@@ -31,7 +31,7 @@
   "source_sha256": {
     "stroke_rehab/early_selection.py": "530516d054d4b079faad2ccdbde5578051dd0bc8b614c6ac3fad5a6b7d8d1e7b",
     "stroke_rehab/comparison.py": "d2850134cf722bef47196c9eecb1c20f983801a9f625f0f99132b61cc4a3f95a",
-    "stroke_rehab/riemann.py": "51d5d858e3b8eeb64347426e0e2238c40d3fbc9affeaa7b8ac23fb7639bef5f4",
+    "stroke_rehab/riemann.py": "1a025056045846b16264ff52c9dd626c308f448193204a53f7a29c64e80f5a5b",
     "stroke_rehab/models.py": "1c2564c0ec945fa81c1c374d589a7e638c88fad961a93a285df5b5db322382be",
     "stroke_rehab/data.py": "1759401e31fc41c2accc439adc387e1086bd1e7380f39fbcf9b3917967b3cc68",
     "stroke_rehab/features.py": "fba7d9a2bf19cc1900486eb9df1367b5f60e4907d5d4d7ae14b8dfd39c90fba2",
