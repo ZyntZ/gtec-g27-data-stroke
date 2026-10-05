@@ -80,5 +80,36 @@
     "inner_predictions": 1080,
     "choices": 24,
     "scope": "Actual PR6 integrated branch, same numerical outcomes as the original exposed-tail audit"
+  },
+  "latest_main_integration": {
+    "checked_at_utc": "2026-10-05T10:16:46.006394+00:00",
+    "branch_execution_base": "354b81235f3c691138801cb1549c895bd046a8ee",
+    "current_main": "041379211a8efe3d6234ef75fb2b53a19bf96a9d",
+    "shared_computation_execution_base": "5037fabb243da6ac0b7e0a08772856e305c12443",
+    "receipt_reuse": "Organizer and stream calculations were actually rerun on PR6; every recorded dependency and output fingerprint is identical in this component. Early calculation sources and saved outputs are unchanged.",
+    "commands": [
+      {
+        "command": [
+          "C:\\Users\\jason\\Documents\\ChatGPT\\Competitions\\work\\g27_accuracy_env\\Scripts\\python.exe",
+          "-m",
+          "pytest",
+          "-q"
+        ],
+        "returncode": 0,
+        "output": "........................................................................ [ 64%]\n.......................................                                  [100%]\n111 passed in 16.93s"
+      },
+      {
+        "command": [
+          "C:\\Users\\jason\\Documents\\ChatGPT\\Competitions\\work\\g27_accuracy_env\\Scripts\\python.exe",
+          "tools/repo_preflight.py"
+        ],
+        "returncode": 0,
+        "output": "Repository preflight passed: no tracked raw data, caches or failed notebooks"
+      }
+    ],
+    "shared_receipt_sha256_lf": {
+      "results/organizer_metric/organizer_metric_provenance.json": "a59aaf04f99d5e5f5c59cffd56e33aed16cf4bb4a849f0b0a42e75a3493f3de7",
+      "results/forward_calibration/stream_parity.json": "4a248c0031c37c20e2f453b39dc5e3ead5a380aa4c8c3456b54bf6ce51d41233"
+    }
   }
 }

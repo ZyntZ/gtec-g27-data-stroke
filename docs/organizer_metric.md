@@ -106,3 +106,15 @@ retain raw bytes, with numerical CSVs protected from Git text conversion.
 The guard requires all six calculation sources and all four output files.
 Exact execution and full combined checks are indexed by the current integration
 record; regeneration is not a new method, score improvement or blind evaluation.
+
+## Shared execution after current-main integration
+
+This component integrates main `0413792` and retains the PR8 terminal-error fix.
+Its active organizer and stream receipts come from an actual run of the combined
+PR6 calculation sources at `5037fab`. Every recorded source dependency and output
+fingerprint is identical here; the full component suite checks those identities.
+There was no independent refit of identical models in this checkout. The original
+update03 organizer receipt and this component's earlier stream receipt are kept
+as clearly named snapshots. Source hashes normalize CRLF to LF; raw input/output
+bytes remain unchanged. This reuse establishes execution equivalence for the
+declared calculation, not independent scientific validation.
