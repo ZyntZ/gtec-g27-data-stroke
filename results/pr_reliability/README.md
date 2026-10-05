@@ -8,8 +8,14 @@ forward predictions/192 summaries, twelve stream parity conditions and six
 80-trial replays match. Organizer scoring reads six training and six previously
 inspected test recordings; stream replay reads training recordings only.
 
-The top-level fields, hosted checks and one-page PDF below describe the earlier
-pre-update03 integration. They do not certify this new combined source.
+The top-level fields and hosted/PDF records in `verification.json` describe the
+earlier pre-update03 integration. They do not certify this combined source.
+The delivered one-page PDF is now version 2, visibly naming code snapshot
+`558699d` and the current 136-test result. `report_snapshot.json` records its
+evidence scope and both completed model reviews. The builder refuses changed
+calculation/check sources or organizer CSVs rather than relabeling stale results.
+Anna has merged that code snapshot into main `88c9ae8`; the report correction
+is a separate documentation update against main.
 `organizer_metric_provenance_update03_snapshot.json` and
 `stream_parity_pre_update03_snapshot.json` retain the preceding receipts;
 their active counterparts were refreshed by actual execution.
@@ -37,5 +43,9 @@ python analysis/accuracy_calibration/validate.py
 ```
 
 The workflow runs without raw EEG and installs the optional accuracy dependencies.
-Local runs report that module as skipped if absent. Numerical reproduction uses six local training MAT files
-only. A reproduction of earlier predictions is not independent validation.
+It applies to PRs containing the workflow, pushes to `main` or
+`codex/pr-reliability`, and enabled merge groups. Standalone branches need their
+own check evidence. Local runs report the accuracy module skipped if absent.
+Historical early/forward reproduction uses six local training MAT files only;
+the current organizer rerun also uses six already-inspected test recordings.
+A reproduction of earlier predictions is not independent validation.
