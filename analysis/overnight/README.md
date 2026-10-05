@@ -60,7 +60,7 @@ The supplied-montage mapping remains an assumption for each recording. PR #3's c
 Latest collaborator snapshot checked: `a3382b7`. It fixes auxiliary transfer to fit the source training run only and changes its physiology to a per-file correlation-inferred layout, adding a CP5/CP1-swap hypothesis. The source-label concern is resolved in that branch. Other contract differences remain: inferred acquisition mapping, zero-phase filtering, unlabeled recentering and both temporal directions. This is a source review of that snapshot, not a reproduction of its changed numerical outputs.
 
 
-## Current integration — main 3506ca2, 5 October 2026
+## Current integration — main dbab3b7, 5 October 2026
 
 PRs 3 and 4 are now merged. The current physiology module uses inferred
 per-file channel mappings, so the fixed-montage CSV hashes above are historical.
@@ -71,7 +71,7 @@ Run the current mu module separately for current descriptive outputs; those
 outputs are not a reproduction of the historical fixed-montage CSVs.
 
 PR2 was closed automatically when its head branch was renamed. Its replacement
-review branch is `analysis/calibration-benchmarks`, reconciled with main 3506ca2.
+review branch is `analysis/calibration-benchmarks`, reconciled with main dbab3b7.
 The source-level channel map and ERD/ERS limitations are in `docs/protocol.md`.
 New chronological selection and covariance-stream work have separate branches
 and receipts; their results must not be pooled with this four-second benchmark.

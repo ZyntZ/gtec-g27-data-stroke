@@ -505,3 +505,5 @@ selected on the same exposed test runs or called a clinical improvement.
 ## Historical accuracy/calibration benchmark for review
 
 The [comparison report](results/accuracy_calibration/REPORT.html), [methods](analysis/accuracy_calibration/PROTOCOL.md) and [reproduction handoff](results/overnight/MORNING_REPORT.md) retain the earlier four-second calibration/transfer study and verification checks. Those pipelines, windows and exposed test scores are separate from the merged early chronological audit above. They are not interchangeable replications or fresh validation. The historical fixed-column physiology receipt predates the current conditional per-file montage and must not certify the revised anatomical labels.
+
+Latest integration: `dbab3b7` adds the cue-response audit and prequential negative controls. The original benchmark remains historical; the current protocol records the unavailable affected-hand metadata and limits ERD/ERS inference to exploratory asymmetry.

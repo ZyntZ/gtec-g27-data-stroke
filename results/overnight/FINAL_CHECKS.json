@@ -112,5 +112,16 @@
     ],
     "new_decoder_fitting": false,
     "test_scores_changed": false
+  },
+  "current_integration": {
+    "checked_at_utc": "2026-10-05T06:28:37.621468+00:00",
+    "upstream_commit": "dbab3b7e8118188f9953ef3875288b2e61a257cf",
+    "integration_commit": "426858a",
+    "tests_passed": 88,
+    "tests_skipped": 1,
+    "skip": "optional pyriemann accuracy dependency unavailable in this runtime",
+    "preflight": "pass",
+    "scientific_scope": "Code integration checks; previous numerical receipts retain their original source snapshots",
+    "physiology_gate": "Changed inferred-montage source rejects historical fixed-montage receipt before execution"
   }
 }
