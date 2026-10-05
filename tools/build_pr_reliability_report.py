@@ -1,8 +1,11 @@
-"""Build the one-page review from the integration verification receipt.
+"""Build the one-page report for its explicitly recorded code snapshot.
 
-Requires reportlab. Run from the repository root after verification.
+Requires reportlab. Does not rerun EEG analyses or certify newer source trees.
 """
+import csv
+import hashlib
 import json
+import re
 from pathlib import Path
 
 from reportlab.lib import colors
@@ -14,73 +17,105 @@ from reportlab.platypus import SimpleDocTemplate, Paragraph, Spacer, Table, Tabl
 ROOT = Path(__file__).resolve().parents[1]
 
 
-def build():
+def report_evidence():
     receipt = json.loads((ROOT / "results/pr_reliability/verification.json").read_text())
-    assert receipt["early_all_output_bytes_unchanged"]
-    assert receipt["early_recording_hashes_unchanged"]
-    assert receipt["tests"]["returncode"] == receipt["preflight"]["returncode"] == 0
+    snapshot = json.loads((ROOT / "results/pr_reliability/report_snapshot.json").read_text())
+    current = receipt["current_stack_checks"]
+    for section in ("source_sha256_lf", "checks_source_sha256_lf"):
+        for name, expected in current[section].items():
+            actual = hashlib.sha256((ROOT / name).read_bytes().replace(b"\r\n", b"\n")).hexdigest()
+            if actual != expected:
+                raise ValueError(f"Report snapshot no longer describes {name}; reverify before rebuilding")
+    for name, expected in current["organizer_metric"]["output_sha256"].items():
+        actual = hashlib.sha256((ROOT / "results/organizer_metric" / name).read_bytes()).hexdigest()
+        if actual != expected:
+            raise ValueError(f"Report snapshot no longer describes {name}")
+    commands = current["final_integration_checks"]["commands"]
+    if any(command["returncode"] != 0 for command in commands):
+        raise ValueError("Recorded combined verification did not pass")
+    test_output = next(command["output"] for command in commands if command["command"] == "python -m pytest -q")
+    match = re.search(r"(\d+) passed", test_output)
+    if not match or int(match.group(1)) != snapshot["hosted_checks"]["tests_passed"]:
+        raise ValueError("Local and hosted snapshot test counts disagree")
+    if snapshot["hosted_checks"]["head_sha"] != snapshot["reviewed_candidate_commit"]:
+        raise ValueError("Hosted check refers to a different report snapshot")
+    if snapshot["hosted_checks"]["conclusion"] != "success":
+        raise ValueError("Hosted snapshot verification did not succeed")
+    with (ROOT / "results/organizer_metric/organizer_metric_aggregate.csv").open(newline="") as source:
+        aggregate = next(csv.DictReader(source))
+    return receipt, snapshot, int(match.group(1)), aggregate
+
+
+def build():
+    receipt, snapshot, tests_passed, aggregate = report_evidence()
     target = ROOT / "output/pdf/g27_pr_reliability_review.pdf"
     target.parent.mkdir(parents=True, exist_ok=True)
-    body = ParagraphStyle("Body", fontName="Helvetica", fontSize=10,
-                          leading=13.3, textColor=colors.HexColor("#18232b"), spaceAfter=8)
+    body = ParagraphStyle("Body", fontName="Helvetica", fontSize=9.5,
+                          leading=12, textColor=colors.HexColor("#18232b"), spaceAfter=6)
     title = ParagraphStyle("Title", parent=body, fontName="Helvetica-Bold",
-                           fontSize=19, leading=23, textColor=colors.black, spaceAfter=7)
+                           fontSize=18, leading=22, textColor=colors.black, spaceAfter=5)
     heading = ParagraphStyle("Heading", parent=body, fontName="Helvetica-Bold",
-                             fontSize=11, leading=15, spaceBefore=6, spaceAfter=5)
-    small = ParagraphStyle("Small", parent=body, fontSize=8.5, leading=11, spaceAfter=6)
-    cell = ParagraphStyle("Cell", parent=body, fontSize=9.4, leading=12.4,
+                             fontSize=10.5, leading=13, spaceBefore=5, spaceAfter=4)
+    small = ParagraphStyle("Small", parent=body, fontSize=8, leading=10, spaceAfter=5)
+    cell = ParagraphStyle("Cell", parent=body, fontSize=9, leading=11.5,
                           spaceAfter=0, alignment=TA_LEFT)
     p = lambda s, style=body: Paragraph(s, style)
+    code = snapshot["reviewed_candidate_commit"][:7]
     content = [p("G27 Pull Request Reliability Review", title),
-               p("5 October 2026 | Findings and verified integration changes", small),
-               p("We reproduced the combined-branch failure and repaired the source receipt "
-                 "by rerunning the frozen analysis. Normal prediction parity had missed "
-                 "error paths; passing branches separately had missed their integration. "
-                 "The numerical findings remain unchanged.")]
+               p(f"Version {snapshot['report_version']} | 5 October 2026 | Code snapshot {code}", small),
+               p("The combined implementation addresses Anna's reported state and source-receipt "
+                 "failures, including main's update03. Recorded reruns preserve the numerical "
+                 "outputs. This page replaces the earlier 127/130-test report; it certifies "
+                 "the named snapshot, not future commits.")]
     rows = [[p("Finding", heading), p("Cause and response", heading)],
-            [p("PR5 model state", cell), p("State advanced before the classifier returned. "
-             "Included PR8 commits state only after success and restores it after a failed batch.", cell)],
-            [p("PR8 EEG stream", cell), p("Model rollback did not restore consumed EEG. Updated "
-             "PR8 fails closed: a processing error makes the decoder terminal. Recovery "
-             "reconstructs it and replays from a known run boundary; chunk retry is unsupported.", cell)],
-            [p("PR7/8 source receipts", cell), p("PR7 rejected the changed Riemannian source; PR8's "
-             "test ignored extra stream-source hashes. Actual reruns preserve historical evidence. "
-             "Tests now verify all declared current sources, output hashes and prediction correctness.", cell)],
-            [p("PR6 evidence labels", cell), p("Random balanced subsets were easy to mistake for "
-             "chronological calibration. PNG, SVG and HTML captions now state the limitation. "
-             "Historical receipts and convenience exports have an explicit scope.", cell)]]
-    table = Table(rows, colWidths=[102, 397], hAlign="LEFT")
+            [p("Model state", cell), p("PR5 advanced state before classification succeeded. PR8 "
+             "commits state after success and restores model state after a failed batch.", cell)],
+            [p("Consumed EEG", cell), p("Model rollback did not rewind the EEG stream. Updated PR8 "
+             "makes processing failures terminal; recovery reconstructs the decoder and replays "
+             "from a known run boundary. Retrying a consumed chunk is rejected.", cell)],
+            [p("Combined receipts", cell), p("PR7/8 integration and then update03 changed sources "
+             "behind saved receipts. Actual reruns refresh active evidence and preserve historical "
+             "snapshots. Guards check source/output hashes and prediction correctness.", cell)],
+            [p("Evidence labels", cell), p("Balanced random subsets are retrospective, not "
+             "chronological calibration. Reports label inspected test reuse, historical checks "
+             "and the distinct scoring windows.", cell)]]
+    table = Table(rows, colWidths=[100, 399], hAlign="LEFT")
     table.setStyle(TableStyle([("VALIGN", (0, 0), (-1, -1), "TOP"),
                                ("BACKGROUND", (0, 0), (-1, 0), colors.HexColor("#edf2f4")),
                                ("LEFTPADDING", (0, 0), (-1, -1), 7),
                                ("RIGHTPADDING", (0, 0), (-1, -1), 7),
-                               ("TOPPADDING", (0, 0), (-1, -1), 7),
-                               ("BOTTOMPADDING", (0, 0), (-1, -1), 7)]))
-    content.extend([table, Spacer(1, 9), p("Verification and prevention", heading),
-        p(f"{receipt['tests']['summary']}. Preflight and published-result arithmetic pass. "
-          "All 24 early choices, 1,920 outer and 1,080 inner predictions match; "
-          "3,840 historical forward predictions and 192 summaries reproduce. "
-          "Automated checks run on pull requests, pushes and merge groups without raw EEG. "
-          + (f"GitHub: {receipt['hosted_checks']['summary']} on "
-             f"{receipt['hosted_checks']['head_sha'][:7]} (Python 3.11, optional accuracy dependencies installed)."
-             if 'hosted_checks' in receipt else
-             "Hosted workflow execution is reported separately from these local checks.")),
-        p("Scientific result and limits", heading),
-        p("At 60 calibration labels and +3.5 seconds, fixed CSP scores <b>82/120</b> "
-          "versus <b>75/120</b> for selection; P2 PRE falls from 13/20 to 8/20. "
-          "These exposed retrospective tails are not independent validation. "
-          "Feedback onset and clinical side remain uncertain. Repairing reproducibility "
-          "does not establish motor-intent specificity or rehabilitation benefit."),
-        p("Sources: Anna's comments on "
-          '<a href="https://github.com/ZyntZ/gtec-g27-data-stroke/pull/5#issuecomment-5989971381">PR5</a>, '
-          '<a href="https://github.com/ZyntZ/gtec-g27-data-stroke/pull/8#issuecomment-5989985404">PR8</a>, '
-          '<a href="https://github.com/ZyntZ/gtec-g27-data-stroke/pull/7#issuecomment-5989993987">PR7</a> and '
-          '<a href="https://github.com/ZyntZ/gtec-g27-data-stroke/pull/6#issuecomment-5990009998">PR6</a>. '
-          "Requested independent reviewer: Astra / Ultra; runtime identity unverified. "
-          "Exact hashes: results/pr_reliability/verification.json. "
-          "Candidate integration only; no main merge or competition submission.", small)])
+                               ("TOPPADDING", (0, 0), (-1, -1), 6),
+                               ("BOTTOMPADDING", (0, 0), (-1, -1), 6)]))
+    total = int(aggregate["test_trials"])
+    content.extend([table, Spacer(1, 7), p("Verification and independent review", heading),
+        p(f"<b>{tests_passed} tests pass</b> locally and in "
+          f'<a href="{snapshot["hosted_checks"]["url"]}">GitHub CI</a>; preflight and 19 published-result '
+          "checks pass. Training replay preserves 3,840 predictions, 192 summaries and six "
+          "80-trial raw runs. Organizer reruns preserve three CSVs and 12 input hashes."),
+        p("The requested Astra/Ultra review is recorded as completed; actual runtime identity "
+          "is unverified. A completed read-only review verified <b>Claude Fable 5.1 at Max</b> "
+          f"on {code}, with no blocking code or provenance finding. Its medium report-freshness "
+          "finding is corrected here. Smaller hardening suggestions are recorded in the companion."),
+        p("Scientific results and limits", heading),
+        p(f"Organizer-style CSP: fixed +3.5 s <b>{aggregate['fixed_correct']}/{total}</b>; "
+          f"one pooled peak <b>{aggregate['pooled_peak_correct']}/{total}</b>; sum of six separately "
+          f"selected session peaks <b>{aggregate['sum_of_session_peaks_correct']}/{total}</b>. "
+          "Peak times were selected after seeing test results. Offline 433/480 baseline and "
+          "exploratory Riemannian 446/480 use a different scoring contract."),
+        p("Early training-tail selection remains <b>75/120 versus fixed CSP 82/120</b>. "
+          "There is no independent accuracy improvement, motor-intent or rehabilitation claim. "
+          "Actual FES onset, clinical side and physical channel geometry remain unconfirmed."),
+        p("Integration and delivery", heading),
+        p("Anna merged PR6 into main on 5 October 2026. It includes PR5, PR7, PR8 and PR9; "
+          "GitHub also marks PR5/7/9 merged. PR8 remains open although its commits are included. "
+          "This report update is a separate documentation change. Video/submission remain team outcomes."),
+        p("Evidence: results/pr_reliability/verification.json (current_stack_checks), "
+          "report_snapshot.json, and docs/pr_reliability_review.md. "
+          '<a href="https://github.com/ZyntZ/gtec-g27-data-stroke/pull/6#issuecomment-5992153702">'
+          "Anna's update03 request</a>. Workflow applies to PRs containing it, pushes to "
+          "main/codex/pr-reliability, and enabled merge groups. CI does not rerun raw EEG.", small)])
     SimpleDocTemplate(str(target), pagesize=A4, leftMargin=48, rightMargin=48,
-                      topMargin=40, bottomMargin=40, title="G27 Pull Request Reliability Review",
+                      topMargin=36, bottomMargin=36, title="G27 Pull Request Reliability Review - Version 2",
                       author="").build(content)
     print(target)
 

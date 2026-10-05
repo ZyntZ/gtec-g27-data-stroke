@@ -1,0 +1,74 @@
+{
+  "report_version": 2,
+  "report_date": "2026-10-05",
+  "reviewed_candidate_commit": "558699dff4ecda2eea69c5f68eb1f4be5acdb552",
+  "current_main_at_review": "041379211a8efe3d6234ef75fb2b53a19bf96a9d",
+  "scope": "Report correction only; calculation and verification sources match the executed PR6 snapshot. No new EEG analysis or cross-model review was launched.",
+  "hosted_checks": {
+    "head_sha": "558699dff4ecda2eea69c5f68eb1f4be5acdb552",
+    "url": "https://github.com/ZyntZ/gtec-g27-data-stroke/actions/runs/37296588128",
+    "tests_passed": 136,
+    "conclusion": "success",
+    "raw_eeg_reproduction_in_ci": false
+  },
+  "reviews": {
+    "astra": {
+      "requested_model": "gpt-6-astra",
+      "requested_effort": "ultra",
+      "completed": true,
+      "actual_runtime_identity_verified": false,
+      "evidence": "verification.json.current_stack_checks.independent_review"
+    },
+    "claude": {
+      "actual_model": "claude-fable-5-1",
+      "configured_effort": "max",
+      "cli_version": "2.1.283",
+      "actual_runtime_identity_verified": true,
+      "started_at_utc": "2026-10-05T10:42:48.230703+00:00",
+      "finished_at_utc": "2026-10-05T10:51:52.624670+00:00",
+      "returncode": 0,
+      "scope": "Read-only immutable PR6 snapshot558699d; no raw EEG or source edits",
+      "verdict": "No blocking code or provenance finding; report freshness was the medium finding",
+      "raw_review_is_local_only": true
+    }
+  },
+  "merge_guidance": {
+    "pr6_contains": [
+      5,
+      7,
+      8,
+      9
+    ],
+    "pr6_state": "MERGED",
+    "merged_at_utc": "2026-10-05T11:21:51Z",
+    "merged_by": "ZyntZ",
+    "main_merge_commit": "88c9ae872fc19b341f9edfeb40392baa305afbab",
+    "main_tree_identical_to_reviewed_candidate": true,
+    "pr5_pr7_pr9_state": "MERGED",
+    "pr8_state": "OPEN draft; exact head already included in main",
+    "no_main_merge_or_submission_performed_by_this_review": true
+  },
+  "historical_report": {
+    "commit": "173a3a3c89af73afa8e47c59e1564f58b858e281",
+    "path": "output/pdf/g27_pr_reliability_review.pdf",
+    "local_tests": "127 passed, 1 skipped",
+    "hosted_tests": "130 passed",
+    "scope": "Pre-update03 snapshot retained in Git history; replaced by the visibly versioned report"
+  },
+  "report_revision_checks": {
+    "active_receipt_tests": "8 passed",
+    "repository_preflight": "pass",
+    "published_result_checks": 19,
+    "all_published_result_checks_passed": true,
+    "builder_refuses_changed_calculation_source": true,
+    "analysis_sources_changed": false,
+    "new_raw_eeg_analysis": false
+  },
+  "current_main_at_report_finalization": "88c9ae872fc19b341f9edfeb40392baa305afbab",
+  "report_document": {
+    "path": "output/pdf/g27_pr_reliability_review.pdf",
+    "sha256": "91009ee34d7520f1e51fdf0be0bb9438543dfed6cfde21fc8f14fcc2619f0e0f",
+    "pages": 1,
+    "render_visually_reviewed": true
+  }
+}
