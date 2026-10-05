@@ -34,7 +34,8 @@ def test_frozen_audit_receipts_are_self_consistent():
     for source, digest in parity["source_sha256"].items():
         assert hashlib.sha256((ROOT / "stroke_rehab" / source).read_bytes().replace(b"\r\n", b"\n")).hexdigest() == digest
     assert set(parity["additional_source_sha256_lf"]) >= {
-        "stroke_rehab/riemann_stream.py", "stroke_rehab/features.py", "stroke_rehab/data.py"}
+        "stroke_rehab/riemann_stream.py", "stroke_rehab/features.py", "stroke_rehab/data.py",
+        "stroke_rehab/spatial.py", "stroke_rehab/streaming.py", "analysis/reproduce_stream.py"}
     for source, digest in parity["additional_source_sha256_lf"].items():
         assert hashlib.sha256((ROOT / source).read_bytes().replace(b"\r\n", b"\n")).hexdigest() == digest
     assert set(parity["output_sha256_lf"]) == {
