@@ -67,6 +67,11 @@ def main(argv=None):
     plot_time.add_argument("--csv", default="results/decision_time.csv")
     plot_time.add_argument("--output", default="results/decision_time.png")
     plot_time.add_argument("--theme", choices=("light", "dark"), default="light")
+    cue = sub.add_parser("cue-audit", help="Training-only visual-cue confound control")
+    cue.add_argument("--data-dir", default="data/stroke-rehab")
+    cue.add_argument("--output", default="results/cue_audit.csv")
+    cue.add_argument("--folds", type=int, default=5)
+    cue.add_argument("--purge", type=int, default=1)
     forward = sub.add_parser("forward-calibration", help="Training-only causal forward validation at fixed calibration budgets")
     forward.add_argument("--config", default="configs/forward_calibration.json")
     forward.add_argument("--data-dir", default="data/stroke-rehab")
@@ -175,6 +180,9 @@ def main(argv=None):
     elif args.command == "transfer":
         from .transfer import run_transfer
         run_transfer(args.data_dir, args.output)
+    elif args.command == "cue-audit":
+        from .cue_audit import run_cue_audit
+        print(f"Wrote {len(run_cue_audit(args.data_dir, args.output, folds=args.folds, purge=args.purge))} training-only cue-control rows")
     elif args.command == "forward-calibration":
         from .forward_calibration import run_forward_calibration
         import json

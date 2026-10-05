@@ -1,0 +1,13 @@
+patient,session,condition,correct,trials,accuracy,balanced_accuracy,features,folds,purge_trials
+P1,pre,pre_instruction,29,80,0.3625,0.36250000000000004,80,5,1
+P1,pre,early_cue,41,80,0.5125,0.5125,80,5,1
+P1,post,pre_instruction,40,80,0.5,0.5,80,5,1
+P1,post,early_cue,69,80,0.8625,0.8625,80,5,1
+P2,pre,pre_instruction,41,80,0.5125,0.5125,80,5,1
+P2,pre,early_cue,35,80,0.4375,0.4375,80,5,1
+P2,post,pre_instruction,47,80,0.5875,0.5874999999999999,80,5,1
+P2,post,early_cue,45,80,0.5625,0.5625,80,5,1
+P3,pre,pre_instruction,39,80,0.4875,0.4875,80,5,1
+P3,pre,early_cue,41,80,0.5125,0.5125,80,5,1
+P3,post,pre_instruction,29,80,0.3625,0.3625,80,5,1
+P3,post,early_cue,33,80,0.4125,0.4125,80,5,1

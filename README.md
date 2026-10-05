@@ -2,6 +2,10 @@
 
 A reproducible starting line for the BR41N.IO Stroke Rehab track. We use the organizer's EEG recordings, keep training and test runs separate, and measure what our decoder actually does on **80 held-out trials per session**. Three active collaborators, six sessions, no mystery score.
 
+## Critical research review
+
+Read [the prioritized scientific and deployment review](docs/critical_review.md) before treating an accuracy figure as a motor-intent or clinical endpoint. The new training-only `stroke-rehab cue-audit` finds a strong immediate cue-period voltage signal in P1 POST (69/80, versus 40/80 before the instruction), an unresolved confound rather than a new test score. Reproduce it with `stroke-rehab cue-audit` after downloading the organizer archive; detailed conditions and all six per-run values are in `results/cue_audit.csv`. The existing held-out test runs have already been examined and are not a fresh blind set.
+
 ## Active team
 
 - [Anna Sokolova](https://github.com/ZyntZ)
