@@ -1,0 +1,13 @@
+patient,session,run,line_100hz_feedback_vs_rest_db,line_106hz_alias_of_150_feedback_vs_rest_db,line_56hz_alias_of_200_feedback_vs_rest_db,evoked_instruction_2p0s_vs_rest,evoked_nominal_feedback_3p5s_vs_rest,evoked_relax_8p0s_vs_rest
+P1,pre,training,-0.43,-0.07,-0.18,1.94,1.17,4.15
+P1,pre,test,0.15,0.15,-0.08,1.75,1.28,4.34
+P1,post,training,0.94,0.37,1.32,3.04,1.08,5.69
+P1,post,test,0.69,0.15,0.79,1.94,0.75,5.3
+P2,pre,training,2.01,-0.19,0.05,1.42,0.68,1.14
+P2,pre,test,0.54,-0.16,0.17,2.02,0.71,1.54
+P2,post,training,1.02,0.4,0.48,1.23,0.99,1.19
+P2,post,test,0.41,0.28,0.16,1.25,0.99,1.01
+P3,pre,training,-0.11,-0.5,-0.75,1.05,0.85,0.89
+P3,pre,test,-0.47,-0.56,0.3,0.66,0.85,0.8
+P3,post,training,-0.02,0.17,0.85,0.84,1.12,1.36
+P3,post,test,0.76,0.11,0.75,0.92,0.8,0.7

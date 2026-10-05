@@ -51,13 +51,13 @@ def _distances(layout):
     return np.linalg.norm(xy[:, None] - xy[None], axis=-1)
 
 
-def median_trial_correlation(recording, band=(8.0, 30.0)):
+def median_trial_correlation(recording, band=(8.0, 30.0), trials=slice(None)):
     """Median over trials of the channel correlation matrix (robust to artefacts)."""
     sos = butter(4, band, btype="bandpass", fs=recording.fs, output="sos")
     filtered = sosfiltfilt(sos, recording.signal, axis=0)
     span = slice(recording.fs, 8 * recording.fs)
     return np.median([np.corrcoef(filtered[onset:][span].T)
-                      for onset in recording.onsets], axis=0)
+                      for onset in recording.onsets[trials]], axis=0)
 
 
 def layout_fit(correlation, layout, *, permutations=2000, seed=27):
@@ -100,6 +100,45 @@ def swaps_improving_fit(correlation, layout):
     return int(better)
 
 
+def mirrored(layout):
+    """Column order of the left-right mirror image of a layout."""
+    position = {GRID[name]: i for i, name in enumerate(layout)}
+    return [position[-GRID[name][0], GRID[name][1]] for name in layout]
+
+
+def global_search(correlation, layout, *, restarts=20, seed=27):
+    """Search all channel orders for the best fit, starting from random orders.
+
+    Each restart swaps channel pairs for as long as a swap improves the fit.
+    Returns whether the best order found is the stated one, its mirror image
+    (which fits identically), or something else, with that order's fit.
+    """
+    upper = np.triu_indices(len(layout), 1)
+    distance = _distances(layout)
+    fit = lambda order: spearmanr(distance[np.ix_(order, order)][upper],
+                                  correlation[upper]).statistic
+    rng = np.random.default_rng(seed)
+    best_order, best = None, np.inf
+    for _ in range(restarts):
+        order = rng.permutation(len(layout))
+        current = fit(order)
+        while True:
+            options = []
+            for i, j in combinations(range(len(layout)), 2):
+                trial = order.copy()
+                trial[[i, j]] = order[[j, i]]
+                options.append((fit(trial), trial))
+            value, candidate = min(options, key=lambda item: item[0])
+            if value >= current - 1e-12:
+                break
+            order, current = candidate, value
+        if current < best:
+            best_order, best = order, current
+    found = ("stated" if np.array_equal(best_order, np.arange(len(layout)))
+             else "mirror" if np.array_equal(best_order, mirrored(layout)) else "other")
+    return found, float(best)
+
+
 def notch_hz(recording):
     """Mains notch already applied to the file: 50 or 60 Hz, whichever is emptier."""
     frequency, density = welch(recording.signal[recording.onsets[0]:], recording.fs,
@@ -123,6 +162,14 @@ def run_montage_check(data_root, output_file, *, permutations=2000, seed=27):
             row["best_layout"] = min(LAYOUTS, key=lambda k: row[f"{k}_rho"])
             row["swaps_improving_best_layout"] = swaps_improving_fit(
                 correlation, LAYOUTS[row["best_layout"]])
+            assigned = layout_for(path)
+            found, best = global_search(correlation, assigned, seed=seed)
+            row["global_search_finds"] = found
+            row["global_search_rho"] = round(best, 3)
+            halves = [layout_fit(median_trial_correlation(recording, trials=half),
+                                 assigned, permutations=1)[0]
+                      for half in (slice(0, None, 2), slice(1, None, 2))]
+            row["odd_even_trial_rho"] = "/".join(f"{h:.3f}" for h in halves)
             row["notch_hz"] = notch_hz(recording)
             row["assumed_layout"] = FILE_LAYOUT.get(Path(path).stem, "paper")
             # Smallest 8-30 Hz amplitude marks the side nearest the reference

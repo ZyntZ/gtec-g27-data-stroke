@@ -275,6 +275,7 @@ at 2 s. Feedback onset is unknown, including for the shorter window.
 
 ```bash
 stroke-rehab montage-check       # results/montage_check.csv
+stroke-rehab feedback-check      # results/feedback_timing_check.csv
 stroke-rehab compare             # results/model_comparison.csv
 stroke-rehab decision-time       # results/decision_time.csv
 stroke-rehab plot-decision-time  # results/decision_time.png (--theme dark for slides)
@@ -328,9 +329,33 @@ are fitted on the training run and scored on the test run every 0.25 s.
 | Filter-bank CSP | 48.1% | 59.4% | 74.6% | 84.8% | 77.7% | 72.5% |
 | Riemannian | 50.6% | 55.6% | 71.2% | 86.2% | 84.4% | 74.2% |
 
-Both models are at chance up to the instruction at 2 s. A 65–95 Hz power
-check found no consistent stimulation trace from which feedback onset could be
-timed, so the interval before 3.5 s is labelled "early post-cue".
+Both models are at chance up to the instruction at 2 s. The figure marks
+what is documented with a solid line (instruction at 2 s) and what is assumed
+with a dotted line (feedback from 3.5 s), and repeats both in its footer.
+
+### Feedback timing: not recoverable from the recordings
+
+`stroke-rehab feedback-check` asks, without labels, whether each file shows
+when stimulation starts. Neither probe finds it.
+
+- **Stimulation lines.** The paper gives a 50 Hz stimulator. The 50 Hz notch
+  removes its fundamental, so a trace could only survive at harmonics: 100 Hz,
+  and 150/200 Hz folded to 106/56 Hz at this sampling rate. Power at those
+  lines in the feedback phase (4–8 s) differs from rest (0.5–2 s) by −0.8 to
+  +2.0 dB across all twelve files, with no consistent sign. The strong 106 Hz
+  line present in ten files is constant through the trial, so it is mains
+  interference, not stimulation.
+- **Evoked response.** The trial-median 1–12 Hz response in the 0.75 s after
+  the instruction is 1.2 to 3.0 times rest in the P1 and P2 files, and after
+  the relax cue up to 5.7 times in P1. After the assumed feedback start at
+  3.5 s it is 0.7 to 1.3 times rest in every file: nothing is time-locked there.
+
+This does not show that feedback was absent or late; it shows the 3.5 s start
+cannot be confirmed from the data. It stays an assumption from
+`DatasetInformation.pdf` until the organizer supplies stimulation timestamps.
+In test runs feedback is also conditional on the online classifier, at a time
+that is not recorded, so the interval before 3.5 s is labelled "early
+post-cue", never "feedback-free".
 
 ### Channel order differs between files
 
@@ -352,6 +377,11 @@ correlation (8–30 Hz, median over trials; no labels are used) for each layout.
   13 and 14 (CP5, CP1) fit clearly better exchanged; C3 and C4 are unaffected.
 - **Order, not only electrode set:** with the layout assigned to each file,
   none of the 120 possible two-channel swaps improves the fit in any file.
+- **Search over all orders:** starting from 20 random channel orders per file
+  and swapping pairs while the fit improves, the best order found is the
+  assigned one or its mirror image in all twelve files.
+- **Stable within a run:** odd and even trials give the same fit to within
+  0.02 in every file.
 - **What this cannot show:** a left-right mirrored layout fits identically. In
   every file the lowest-amplitude channel is on the right edge, which agrees
   with the paper's right-earlobe reference but does not prove orientation. The

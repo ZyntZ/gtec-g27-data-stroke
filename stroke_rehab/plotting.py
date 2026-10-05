@@ -70,7 +70,9 @@ def plot_decision_time(csv_path, png_path, *, theme="light", cue_s=2.0, feedback
     def dress(ax, small=False):
         ax.set_facecolor(c["surface"])
         ax.axvspan(feedback_s, 8, color=c["band"], linewidth=0, zorder=0)
+        # Solid: documented in the dataset notes. Dotted: assumed, not recorded.
         ax.axvline(cue_s, color=c["ink2"], linewidth=1)
+        ax.axvline(feedback_s, color=c["ink2"], linewidth=1, linestyle=(0, (1, 2.5)))
         ax.axhline(50, color=c["ink2"], linewidth=1, linestyle=(0, (4, 3)))
         ax.set(xlim=(1, 8), ylim=(35, 100), xticks=range(1, 9),
                yticks=(50, 75, 100) if small else (40, 50, 60, 70, 80, 90, 100))
@@ -80,9 +82,9 @@ def plot_decision_time(csv_path, png_path, *, theme="light", cue_s=2.0, feedback
         ax.spines[["left", "bottom"]].set_color(c["grid"])
         ax.tick_params(colors=c["ink2"], length=0, labelsize=8 if small else 10)
 
-    fig = plt.figure(figsize=(10, 7.4), facecolor=c["surface"])
+    fig = plt.figure(figsize=(10, 8.0), facecolor=c["surface"])
     grid = fig.add_gridspec(2, 6, height_ratios=(3.1, 1), hspace=0.42, wspace=0.28,
-                            left=0.07, right=0.98, top=0.86, bottom=0.08)
+                            left=0.07, right=0.98, top=0.87, bottom=0.15)
     main = fig.add_subplot(grid[0, :])
     dress(main)
     for model, label, color in series:
@@ -91,18 +93,27 @@ def plot_decision_time(csv_path, png_path, *, theme="light", cue_s=2.0, feedback
     main.set_ylabel("Held-out test trials correct (%), 480 trials", color=c["ink2"])
     main.set_xlabel("Decision time after trial trigger (s): end of a causal 1 s window",
                     color=c["ink2"])
-    for x, text in ((1.06, "before the\ninstruction"), (cue_s + 0.06, "early post-cue"),
-                    (feedback_s + 0.06, "feedback phase: visual + electrical stimulation\n"
-                     "may be on (protocol timing; not recorded per trial)")):
+    for x, text in ((1.06, "before the\ninstruction"),
+                    (cue_s + 0.06, "early post-cue\n(instruction at 2 s:\ndocumented)"),
+                    (feedback_s + 0.06, "ASSUMED feedback phase from 3.5 s: visual + electrical\n"
+                     "stimulation may be on. Start taken from the protocol diagram;\n"
+                     "no per-trial marker, and no trace of it found in the EEG.")):
         main.text(x, 98.5, text, color=c["ink2"], fontsize=9, va="top", linespacing=1.3)
     main.text(7.94, 51, "chance", color=c["ink2"], fontsize=9, ha="right", va="bottom")
     main.legend(loc="lower right", frameon=False, fontsize=10, labelcolor=c["ink"],
                 bbox_to_anchor=(1.0, 0.04))
-    fig.text(0.07, 0.955, "Decoding rises only after the cue and peaks once feedback can be present",
+    fig.text(0.07, 0.96, "Decoding rises only after the cue and peaks in the assumed feedback phase",
              color=c["ink"], fontsize=14, fontweight="bold")
-    fig.text(0.07, 0.915, "Each model is fitted on the training run and scored once per test trial; "
+    fig.text(0.07, 0.925, "Each model is fitted on the training run and scored once per test trial; "
              "causal filters, so no EEG after the decision time is used.",
              color=c["ink2"], fontsize=9.5)
+    fig.text(0.07, 0.012,
+             "Documented: trial trigger at 0 s, instruction at 2 s, relax at 8 s (solid line = documented). "
+             "Assumed: feedback from 3.5 s (dotted line); in test runs\nit is given only after a correct "
+             "online detection, at a time that is not recorded. So scores left of 3.5 s are not shown to be "
+             "feedback-free.\nExploratory: these test runs were already inspected and model settings were "
+             "not chosen on training data alone. Six runs from three patients.",
+             color=c["ink2"], fontsize=8, va="bottom", linespacing=1.45)
     for i, session in enumerate((p, s) for p in ("P1", "P2", "P3") for s in ("pre", "post")):
         ax = fig.add_subplot(grid[1, i])
         dress(ax, small=True)
