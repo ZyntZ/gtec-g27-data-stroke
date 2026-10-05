@@ -79,6 +79,11 @@ def main(argv=None):
     prequential.add_argument("--output", default="results/prequential_summary.csv")
     prequential.add_argument("--warmup", type=int, default=20)
     prequential.add_argument("--chunk-samples", type=int, default=512)
+    mechanism = sub.add_parser("mechanism-audit", help="Training-only chronological CSP, power and visual-cue controls")
+    mechanism.add_argument("--data-dir", default="data/stroke-rehab")
+    mechanism.add_argument("--output", default="results/mechanism_audit.csv")
+    mechanism.add_argument("--warmup", type=int, default=20)
+    mechanism.add_argument("--chunk-samples", type=int, default=64)
     forward = sub.add_parser("forward-calibration", help="Training-only causal forward validation at fixed calibration budgets")
     forward.add_argument("--config", default="configs/forward_calibration.json")
     forward.add_argument("--data-dir", default="data/stroke-rehab")
@@ -210,6 +215,11 @@ def main(argv=None):
         rows = run_prequential(args.data_dir, args.output, warmup=args.warmup,
                                chunk_samples=args.chunk_samples)
         print(f"Wrote {len(rows)} training-only, sequential session/method scores")
+    elif args.command == "mechanism-audit":
+        from .mechanism_audit import run_mechanism_audit
+        rows = run_mechanism_audit(args.data_dir, args.output, warmup=args.warmup,
+                                   chunk_samples=args.chunk_samples)
+        print(f"Wrote {len(rows)} chronological training-only mechanism/control rows")
     elif args.command == "plot-forward-calibration":
         from .forward_plot import plot_forward_calibration
         print(plot_forward_calibration(args.csv, args.output))

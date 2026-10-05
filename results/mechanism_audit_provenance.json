@@ -1,0 +1,69 @@
+{
+  "scope": "Retrospective training runs only; exploratory, already-exposed data",
+  "input_sha256": {
+    "P1_pre_training.mat": "6a2b29ef701d3e839f9ce5e81a9e5df6458130e252a4d94465ecdf249b43c889",
+    "P1_post_training.mat": "88cdaa8214c015d39c8f18f68db8b02c6b46cfffaaeabe2f081d7f582f017732",
+    "P2_pre_training.mat": "7296aa803d488d6a8f1d1bd0621c1c011c561ac0dc8867c17256bc4a0ed4b93c",
+    "P2_post_training.mat": "fcb480909f6e2c4b81ce0fcebaca242e2ad4d5dc3163d205f74e3a1c45c845bb",
+    "P3_pre_training.mat": "247a1a5d585f60da71412892e3f70f10d59c6505cf079d7bb54f78cf779faeed",
+    "P3_post_training.mat": "ac47b77cf0d954f4287685d5cf81ffccf611befa1d9e1f3f21c42856afe2140c"
+  },
+  "source_sha256": {
+    "mechanism_audit.py": "4622e7e23d4a77ee55966c2038446ef612b63c7d635d501d6d3ed43ebb8bff6e",
+    "prequential.py": "ee9c16fc10e9d86479c0ea731819d5dd439b6efd4579ebcbf4830821ad6ba383",
+    "streaming.py": "f4ce3f58662a79b7a19111c88b980530cfba986d043ef63bf83784e937103245",
+    "spatial.py": "6f1983f4c2e1a28137c2540b6e268c717ec3937c661e64ecface070546fe1ce3",
+    "cue_audit.py": "ff0cb5b092f36bfc5ff37c0a61c8317eb95ef2cc0bce393540d6fc0ac2d052bd",
+    "data.py": "1759401e31fc41c2accc439adc387e1086bd1e7380f39fbcf9b3917967b3cc68",
+    "features.py": "fba7d9a2bf19cc1900486eb9df1367b5f60e4907d5d4d7ae14b8dfd39c90fba2"
+  },
+  "python": "3.13.7",
+  "packages": {
+    "numpy": "2.4.3",
+    "scipy": "1.17.1",
+    "scikit_learn": "1.8.0"
+  },
+  "first_scored_trial_1based": 21,
+  "calibration_label_access": "Only labels of strictly preceding trials",
+  "chunk_samples": 64,
+  "power_and_csp_windows_s": {
+    "pre_instruction_power": [
+      0.5,
+      1.5
+    ],
+    "early_postcue_power": [
+      2.5,
+      3.5
+    ],
+    "pre_instruction_csp": [
+      0.5,
+      1.5
+    ],
+    "early_postcue_csp": [
+      2.5,
+      3.5
+    ]
+  },
+  "cue_voltage_feature_stops_s": {
+    "pre_instruction_voltage": 1.54,
+    "early_cue_voltage": 2.54
+  },
+  "csp_pairs_per_band": 1,
+  "csp_ridge": 0.01,
+  "csp_bands_hz": [
+    [
+      8.0,
+      12.0
+    ],
+    [
+      12.0,
+      20.0
+    ],
+    [
+      20.0,
+      30.0
+    ]
+  ],
+  "voltage_status": "Causal offline extraction only; no measured delivery latency",
+  "interpretation": "No measured per-trial feedback times, new patient, or clinical outcome"
+}

@@ -69,6 +69,54 @@ specificity or rehabilitation benefit. Treat six sessions as three paired
 participants, not six independent patients. Do not choose a winner by looking
 at these validation trials and then report the same trials as untouched tests.
 
+## Fixed-window mechanism stress test (training runs only)
+
+Run `stroke-rehab mechanism-audit` to reproduce the chronological comparison
+in [`results/mechanism_audit.csv`](results/mechanism_audit.csv); input hashes,
+code hashes and runtime are in
+[`results/mechanism_audit_provenance.json`](results/mechanism_audit_provenance.json).
+All methods predict **the same trials 21–80**, per session. Trial `i` is
+predicted after fitting **only trials `< i`**; CSP spatial filters, scaling and
+shrinkage LDA are refitted inside each training prefix. Label-only controls
+also see no current or future label. The CSP configuration is **fixed**, not
+chosen from these 60-trial evaluation tails: one pair per 8–12, 12–20 and
+20–30 Hz band; ridge 0.01. The post-instruction causal EEG interval is
+[2.5, 3.5) seconds after trigger, compared with the same 1-second
+pre-instruction interval [0.5, 1.5). A short low-pass cue-locked voltage
+control tests whether the instruction itself can be decoded; that method
+uses earlier samples and **is not an alternative at the same decision time**.
+
+| Method | Correct / 360 | Mean balanced accuracy across six sessions | Signal available by |
+|:--|--:|--:|--:|
+| Causal CSP, post-instruction | 245/360 | 68.3% | 3.50 s |
+| Causal CSP, pre-instruction | 169/360 | 47.5% | 1.50 s |
+| Bandpower, post-instruction | 214/360 | 59.9% | 3.50 s |
+| Bandpower, pre-instruction | 162/360 | 45.6% | 1.50 s |
+| Cue-locked voltage, post-instruction | 197/360 | 55.6% | 2.54 s |
+| Cue-locked voltage, pre-instruction | 178/360 | 50.2% | 1.54 s |
+| Previous trial label / prefix majority | 179/360 / 142/360 | 49.3% / 41.6% | No EEG |
+
+The post-instruction CSP session scores are P1 PRE **49/60**, P1 POST
+**60/60**, P2 PRE **29/60**, P2 POST **36/60**, P3 PRE **42/60**, P3 POST
+**29/60**. A perfect score for *one already-exposed training session* is
+not evidence of a universal decoder. Strong cue-only P1 POST (**52/60**) and
+missing per-trial feedback timestamps leave motor-intent specificity
+unresolved. Mean session accuracy conceals a below-50% outcome in two of
+six sessions. A model chosen by inspecting these scores needs independent
+new participants/sessions for confirmation; none are available in this archive.
+
+The bandpower and CSP windows are replayed in **64-sample chunks** at 256 Hz;
+the latest observed EEG-sample delivery for the 3.50-s window is **3.746 s**
+after trigger. This number excludes acquisition, compute, display and
+stimulation delays. Voltage features are extracted using causal filters
+from offline files, *not* through the streaming interface; the table gives
+their latest signal sample, not a measured delivery time. `correct_left` and
+`correct_right` in the CSV permit class-wise error audits; no individual
+trials or raw EEG are exported. This retrospective analysis cannot establish
+motor imagery, safety of functional electrical stimulation, clinical recovery
+or prospective accuracy. In particular, feedback during the early EEG window
+has **not** been ruled out.
+
 ## First held-out run
 
 Selection is based on training-run CV alone. One final prediction is made for each test trial from **2.5–6.5 seconds after trigger onset**; the instruction is given at **2 seconds**. Numbers below are from the committed `results/session_results.csv`, seed 27.
