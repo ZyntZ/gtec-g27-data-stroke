@@ -2,6 +2,10 @@
 
 A reproducible starting line for the BR41N.IO Stroke Rehab track. We use the organizer's EEG recordings, keep training and test runs separate, and measure what our decoder actually does on **80 held-out trials per session**. Three active collaborators, six sessions, no mystery score.
 
+## Critical research review
+
+Treat accuracy as an instruction/feedback decoding result, not a motor-intent or clinical endpoint. The new training-only `stroke-rehab cue-audit` finds a strong immediate cue-period voltage signal in P1 POST (69/80, versus 40/80 before the instruction), an unresolved confound rather than a new test score. Reproduce it with `stroke-rehab cue-audit` after downloading the organizer archive; detailed conditions and all six per-run values are in `results/cue_audit.csv`. The existing held-out test runs have already been examined and are not a fresh blind set.
+
 ## Active team
 
 - [Anna Sokolova](https://github.com/ZyntZ)
@@ -35,6 +39,35 @@ pytest -q
 ```
 
 `stroke-rehab download` fetches ~175 MB to `data/stroke-rehab.rar` and expands the relevant files to `data/stroke-rehab/`. The downloaded archive and EEG files are intentionally excluded from commits and incremental update zips. If you already have the official archive, put it at `data/stroke-rehab.rar` before running `download`; the SHA-256 check still runs. For a different path, use `--archive` and `--data-dir`. Outputs go to `results/` by default. Rebuilding results requires downloading the dataset.
+
+## Sequential training-only control (no test labels)
+
+Run `stroke-rehab prequential` to compare a fixed 2.5–3.5 s post-instruction
+filter-bank power decoder with a *matched-duration* 0.5–1.5 s pre-instruction
+negative control, plus label-only previous-cue and running-majority baselines.
+The first 20 training trials initialize each model; each of trials 21–80 is
+predicted with a fresh model fitted only on **earlier** trials. The newly
+predicted trial label becomes available for fitting the next trial. Continuous
+causal filters never inspect samples after their decision window, and no test
+MAT file is opened. Per-session results are in
+[`results/prequential_summary.csv`](results/prequential_summary.csv).
+With the frozen 20-trial warmup, the post-instruction power decoder is correct
+214/360 (59.4%) and the matched pre-instruction control 162/360 (45.0%).
+The previous-label baseline is 179/360 (49.7%). Most of the post-cue advantage
+is concentrated in P1: P1 PRE 42/60 and POST 52/60; P2 PRE is 23/60 and
+POST 30/60; P3 PRE 36/60 and POST 31/60. These are repeated sessions and
+should **not** be pooled as 360 independent patients or promoted as an
+expected performance for a new stroke survivor. The score is specific to
+three-band log-power plus regularized linear discriminant analysis; it does
+not contradict different methods' scores for different windows.
+
+This is an exploratory audit of already exposed training runs, **not** a fresh
+blind evaluation. The training sessions include visual and electrical feedback,
+and even the early post-cue window is not verified feedback-free. A difference
+between early post-cue and pre-cue scores alone cannot establish motor-imagery
+specificity or rehabilitation benefit. Treat six sessions as three paired
+participants, not six independent patients. Do not choose a winner by looking
+at these validation trials and then report the same trials as untouched tests.
 
 ## First held-out run
 

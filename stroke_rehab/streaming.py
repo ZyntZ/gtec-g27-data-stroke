@@ -24,8 +24,9 @@ class CausalPowerStream:
 
     A caller reports a trigger onset only inside the current chunk. Signal
     samples are zero-state filtered continuously, including pre-cue samples.
-    The first decision becomes available after the entire [2.5, 3.5) s EEG
-    interval has arrived. Calls may have positive chunk lengths containing at most one new cue.
+    A decision becomes available after the configured EEG window has arrived.
+    A pre-instruction window is valid for negative controls, not for decoding
+    an instructed movement. A chunk contains at most one new cue.
     """
 
     def __init__(self, fs=256, channels=16, window=(2.5, 3.5)):
@@ -34,8 +35,8 @@ class CausalPowerStream:
         if not isinstance(channels, int) or channels < 1:
             raise ValueError("Expected positive channel count")
         start, stop = (round(t * fs) for t in window)
-        if not (2 * fs <= start < stop <= 8 * fs):
-            raise ValueError("Window must be post-instruction and inside the trial")
+        if not (0 <= start < stop <= 8 * fs):
+            raise ValueError("Window must be nonnegative and inside the trial")
         self.fs = fs
         self.channels = channels
         self.start_offset = start
