@@ -77,3 +77,26 @@ review branch is `analysis/calibration-benchmarks`, reconciled with main dbab3b7
 The source-level channel map and ERD/ERS limitations are in `docs/protocol.md`.
 New chronological selection and covariance-stream work have separate branches
 and receipts; their results must not be pooled with this four-second benchmark.
+
+
+## Why retain these historical records
+
+The dated handoff and receipts preserve executed sources, original runtime/input
+hashes and the prespecified sensitivity. They are retained as provenance, not
+current-tree validation. The generated report/figures are optional review
+exports; the numerical CSVs and memberships/settings remain the evidence.
+
+| Receipt | Recorded execution scope |
+|:--|:--|
+| `reproduction.json` | Pipeline snapshot `1edae10`, upstream `45d5b91` |
+| `artifact_checks.json` | Notebook/export snapshot `4285e85` |
+| `mu_reference_hashes.json` | Fixed-montage references from `4285e85` |
+| `selection_sensitivity.json` and CSVs | Training-only sensitivity at `4285e85` |
+| `main_integration_check.json` | Physiology notebook at main `44d240f` |
+| `FINAL_CHECKS.json` historical fields | Top-level `44d240f`; integration entry `dbab3b7`/`426858a` |
+| Accuracy `provenance.json` | Original four-second numerical study, 4 October |
+| Accuracy `validation.json` | Published CSV consistency only; no model execution |
+
+The `current_stack_checks` entry of `FINAL_CHECKS.json` identifies current
+combined-tree checks separately. The full historical notebook runner remains
+source-gated: the changed inferred montage cannot claim fixed-montage parity.

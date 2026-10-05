@@ -5,7 +5,7 @@ Historical handoff for the named snapshots below. Its test counts, notebook/expo
 Historical physiology PR [#1](https://github.com/ZyntZ/gtec-g27-data-stroke/pull/1) was ready at `8f44f8d` against main `483ac87` after 42 tests/preflight. Its implementation is now incorporated directly in main `44d240f`. The numerical pipeline, notebook execution and model-export checks are complete. The single training-only selection sensitivity is mixed and is not adopted as a universal upgrade.
 
 
-## Current integration — 5 October 2026
+## Historical integration — main3506ca2, 5 October 2026
 
 Main3506ca2 has merged the decision-time and channel/feedback diagnostics, plus a training-only forward calibration audit. This renamed benchmark branch integrates that main while preserving its earlier numerical study. The older receipts below are immutable execution snapshots, not certification of the newer montage or stream implementation. Current per-file electrode names are signal-topology hypotheses. No per-trial FES marker or exact organizer score contract has been obtained. The separate fixed-early selection and explicit stream-state review changes target the current priorities without choosing from exposed test scores.
 
@@ -13,7 +13,7 @@ Main3506ca2 has merged the decision-time and channel/feedback diagnostics, plus 
 
 Main is now `44d240f`. Anna incorporated PR #1's identical physiology module, tests and eight notebook code cells, with saved outputs removed. The redundant PR #1 is closed as superseded; its commits and earlier receipts remain history. The separate model/research PR #2 integrates this main snapshot and remains draft for review.
 
-Further review led to a portable published-CSV validator, nineteen independent arithmetic/membership checks, and eleven corruption/portability tests. It neither needs the ignored covariance cache nor claims that pytest ran. The notebook verifier also requires all three frozen physiology hashes; missing/changed references fail, with four regression tests. Current checks: **66 scientific-environment tests**, **63 default-environment tests plus one optional module skipped**, preflight and diff checks pass. The current compact physiology notebook executes all eight code cells and reproduces three CSV hashes, with all six training input hashes unchanged.
+Further review led to a portable published-CSV validator, nineteen independent arithmetic/membership checks, and eleven corruption/portability tests. It neither needs the ignored covariance cache nor claims that pytest ran. The notebook verifier also requires all three frozen physiology hashes; missing/changed references fail, with four regression tests. Checks at this historical snapshot: **66 scientific-environment tests**, **63 default-environment tests plus one optional module skipped**, preflight and diff checks pass. The current compact physiology notebook executes all eight code cells and reproduces three CSV hashes, with all six training input hashes unchanged.
 
 Riemannian leads training classification accuracy, 437/480 versus fixed causal CSP422/480, but is worse on mean Brier (0.098683 vs0.083978) and log loss (0.343823 vs0.297291). It gains in two sessions, ties one and loses two trials in each other session. The report now presents this tradeoff and separates the +6.5s EEG cutoff from unmeasured delivered latency. Verified streaming exports concern separate early continuous-filter CSP models, not Riemannian deployment.
 
@@ -21,7 +21,7 @@ Sudip's [PR #3](https://github.com/ZyntZ/gtec-g27-data-stroke/pull/3) supplies t
 
 **Learning:** yes, learn enough to explain the decoder chain, training/evaluation boundary, accuracy/confidence tradeoff and feedback limits. The existing first-trial notebook now has a complete optional15-minute decoder section with predictions and self-checks; seven total code cells execute without error and the original ten cell sources are unchanged. No learner answer/mastery is inferred. Use the existing NeuralBench guide§4.1–§4.2 for deeper covariance detail; deep geometry/game theory can wait. The smallest future two-learner simulation is specified in the existing literature review, proposed rather than launched.
 
-The older sections below describe the original frozen execution snapshots. Current sources and receipts are in `FINAL_CHECKS.json`, `main_integration_check.json` and `../accuracy_calibration/validation.json`. The new report table was checked against CSV arithmetic; a new browser preview was blocked by its local-file policy, so no new layout inspection is claimed.
+The older sections below describe the original frozen execution snapshots. Historical sources and receipts are in `FINAL_CHECKS.json`, `main_integration_check.json` and `../accuracy_calibration/validation.json`. The new report table was checked against CSV arithmetic; a new browser preview was blocked by its local-file policy, so no new layout inspection is claimed.
 
 ## Reproduction and source
 
