@@ -1,5 +1,9 @@
 # Forward-only calibration and decision-time audit
 
+[Home](../README.md) · [Documentation map](index.md) · [Evaluation contract](protocol.md)
+
+> **Evidence:** Retrospective training-only calibration and observation-time audit. Same later training trials are reused for each budget and time; no blind validation.
+
 This is a training-run-only retrospective **sensitivity analysis**, not a new
 blinded test result or evidence of rehabilitation benefit. It asks whether
 conclusions from the existing test-exposed curves survive when fitting uses
@@ -11,7 +15,7 @@ For the exact design, input/code SHA-256 hashes and runtime versions, see
 ## Run
 
 From the repository root, with Python 3.11+, system libarchive and the
-[organizer's downloaded recordings](../README.md#get-running):
+[organizer's downloaded recordings](../README.md#reproduce):
 
 ```bash
 python -m pip install -e '.[test]'

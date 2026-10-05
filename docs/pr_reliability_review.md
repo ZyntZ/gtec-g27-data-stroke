@@ -1,5 +1,9 @@
 # G27 pull request reliability review
 
+[Home](../README.md) · [Documentation map](index.md) · [Evaluation contract](protocol.md)
+
+> **Archive (5 October 2026):** PR/commit references and quoted test counts describe the integration snapshot at that date. They are not the current branch status or proof of clinical validation.
+
 Historical review before update03, 5 October 2026. That integration combined main `07d725f`, PR6
 `e5f8898`, PR7 `4b72159` and the updated PR8 `70c504f`. Passing individual
 branches and matching normal predictions did not establish that combined
@@ -14,7 +18,7 @@ source receipts or failed streaming decisions were safe to reuse.
 
 An independent review was requested with `gpt-6-astra` at Ultra effort and completed after a capacity retry. Its runtime identity is not independently exposed by agent metadata. The review inspected published sources and Anna's comments; this checkout executed the checks.
 
-## Current-main integration — 5 October 2026
+## Dated integration snapshot — 5 October 2026
 
 Anna's newer comments on PR6/7/9 identify current-main update03 as the remaining
 integration dependency. Main `0413792` and PR9 `173a3a3` were combined with PR6;
@@ -60,5 +64,4 @@ motor-intent specificity or rehabilitation benefit.
 [PR8 failure handling](https://github.com/ZyntZ/gtec-g27-data-stroke/pull/8#issuecomment-5989985404),
 [PR7 combined receipt](https://github.com/ZyntZ/gtec-g27-data-stroke/pull/7#issuecomment-5989993987),
 [PR6 reporting](https://github.com/ZyntZ/gtec-g27-data-stroke/pull/6#issuecomment-5990009998).
-Review this integration against PR6 before choosing how to merge PR5/7/8.
-No main merge or competition submission is implied.
+The historical PR comparison does not establish the current merge state or any competition submission; verify an actual Git checkout before acting on it.

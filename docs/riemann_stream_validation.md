@@ -1,5 +1,9 @@
 # Validation and rejected-input state for PR5
 
+[Home](../README.md) · [Documentation map](index.md) · [Evaluation contract](protocol.md)
+
+> **Evidence:** Historical PR5 implementation/parity review using training data and synthetic failure tests. Matching batch/replay predictions does not measure generalization or hardware latency.
+
 This companion change uses PR5's existing `predict_next`, `decision_next` and
 `predict_stream` API. Stateless `predict` and `decision_function` still start
 from the training reference. It does not introduce another stream interface.
@@ -46,7 +50,7 @@ python -m pytest -q
 
 PR5 head `d828b6d` is the integration base. Main `dbab3b7` was inspected:
 its new cue/prequential controls do not alter these Riemannian features.
-This is a companion for PR5 review, not a request to merge two competing APIs.
+This is a historical companion for PR5 review, not a request to merge two competing APIs. The current power and spatial streaming wrappers also fail closed; see [the current experiment guide](experiments.md#timing-and-streaming).
 
 An isolated combined-code check with PR7 also matched all 24 early choices,
 1,920 outer predictions and 1,080 inner predictions; see

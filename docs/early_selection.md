@@ -1,4 +1,9 @@
 # One fixed early decision with chronological model selection
+
+[Home](../README.md) · [Documentation map](index.md) · [Evaluation contract](protocol.md)
+
+> **Evidence:** Retrospective training-only selection audit. Trials 61–80 have already been explored; no independent model improvement is established.
+
 At 60 calibration trials, the selected policy scores **75/120** versus
 **82/120** for fixed CSP. P2 PRE falls from **13/20** to **8/20**. Selection
 underperforms the fixed baseline; this is not a validated prospective policy.

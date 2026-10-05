@@ -1,248 +1,53 @@
 # Evaluation contract
 
-## Source and decoding target
+[Home](../README.md) · [Documentation map](index.md) · [Experiment guide](experiments.md)
 
-The official archive contains 12 MATLAB MAT recordings: patients P1–P3 × first (`pre`) / last (`post`) rehabilitation session × `training` / `test` run. Each file has `fs`, `y` (sample × 16 EEG channels), and `trig`. Inspection of all 12 files found 256 Hz, 80 eight-second labelled trigger blocks per run (40 `+1`, 40 `-1`). The source `DatasetInformation.pdf` defines `+1` as left-hand motor imagery, `-1` as right-hand motor imagery, and says the instruction comes two seconds after the trigger. The labels repeat for the whole 2048-sample block; treating all labelled samples as independent examples would catastrophically inflate the sample count. `results/data_inventory.csv` includes a checksum for each original MAT file.
+This contract separates **training-only diagnostics**, **previously inspected test-file evaluations** and **historical runs**. It is an analysis of research EEG, not a medical-device or clinical-efficacy study.
 
-**Target:** binary, one decision per test trial. **Unit of independence:** trial, not individual samples or sliding windows. We do not interpret PRE/POST differences in three participants as a treatment effect.
+## Data and trial identity
 
-## Locked pipeline for this update
+The organizer supplies 12 MATLAB MAT files: P1–P3 × first (`pre`) / last (`post`) rehabilitation session × `training` / `test`. Each file has `fs`, `y` (samples × 16 EEG columns) and `trig`. The validated files have 256 Hz sampling and **80 labelled eight-second trial blocks per file**, balanced 40/40 across instructions. A trigger value `+1` instructs *left-hand imagery*; `-1` instructs *right-hand imagery*. It is **repeated across 2,048 samples of one trial**, not 2,048 independent labels. The visual left/right instruction occurs +2 s after the attention trigger. Source: `DatasetInformation.pdf` inside the official archive; file hashes: [`results/data_inventory.csv`](../results/data_inventory.csv).
 
-1. Read each MAT file and verify sampling rate, finite EEG, 16 channels, 80 unbroken blocks, expected block length, and both classes.
-2. Apply a zero-phase, fourth-order Butterworth bandpass filter to the *continuous run*, separately for 8–12, 12–20 and 20–30 Hz. Filtering is offline and noncausal; do **not** call this an online-ready decoder.
-3. Take post-instruction windows at 2.5–3.5, 3.5–4.5, 4.5–5.5 and 5.5–6.5 s relative to the trigger. Baseline A uses log channel variance per band/window, a training-fitted standardizer, then shrinkage LDA. Baseline B learns trace-normalized, ridge-stabilized CSP spatial filters on the training trials, uses two eigenvectors from each end per band, computes log relative spatial variance over 2.5–6.5 s, standardizes on training trials, then fits shrinkage LDA.
-4. For each patient/session, use *only its training run* for a seeded, shuffled, stratified **5-fold trial-level** CV. CSP, scaler and LDA are fitted from scratch within every fold. Select the model with greatest out-of-fold trial accuracy (fixed candidate order breaks ties); refit on all 80 training trials. Only then extract test features and make predictions on that session's 80-test-trial run. Test labels are used solely to calculate the final score. No pooled cross-session training, no test-run-based hyperparameter selection.
-5. Report exact `correct / 80`, accuracy and balanced accuracy. Classes are balanced, but balanced accuracy is kept for future checks. The pooled 433/480 describes these recordings only; it is not a confidence interval over patients.
+Training and test are **different runs from the same patient and session**. The 25 treatment sessions are not provided: only the first and last are available. Trials/windows are not independent patients; six sessions come from **three** participants. Hand-instruction labels do not identify actual movement, lesion side, the affected hand, recovery or treatment response.
 
-The power baseline and CSP were fixed before examining test outcomes within the scripted experiment, but this is an exploratory hackathon dataset: subsequent human choices may have been informed by seeing test data. Any future model chosen with knowledge of these test outcomes needs *new subjects or a new genuinely held-out run* for an unbiased performance claim. Out-of-fold training accuracy is the only honest score for choosing improvements on this release.
+## Which evidence lane?
 
-## Timing sensitivity
+| Lane | Fitting and scoring | Why it exists | Limitation |
+|:--|:--|:--|:--|
+| Forward-only training tails | Fit first 10/20/40/60 labelled training trials; score **the same later trials 61–80** at each budget | Compare calibration needs, model families and timing without reading test MAT files | The tails have been explored and are not an untouched future cohort. |
+| Chronological prequential controls | Fit only preceding training labels; score trials 21–80 sequentially | Test whether a proposed feature still predicts when new labels arrive over time | A different 60-trial evaluation set; model selection based on these scores would require a new holdout. |
+| Purged blocked training cross-validation (CV) | Five contiguous blocks; exclude one adjacent training trial on each side | Compare fixed candidates and diagnose temporal correlations | Often uses *future* calibration trials in a fold; not online forward-only validation. |
+| Paired test-run analysis | Fit only the session's training MAT; calculate one decision per test trial at a declared time | Descriptive comparison with organizer-style evaluations | All six public test runs have been inspected repeatedly; **not blind** after development. |
+| Historical offline benchmark | Run-wide zero-phase filtering; several later windows and separate model selection | Reproduce the original 433/480 pipeline | **Noncausal** and not comparable to early streaming with only one variable changed. |
 
-`stroke-rehab audit` fits the same fixed CSP pipeline separately on 2.5–3.5 s and 4.5–6.5 s windows. It does **not** replace the selected main model, and no best window is selected based on test performance. The original dataset documentation says training delivers visual + functional electrical stimulation (FES) feedback, while test feedback is contingent on correct decoding. Late test windows can therefore carry consequences of earlier correct/incorrect detection. This creates a feedback confound; late-window offline accuracy should not be sold as a pure pre-feedback intention-decoding score. The early window is a diagnostic, not guaranteed to precede every feedback event: precise feedback timestamps are not included.
+Models, band banks, decision times and label budgets differ between lanes. Always state the **recording source, trial IDs, window relative to trigger, filter direction, calibration budget, selection rule, and numerator/denominator** with a score. [Experiment commands and receipts](experiments.md).
 
-## Timing and physiology guardrails
+## Two scoring rules: do not substitute one for the other
 
-The original offline timing audit filters the complete continuous recording
-in both directions before cutting an epoch. Samples after the decision can
-therefore affect its early-window features. It is not a causal or necessarily
-feedback-free benchmark. The separate one-pass causal replay addresses the
-backward-filtering issue, but missing per-trial feedback timestamps still
-prevent a feedback-free interpretation.
+For test trial `i` and time-grid point `t`, let `C[t, i]` be 1 if the predicted instruction equals its label, otherwise 0. The organizer's team-supplied clarification specifies:
 
-The training-only [mu-power protocol](../analysis/mu_power/README.md)
-compares within-trial spectral power; it is not a classifier score. PRE and
-POST are repeated recordings from three participants, not six independent
-patients or proof of improved clinical outcomes.
+```python
+organizer_peak = C.mean(axis=1).max()  # average over trials, THEN maximize across time
+```
 
-## How these metrics differ from the organizer's table
+It **does not** specify averaging per-trial best times (`C.max(axis=0).mean()`). The grid, preprocessing, model and reference windows must also be declared before attempting a reproduction of the published methods. Feedback-period EEG is permitted by the organizer and all 80 training trials may calibrate the paired test-run model. The submitted deliverable is a video. [Organizer-metric reproduction and its 23-point grid](organizer_metric.md).
 
-The organizer reports `CSP+LDA` and `PCA+TVLDA` accuracies in `overview.pdf`. We report one fixed-window prediction per trial from a different model and implementation. Their referenced paper describes averaging classification accuracy over multiple time steps, then taking a maximum over a feedback period. We have **not** reproduced that protocol and do not claim our scores improve on it. Nor can offline `sosfiltfilt` be put directly into a real-time stimulator.
+For a **fixed deployable-time decision**, declare a single cutoff (or a rule for choosing it from training data) *before evaluating test labels*: score one decision per trial at that cutoff. On the exposed test curves, fixed +3.5 s is **358/480**; the training-tail-selected global +4.25 s is **407/480**. In contrast, the six **post-hoc, test-label-chosen session peaks** sum to **427/480**. A separate purged-CV **per-session** training-time selector gives **388/480**; these are two different training selection rules. None constitutes independent test validation here. The published `overview.pdf` CSP+LDA and PCA+TVLDA reference scores are not reproduced exactly by our distinct decoders/time grids. [Side-by-side definitions](index.md#scorecard), [global time lock](training_locked_endpoint.md), [session-specific time lock](locked_time.md).
 
-## Sources bundled with the organizer archive
+Balanced accuracy is the mean of the two recalls. `correct / trials` is the primary transparent count; do not report a pooled trial-level confidence interval as if 120 or 480 trials were independent participants.
 
-- `DatasetInformation.pdf` (trigger timing, train/test feedback semantics).
-- `overview.pdf` (MAT variable descriptions and the original method table).
-- `StrokeRehab.pdf` (feasibility study; interpretation of treatment and BCI feedback).
-- `Gruenwald et al. - 2019 - Time-Variant Linear Discriminant Analysis Improves.pdf` (methodological background, not our implemented classifier).
+## Filtering, feedback and delivery time
 
-## Added training-only controls (not a replacement leaderboard)
+The instruction occurs at +2 s. The protocol diagram suggests a feedback phase around +3.5 s, but these MAT files have **no per-trial visual/FES timestamp**. Training includes visual and functional electrical stimulation (FES) feedback; in test, feedback is conditional on an earlier successful BCI detection. Consequently a late signal may partly decode a *consequence* of earlier decisions. The interval `[2.5, 3.5)` s is **early post-cue**, not certified pre-feedback. The cue-locked voltage control further challenges attribution to motor intent.
 
-`stroke-rehab diagnose` loads only the six training MAT files. Its JSON
-manifest `configs/diagnostics.json` fixes the five folds, seed 27 and
-one-neighbour purge. It compares random stratified trial folds with five
-contiguous 16-trial validation blocks. The latter exclude adjacent trials
-from each training partition but score each trial once. Every fitted CSP,
-scaler and LDA is learned anew on that fold's training trials. These scores
-do not select or modify the original held-out models. The post-cue CSP
-uses the original offline 2.5–6.5 s feature and is **noncausal**. The other
-control is causal 8–12, 12–20 and 20–30 Hz channel log-power, with a
-0.5–1.75 s window entirely before the instruction at +2 s. Because it is
-filtered causally on the continuous run, later EEG cannot enter this window.
-Its analysis still cannot determine when feedback begins.
+The historical baseline filters the **whole recording in both directions** (zero-phase), so features measured at an early time may use future EEG. By contrast, the one-pass causal power/CSP replay maintains continuous filter state and receives onset samples only when a chunk arrives. A feature window ending at +3.5 s with **64 samples/chunk** (256 Hz) can produce a decision as late as almost +3.75 s of recorded EEG. This is *simulated sample availability*, **not** measured acquisition/processing/display/FES latency. Streaming decoders fail closed after an EEG or prediction error; replay from a known recording boundary is needed before further decisions. The implementation never actuates stimulation. [Timing details](experiments.md#timing-and-streaming).
 
-| Training run | Pre-cue random | Pre-cue blocked | Post-cue CSP random | Post-cue CSP blocked |
-|:--|--:|--:|--:|--:|
-| P1 PRE | 46/80 | 39/80 | 77/80 | 75/80 |
-| P1 POST | 33/80 | 31/80 | 79/80 | 79/80 |
-| P2 PRE | 35/80 | 34/80 | 71/80 | 71/80 |
-| P2 POST | 37/80 | 33/80 | 74/80 | 74/80 |
-| P3 PRE | 30/80 | 31/80 | 72/80 | 72/80 |
-| P3 POST | 36/80 | 36/80 | 68/80 | 68/80 |
+## Anatomy and scope of interpretation
 
-Do not interpret the pre-cue numbers as proving a clean decoder: some are
-below 50%, and inverted classification can itself be informative. Neither
-these 80 trials nor the six runs are independent patient replications.
-Temporal folds can still share stable within-run artifacts. The notebook's
-`gross_excursion_trials` flags a trial if at least one channel has post-cue
-peak-to-peak amplitude >5× that channel's within-run median. This is a
-descriptive, unit-free heuristic, not an automated exclusion or clinical
-artifact definition. There are 2 flagged training trials in P1 PRE and
-2 in P2 POST, 0 in each other training run. The original baseline has not
-been reranked or retrained using these diagnostics.
+The source PDF and montage image provide **different** 16-channel orders. The file-specific order used for channel-labelled analyses is supported by unlabeled signal-topology checks: P1 POST appears closer to `montage.png`; the other recordings appear closer to the bundled paper (with a CP5/CP1 exchange in P1 PRE). This is **a heuristic, not acquisition metadata**; mirrored left/right orientation cannot be distinguished from EEG correlation alone. Channel names are unnecessary for within-session decoding but critical for anatomical or cross-session interpretation. [Channel-layout checks and transfer controls](experiments.md#channels-and-transfer).
 
-## Fixed causal training-only replay
+Affected-hand and lesion-hemisphere information is unavailable. Neither a trial's left/right instruction nor exploratory event-related desynchronization/synchronization (ERD/ERS) can establish the affected side. Avoid ipsilesional/contralesional, neuroplasticity or therapy-efficacy claims. Trial-wise instruction EEG may reflect visual cue, sustained imagery, visual or electrical feedback, or artifacts; signal-source attribution is unresolved. The existing tests establish **code invariants**, not a clinical validation.
 
-`configs/causal_training.json` defines a 64-sample (~250 ms) chunk, a
-2.5–3.5 s post-trigger decision window, five chronological validation
-blocks and one adjacent trial removed on each training side. Each session
-has a separate filter state, reset at the beginning of its continuous run.
-Incoming triggers are supplied only when their chunk arrives. A fourth-order
-Butterworth 8–12, 12–20 and 20–30 Hz filter bank operates with stateful,
-one-pass `sosfilt`; centred log variance per channel and band is accumulated
-incrementally. Training partitions fit a standard scaler and shrinkage LDA
-from scratch. `stroke-rehab causal-train` loads the six training MAT paths,
-never reads any test MAT and never selects a model using known test labels.
-The fitted full-training model is used only to benchmark end-to-end replay;
-its in-sample predictions are not scored. `results/causal_train_cv.csv`
-stores deterministic out-of-fold scores and decision times in EEG seconds.
-Runtime measurements are printed to the console rather than committed since
-they depend on the executing CPU. A decision stamped with the end sample of
-its chunk is not an experimental feedback timestamp or a measurement of
-external device latency. The data do not contain timing of contingent FES.
+## If a prospective claim becomes possible
 
-The causal short-window power baseline is intentionally small (48 features,
-80 training trials per session) and has no window or hyperparameter search.
-With purged chronological folds, performance varies widely across sessions:
-59, 70, 35, 37, 48 and 36 correct out of 80, respectively. The poor scores
-for P2 and P3 must not be hidden by pooled accuracy or by relabelling this
-model a rehabilitation decoder. A model using earlier training trials can
-still inherit filters from previously seen validation EEG through the
-continuous, causal filter state. One full-trial purge makes that remote
-filter-state dependence small but does not establish sample independence.
-The interleaved per-trial triggering and zero initial filter state are
-algorithmic choices, not claims about the organizer's exact online hardware.
-
-## Nested causal covariance protocol
-
-Versioned configuration `configs/spatial_nested.json` fixes the bands, the
-2.5–3.5 s window, 64-sample chunk size, five chronological outer folds,
-three chronological inner folds, one purged neighbouring trial, two filter
-pair counts (1 and 2), and ridge 0.01. The control is channel log variance,
-computed from the same stream's covariance diagonals; this ensures equal EEG
-availability and filter state for all candidates. The spatial estimator uses
-trace-normalized class-average covariances, ridge-stabilized generalized
-eigenvectors fitted on only the current fold's calibration trials, and log
-relative projected variances. All 80 training trials receive one outer-fold
-prediction per fixed method; the nested rule selects only by inner training
-accuracy (power first for exact ties). Validation trial labels are read only
-to score their own outer fold. Every programmatic input path ends in
-`_training.mat`; a calibration function rejects `_test.mat` paths. A local
-calibration model is trained on all 80 training trials after selection by
-training-only CV, never on held-out runs.
-
-| Training run | Nested | Power | CSP 1 pair | CSP 2 pairs |
-|:--|--:|--:|--:|--:|
-| P1 PRE | 66/80 | 59/80 | 70/80 | 66/80 |
-| P1 POST | 77/80 | 70/80 | 76/80 | 78/80 |
-| P2 PRE | 40/80 | 35/80 | 46/80 | 43/80 |
-| P2 POST | 48/80 | 37/80 | 46/80 | 49/80 |
-| P3 PRE | 55/80 | 48/80 | 56/80 | 53/80 |
-| P3 POST | 43/80 | 36/80 | 46/80 | 47/80 |
-
-The within-run outer-fold scores are an estimate for the predefined
-algorithm-selection rule, **not** an independent estimate for a new decision
-to choose CSP-1 after viewing this table. The 480 trial outcomes are
-clustered within just three patients and six runs. Purged blocks reduce,
-but cannot eliminate, within-run dependence. The causal filter's state can
-carry earlier EEG into later segments, although each trial is >8 s long;
-there is no selective refit on a test recording. External stimulation and
-feedback timestamps are not available. A classifiable early-window signal
-may be imagery, unintended cue information, or feedback. Model files use
-joblib/pickle and are unsafe to load from untrusted sources. This research
-replay never actuates functional electrical stimulation.
-
-## Fixed-model decision-latency sensitivity
-
-`configs/spatial_latency.json` fixes a single 1-pair CSP and 2.5 s window
-start while ending its observation at 3.5, 4.5, 5.5 or 6.5 s after trigger.
-`stroke-rehab latency-audit` fits each method only on the corresponding
-training portion of the same five chronological, one-neighbour-purged folds.
-`results/causal_latency_audit.csv` contains six sessions × four fixed
-endpoints. The output is a feedback-timing *diagnostic*, not a competing
-nested learner or permission to optimize against its validation labels.
-The aggregate counts 340/480, 384/480, 418/480 and 436/480 do not show
-motor-intent accuracy improves: later training trials can contain visual
-and functional electrical stimulation (FES) feedback. Subject-wise curves
-and numeric values are reproduced by `notebooks/02_causal_latency.ipynb`.
-The fixed early window remains the calibration default until feedback
-timestamps and the organizers' scoring contract establish a valid endpoint.
-
-
-## Missing clinical side and exploratory ERD/ERS
-
-The Discord screenshot supplied on 5 October 2026 shows Sebastian (g.tec)
-stating that affected-hand/lesion hemisphere information is unavailable, and
-suggesting that experienced analysts might infer it from ERD/ERS. The screenshot
-shows relative message dates; 5 October is the source-review date, not a verified
-posting date. Keep the inference suggestion as
-a hypothesis: neither the left/right trial label nor a larger power decrease
-is a clinical lesion label. Do not add inferred patient-side metadata, flip
-hemispheres, or call a channel ipsilesional/contralesional from these data.
-
-The current per-file C3/C4 map is correlation-inferred and remains unconfirmed,
-including orientation. Report task-hand-labelled, channel-labelled power
-changes under the declared map. If exploring asymmetry, show both early and
-later feedback-exposed windows, sensitivity to plausible mappings/reference,
-and artifact controls. Retain all 80 trials or explicitly match exclusions.
-These checks can describe robustness of a signal pattern, not establish lesion
-side or rehabilitation benefit. In 31 stroke patients, artifact reduction
-changed measured ERD and reduced optimistic decoder accuracy, illustrating why
-accuracy alone cannot certify motor-cortical origin. [López-Larraz et al., 2018](https://pmc.ncbi.nlm.nih.gov/articles/PMC6180341/).
-
-
-## Organizer scoring clarification — 5 October 2026
-
-The organizer reply supplied by the team on 5 October clarifies the published
-reference statistic: fit using the training/calibration MAT file, then evaluate
-the corresponding test MAT file. All calibration trials may be used, and
-feedback-period EEG is permitted. For a correctness matrix indexed by time and
-trial, average across trials first, then take the maximum across time:
-`peak_accuracy = correctness.mean(axis=1).max()`. Averaging each trial's best
-time would be a different, incorrect statistic. Declare the evaluated time
-range/grid and retained trial IDs; the reference material describes the original
-windows, and the reply imposes no strict additional window.
-
-Only the video is required; the reply adds no specific instructions. This is
-team-supplied clarification, not a separately retrieved message. It does not
-provide per-trial FES timestamps or confirm the acquisition montage. Feedback
-permission does not establish motor-intent specificity or clinical benefit.
-The archive's test runs have already been inspected. Peak time-point accuracy
-is the permitted descriptive reference statistic, not independent validation
-of a model or a test-chosen decision time. Existing fixed-window/fixed-time
-analyses remain separate results and are not exact reproductions of that peak
-statistic. The early chronological comparison retains its frozen +3.5 s cutoff.
-
-
-## Channel contract and sensor/source interpretation
-
-| Field | Current contract |
-|:--|:--|
-| Signal/order | `y` is samples × 16 EEG columns; the loader preserves their stored order. No per-channel type metadata are supplied. |
-| Sampling rate | `fs=256 Hz`, verified in all 12 organizer recordings. |
-| Names | `montage.layout_for(path)` assigns the signal-inferred layouts below; g.tec has not confirmed these labels. |
-| Units | Amplitudes remain as recorded; physical amplitude units are unconfirmed. |
-| Reference | Acquisition reference is unconfirmed; no verified rereferencing is introduced. |
-| Position source | `montage.GRID` is a 2-D schematic in 10–10 electrode steps, not measured 3-D positions in metres or millimetres. |
-| Orientation/clinical side | Signal topology cannot distinguish mirrored layouts. Affected-hand/lesion-side metadata are unavailable in the supplied organizer reply. |
-
-Current inferred name order:
-
-- P1 POST: `FC3 FCz FC4 C5 C3 C1 Cz C2 C4 C6 CP3 CP1 CPz CP2 CP4 Pz`.
-- P1 PRE: `FC5 FC1 FCz FC2 FC6 C5 C3 C1 Cz C2 C4 C6 CP1 CP5 CP2 CP6` (includes the hypothesized CP5/CP1 swap).
-- Other files use the default paper hypothesis: `FC5 FC1 FCz FC2 FC6 C5 C3 C1 Cz C2 C4 C6 CP5 CP1 CP2 CP6`.
-
-A consistently ordered within-run CSP/covariance decoder can operate without
-anatomical channel names. That statement does not extend to name-matched
-transfer or a geometry-aware encoder: `transfer.py` aligns columns using these
-inferred names. The Foundation Challenge's official REVE probe maps
-`meta['ch_names']` into positions and passes them to its encoder, so uncertain
-labels would also change that geometry. [Official REVE probe](https://github.com/neural-interfaces26/2026-competition/blob/main/tracks/bci_decoding/solvers/reve_probe.py).
-
-Scalp power/covariance patterns are sensor measurements, not localized cortical
-sources or lesion labels. Source estimation needs a head forward model,
-electrode geometry and consistent reference assumptions. Public-template
-modelling without individual MRI is possible, but its anatomy and alignment
-remain assumptions. [MNE template-MRI forward tutorial](https://mne.tools/stable/auto_tutorials/forward/35_eeg_no_mri.html). A later adult-template source-feature comparison would keep the classifier
-and held-out sessions fixed and report geometry uncertainty. It is a separate
-hypothesis, not an experiment performed here; neonatal meshes and restricted
-subject anatomy are not competition assets.
+Freeze the decoder, feedback and abstention policy, observation cutoff, sensor order, calibration protocol and statistics *before* seeing new sessions/people. Record instruction and stimulation onsets per trial; use controls matched for visual cues, time and artifacts. Report per-participant results, including failed sessions, and test once on independent participants or genuinely undisclosed runs. None of that independent evidence exists in this repository.

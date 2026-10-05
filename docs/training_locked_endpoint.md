@@ -1,5 +1,9 @@
 # Training-locked decision-time audit (exploratory)
 
+[Home](../README.md) · [Documentation map](index.md) · [Evaluation contract](protocol.md)
+
+> **Evidence:** Global decision time selected from training tails, then looked up on *already-inspected* public test curves. Model fits and denominators differ between selection and test.
+
 Run from the repository root:
 
 ```bash

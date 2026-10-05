@@ -1,5 +1,9 @@
 # Organizer peak-time scoring: an explicit retrospective replication contract
 
+[Home](../README.md) · [Documentation map](index.md) · [Evaluation contract](protocol.md)
+
+> **Evidence:** Retrospective organizer-style score on already-inspected public test MAT files. Per-session peaks are selected using test labels and are not prospective online accuracy.
+
 The organizer has confirmed that their reported score is the **maximum over
 time of the mean binary correctness across trials**, after fitting on the
 training `.mat` run and evaluating on its paired test `.mat` run. Using the
@@ -23,6 +27,10 @@ peak of the pooled six-session curve: each session selects a different time.
 When several grid points tie, the earliest is recorded. Grid density affects
 the observed maximum; changing it after looking at test scores makes the
 result more optimistic.
+
+## Read the result first
+
+At the declared time grid, the fixed +3.5 s score is **358/480**, the pooled curve reaches **407/480 at +4.25 s**, and the **sum of six session-specific post-hoc peaks** is **427/480**. The latter chooses a different test-label-informed endpoint per session and is not one deployable decision rule. The pooled peak and sum of session peaks are distinct statistics. Compare with the **training-locked** +4.25 s score only with the separate selection procedure and previously inspected test-data caveat in [the endpoint audit](training_locked_endpoint.md).
 
 ## Reproduction
 

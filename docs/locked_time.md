@@ -1,5 +1,9 @@
 # Lock the decision time on calibration data, not on test outcomes
 
+[Home](../README.md) · [Documentation map](index.md) · [Evaluation contract](protocol.md)
+
+> **Evidence:** Training-only *choice of time*, evaluated on public test runs already inspected during development. The resulting test counts are exploratory.
+
 ## Reproduce
 
 ```bash
