@@ -1,0 +1,11 @@
+{
+  "budgets": [10, 20, 40, 60],
+  "decision_time_s": 3.5,
+  "window_s": 1.0,
+  "validation_start_0based": 60,
+  "validation_stop_0based": 80,
+  "inner_initial_trials": 10,
+  "inner_step_trials": 10,
+  "selection_metric": "pooled_inner_balanced_accuracy",
+  "tie_and_no_inner_fold": "filterbank_csp_shrinkage_lda"
+}

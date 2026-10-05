@@ -69,6 +69,54 @@ specificity or rehabilitation benefit. Treat six sessions as three paired
 participants, not six independent patients. Do not choose a winner by looking
 at these validation trials and then report the same trials as untouched tests.
 
+## Fixed-window mechanism stress test (training runs only)
+
+Run `stroke-rehab mechanism-audit` to reproduce the chronological comparison
+in [`results/mechanism_audit.csv`](results/mechanism_audit.csv); input hashes,
+code hashes and runtime are in
+[`results/mechanism_audit_provenance.json`](results/mechanism_audit_provenance.json).
+All methods predict **the same trials 21–80**, per session. Trial `i` is
+predicted after fitting **only trials `< i`**; CSP spatial filters, scaling and
+shrinkage LDA are refitted inside each training prefix. Label-only controls
+also see no current or future label. The CSP configuration is **fixed**, not
+chosen from these 60-trial evaluation tails: one pair per 8–12, 12–20 and
+20–30 Hz band; ridge 0.01. The post-instruction causal EEG interval is
+[2.5, 3.5) seconds after trigger, compared with the same 1-second
+pre-instruction interval [0.5, 1.5). A short low-pass cue-locked voltage
+control tests whether the instruction itself can be decoded; that method
+uses earlier samples and **is not an alternative at the same decision time**.
+
+| Method | Correct / 360 | Mean balanced accuracy across six sessions | Signal available by |
+|:--|--:|--:|--:|
+| Causal CSP, post-instruction | 245/360 | 68.3% | 3.50 s |
+| Causal CSP, pre-instruction | 169/360 | 47.5% | 1.50 s |
+| Bandpower, post-instruction | 214/360 | 59.9% | 3.50 s |
+| Bandpower, pre-instruction | 162/360 | 45.6% | 1.50 s |
+| Cue-locked voltage, post-instruction | 197/360 | 55.6% | 2.54 s |
+| Cue-locked voltage, pre-instruction | 178/360 | 50.2% | 1.54 s |
+| Previous trial label / prefix majority | 179/360 / 142/360 | 49.3% / 41.6% | No EEG |
+
+The post-instruction CSP session scores are P1 PRE **49/60**, P1 POST
+**60/60**, P2 PRE **29/60**, P2 POST **36/60**, P3 PRE **42/60**, P3 POST
+**29/60**. A perfect score for *one already-exposed training session* is
+not evidence of a universal decoder. Strong cue-only P1 POST (**52/60**) and
+missing per-trial feedback timestamps leave motor-intent specificity
+unresolved. Mean session accuracy conceals a below-50% outcome in two of
+six sessions. A model chosen by inspecting these scores needs independent
+new participants/sessions for confirmation; none are available in this archive.
+
+The bandpower and CSP windows are replayed in **64-sample chunks** at 256 Hz;
+the latest observed EEG-sample delivery for the 3.50-s window is **3.746 s**
+after trigger. This number excludes acquisition, compute, display and
+stimulation delays. Voltage features are extracted using causal filters
+from offline files, *not* through the streaming interface; the table gives
+their latest signal sample, not a measured delivery time. `correct_left` and
+`correct_right` in the CSV permit class-wise error audits; no individual
+trials or raw EEG are exported. This retrospective analysis cannot establish
+motor imagery, safety of functional electrical stimulation, clinical recovery
+or prospective accuracy. In particular, feedback during the early EEG window
+has **not** been ruled out.
+
 ## First held-out run
 
 Selection is based on training-run CV alone. One final prediction is made for each test trial from **2.5–6.5 seconds after trigger onset**; the instruction is given at **2 seconds**. Numbers below are from the committed `results/session_results.csv`, seed 27.
@@ -313,6 +361,7 @@ stroke-rehab decision-time       # results/decision_time.csv
 stroke-rehab plot-decision-time  # results/decision_time.png (--theme dark for slides)
 stroke-rehab lateralize          # results/lateralization.csv
 stroke-rehab transfer            # results/transfer.csv
+stroke-rehab stream-check        # results/riemann_stream_check.csv
 ```
 
 **Read this first.** Every test-run number in this section is exploratory.
@@ -444,6 +493,50 @@ both layouts). In the early window (2–3.5 s) no patient shows a PRE-to-POST
 change in contralateral-minus-ipsilateral power (all Mann–Whitney p > 0.07).
 The PRE-to-POST hemisphere flip for P1 in the earlier solo analysis came from
 applying the `montage.png` labels to P1 PRE and does not hold.
+
+### Streaming state of the Riemannian decoder
+
+The decoder's online adaptation used to restart inside every `predict` call,
+so predicting a run trial by trial gave different answers from predicting it
+at once. The state is now explicit (`references_`, `n_seen_`):
+
+- `predict(X)` is stateless: it scores X as one fresh run from the training
+  reference and does not touch the stored state.
+- `predict_next(trial)` / `predict_stream(X)` advance the stored state;
+  `reset()` returns it to the training reference at the start of a run.
+- `stroke_rehab/riemann_stream.py` adds a chunk-by-chunk path from raw EEG:
+  stateful one-pass filters, running covariance sums in place of buffered
+  samples, and one decision in the chunk that completes the window.
+
+`stroke-rehab stream-check` fits on each training run (causal filters,
+2.5–3.5 s) and compares three routes on the test run **without using its
+labels**: all trials at once, trial by trial, and raw EEG in 64-sample chunks.
+All three give the same decision on 480/480 trials; decisions arrive by
+3.74 s after the trigger. Earlier outputs are unchanged by the refactor:
+`model_comparison.csv`, `decision_time.csv`, `transfer.csv` and all 3,840
+forward-calibration predictions regenerate byte-for-byte (the
+forward-calibration provenance file records the new `riemann.py` hash).
+
+The same command scores the early causal window on training runs only, with
+the purged chronological folds used for the causal CSP study above:
+
+| Training run | Riemannian, 7 bands | Without adaptation | Riemannian, 3 team bands | Causal CSP 1 pair (from above) |
+|:--|--:|--:|--:|--:|
+| P1 PRE | 54/80 | 54/80 | 64/80 | 70/80 |
+| P1 POST | 76/80 | 76/80 | 75/80 | 76/80 |
+| P2 PRE | 33/80 | 29/80 | 39/80 | 46/80 |
+| P2 POST | 36/80 | 36/80 | 50/80 | 46/80 |
+| P3 PRE | 56/80 | 59/80 | 57/80 | 56/80 |
+| P3 POST | 38/80 | 39/80 | 43/80 | 46/80 |
+| Pooled | 293/480 | 293/480 | 328/480 | 340/480 |
+
+On this training-only evidence the Riemannian model is **not** the better
+early causal decoder: it trails fixed causal CSP by 47 trials with seven bands
+and by 12 with the team's three. Online adaptation makes no pooled difference
+within a training run. Its lead over CSP on the test runs appears with the
+longer 2.5–6.5 s window, which includes the assumed feedback phase. The
+three-band column was the only variant tried; it is a training-only
+observation, not a selected model.
 
 ### Cross-session transfer with name-matched channels
 
