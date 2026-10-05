@@ -107,11 +107,14 @@ def mirrored(layout):
 
 
 def global_search(correlation, layout, *, restarts=20, seed=27):
-    """Search all channel orders for the best fit, starting from random orders.
+    """Heuristic search for a better-fitting channel order, from random starts.
 
     Each restart swaps channel pairs for as long as a swap improves the fit.
     Returns whether the best order found is the stated one, its mirror image
-    (which fits identically), or something else, with that order's fit.
+    (which fits identically), or something else, with that order's fit. This
+    samples a tiny part of the 16! orders: it is a strong consistency check,
+    not an exhaustive search, and not independent confirmation of electrode
+    labels. It cannot tell left from right.
     """
     upper = np.triu_indices(len(layout), 1)
     distance = _distances(layout)

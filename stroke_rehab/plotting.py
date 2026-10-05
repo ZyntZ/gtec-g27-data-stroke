@@ -97,7 +97,7 @@ def plot_decision_time(csv_path, png_path, *, theme="light", cue_s=2.0, feedback
                     (cue_s + 0.06, "early post-cue\n(instruction at 2 s:\ndocumented)"),
                     (feedback_s + 0.06, "ASSUMED feedback phase from 3.5 s: visual + electrical\n"
                      "stimulation may be on. Start taken from the protocol diagram;\n"
-                     "no per-trial marker, and no trace of it found in the EEG.")):
+                     "no per-trial marker; no reliable onset found by our two probes.")):
         main.text(x, 98.5, text, color=c["ink2"], fontsize=9, va="top", linespacing=1.3)
     main.text(7.94, 51, "chance", color=c["ink2"], fontsize=9, ha="right", va="bottom")
     main.legend(loc="lower right", frameon=False, fontsize=10, labelcolor=c["ink"],

@@ -333,29 +333,37 @@ Both models are at chance up to the instruction at 2 s. The figure marks
 what is documented with a solid line (instruction at 2 s) and what is assumed
 with a dotted line (feedback from 3.5 s), and repeats both in its footer.
 
-### Feedback timing: not recoverable from the recordings
+### Feedback timing: no reliable onset found by these probes
 
-`stroke-rehab feedback-check` asks, without labels, whether each file shows
-when stimulation starts. Neither probe finds it.
+`stroke-rehab feedback-check` runs two simple probes for a stimulation onset
+shared by most trials. This is a diagnostic, not a feedback timestamp.
 
-- **Stimulation lines.** The paper gives a 50 Hz stimulator. The 50 Hz notch
-  removes its fundamental, so a trace could only survive at harmonics: 100 Hz,
-  and 150/200 Hz folded to 106/56 Hz at this sampling rate. Power at those
-  lines in the feedback phase (4–8 s) differs from rest (0.5–2 s) by −0.8 to
-  +2.0 dB across all twelve files, with no consistent sign. The strong 106 Hz
-  line present in ten files is constant through the trial, so it is mains
-  interference, not stimulation.
+- **Stimulation lines.** The paper gives a 50 Hz stimulator. Ten files carry
+  a 50 Hz notch, so there a trace could only survive at harmonics: 100 Hz, and
+  150/200 Hz folded to 106/56 Hz at this sampling rate. The two P1 POST files
+  carry a 60 Hz notch instead, so 50 Hz itself is still present there, mixed
+  with mains interference at the same frequency. Pooled over both hands,
+  harmonic power in the feedback phase (4–8 s) differs from rest (0.5–2 s) by
+  −0.8 to +2.0 dB across the twelve files, and 50 Hz in P1 POST by less than
+  0.1 dB. Split by imagined hand the range is −1.6 to +3.6 dB, with hand
+  differences of up to 3 dB in single files and no direction shared across
+  files. The strong 106 Hz line in the ten 50 Hz-notch files is steady
+  through the trial, which fits mains interference.
 - **Evoked response.** The trial-median 1–12 Hz response in the 0.75 s after
   the instruction is 1.2 to 3.0 times rest in the P1 and P2 files, and after
   the relax cue up to 5.7 times in P1. After the assumed feedback start at
-  3.5 s it is 0.7 to 1.3 times rest in every file: nothing is time-locked there.
+  3.5 s it is 0.7 to 1.3 times rest in every file.
 
-This does not show that feedback was absent or late; it shows the 3.5 s start
-cannot be confirmed from the data. It stays an assumption from
-`DatasetInformation.pdf` until the organizer supplies stimulation timestamps.
-In test runs feedback is also conditional on the online classifier, at a time
-that is not recorded, so the interval before 3.5 s is labelled "early
-post-cue", never "feedback-free".
+**What the probes cannot rule out.** They look for a fixed onset common to
+both hands. The evoked probe pools hands and takes a median over trials, so
+it nearly misses a response of opposite sign for left and right trials, and
+one whose latency varies between trials; `tests/test_timing.py` demonstrates
+both blind spots on synthetic data. Test-run feedback is conditional on the
+online classifier, which makes variable latency likely there. So the result
+is "no reliable onset found by these probes": it does not show that feedback
+was absent, late or untimed. The 3.5 s start stays an assumption from
+`DatasetInformation.pdf` until the organizer supplies stimulation timestamps,
+and the interval before it is labelled "early post-cue", never "feedback-free".
 
 ### Channel order differs between files
 
@@ -377,15 +385,19 @@ correlation (8–30 Hz, median over trials; no labels are used) for each layout.
   13 and 14 (CP5, CP1) fit clearly better exchanged; C3 and C4 are unaffected.
 - **Order, not only electrode set:** with the layout assigned to each file,
   none of the 120 possible two-channel swaps improves the fit in any file.
-- **Search over all orders:** starting from 20 random channel orders per file
-  and swapping pairs while the fit improves, the best order found is the
-  assigned one or its mirror image in all twelve files.
+- **Heuristic search for a better order:** from 20 random channel orders per
+  file, swapping pairs while the fit improves, the best order found is the
+  assigned one or its mirror image in all twelve files. This samples a tiny
+  part of the possible orders; it is a strong consistency check, not an
+  exhaustive search.
 - **Stable within a run:** odd and even trials give the same fit to within
   0.02 in every file.
-- **What this cannot show:** a left-right mirrored layout fits identically. In
-  every file the lowest-amplitude channel is on the right edge, which agrees
-  with the paper's right-earlobe reference but does not prove orientation. The
-  mapping is inferred from the signals and is not confirmed by the organizer.
+- **What this cannot show:** the assigned order is supported by signal
+  topology; it is not a certified montage or independent confirmation of
+  electrode labels. A left-right mirrored layout fits identically, so left
+  versus right is not settled. In every file the lowest-amplitude channel is
+  on the right edge, which agrees with the paper's right-earlobe reference but
+  does not prove orientation. The organizer has not confirmed the mapping.
 
 Within-session decoding does not depend on channel names. Anything that names
 a hemisphere or moves a model between P1 sessions does: **C3/C4 are columns
