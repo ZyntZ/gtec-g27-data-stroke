@@ -605,7 +605,7 @@ Latest integrated main snapshot: `07d725f` adds the chronological CSP/cue mechan
 ## Review summary after stacked integration
 
 The fixed early comparison is a negative selection result: at 60 calibration
-trials, selected75/120 versus fixed CSP82/120, with P2 PRE8/20 versus13/20.
+trials, selected 75/120 versus fixed CSP 82/120, with P2 PRE 8/20 versus 13/20.
 No prospective improvement is established. The streaming decoder fails closed
 after any processing exception; its model rollback does not make EEG chunks
 retryable. Recovery requires reconstruction from a known run boundary.

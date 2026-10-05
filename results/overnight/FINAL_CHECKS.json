@@ -198,6 +198,10 @@
     "generated_review_exports": "Figure captions/HTML rebuilt from saved CSVs; numerical CSV/settings hashes unchanged; calibration PNG visually checked",
     "historical_scope": "Other FINAL_CHECKS entries and overnight receipts retain their original snapshots; historical fixed-montage notebook execution is not current-map validation",
     "organizer_reply": "Team supplied5October: max over time of mean trial correctness; all calibration trials and feedback allowed; test MAT; video only",
-    "boundaries": "Technical and retrospective checks, not independent model/clinical validation; no main merge or submission"
+    "boundaries": "Technical and retrospective checks, not independent model/clinical validation; no main merge or submission",
+    "post_reproduction_artifact_tests": {
+      "passed": 13,
+      "scope": "Early, forward and saved-accuracy receipts after regeneration; production code unchanged"
+    }
   }
 }
