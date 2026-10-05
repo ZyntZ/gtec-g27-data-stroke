@@ -66,7 +66,40 @@
   "tests": {
     "command": "python -m pytest -q",
     "returncode": 0,
-    "summary": "127 passed, 1 skipped in 46.69s",
-    "environment": "Python 3.13, plugin autoload disabled; optional accuracy dependency checked separately by hosted workflow"
+    "summary": "127 passed, 1 skipped in 100.31s (0:01:40)",
+    "environment": "Python 3.13; optional accuracy module checked separately by hosted workflow"
+  },
+  "current_candidate_source_hashes_match_executed_reproduction": true,
+  "reviewed_pr6_base_commit": "e5f8898dcfa0946012df54f505b74caa09dac67f",
+  "checks_execution_base_commit": "f279adc4b1dcfaf0f4a1b52af83de9185121540f",
+  "checks_at_utc": "2026-10-05T08:43:22.676707+00:00",
+  "preflight": {
+    "command": "python tools/repo_preflight.py",
+    "returncode": 0,
+    "summary": "Repository preflight passed: no tracked raw data, caches or failed notebooks",
+    "environment": "Python 3.13; optional accuracy module checked separately by hosted workflow"
+  },
+  "published_arithmetic": {
+    "command": "python analysis/accuracy_calibration/validate.py",
+    "returncode": 0,
+    "summary": "{\n  \"status\": \"pass\",\n  \"checks\": {\n    \"metric_domains_valid\": true,\n    \"expected_sessions_and_families\": true,\n    \"team_baseline_six_sessions_match\": true,\n    \"team_baseline_433_of_480\": true,\n    \"all_new_train_and_test_counts_80\": true,\n    \"oof_trial_coverage\": true,\n    \"oof_labels_and_probabilities_valid\": true,\n    \"oof_family_labels_identical\": true,\n    \"oof_metrics_reproduce\": true,\n    \"subset_memberships_complete\": true,\n    \"exact_balanced_subset_counts\": true,\n    \"nested_subsets\": true,\n    \"all_requested_calibration_budgets\": true,\n    \"calibration_curve_arithmetic\": true,\n    \"full_calibration_endpoint_matches_selected\": true,\n    \"full_calibration_subset_matches_frozen_model\": true,\n    \"full_choice_matches_training_receipt\": true,\n    \"reliability_bins_account_for_80_trials\": true,\n    \"pre_post_transfer_only_pre_training_labels\": true\n  }\n}",
+    "environment": "Python 3.13; optional accuracy module checked separately by hosted workflow"
+  },
+  "final_artifact_checks": {
+    "command": "python -m pytest -q tests/test_early_artifacts.py tests/test_forward_artifacts.py",
+    "returncode": 0,
+    "summary": "2 passed in 2.18s",
+    "scope": "Rechecked after retaining the newest PR6 early receipt"
+  },
+  "pdf_verified": {
+    "pages": 1,
+    "render_reviewed": true,
+    "path": "output/pdf/g27_pr_reliability_review.pdf",
+    "sha256": "247f0636eb4ddd4b0e4b1a949b7f43172a6819f2b57bb7063685331a4af13040"
+  },
+  "checks_source_sha256_lf": {
+    "tests/test_forward_artifacts.py": "58798006b6c32957c2612ab02c292156ab7858466d2432608d666c68883d7fa4",
+    "analysis/reproduce_stream.py": "3c94bb09ad4f5d10137f2bd73426a6466ba28fb9c7b7195b2000cc1be64148e6",
+    ".github/workflows/verify.yml": "97a833241efb7018757becdbe5f861ebefd147526fc04639c3020948a1a46161"
   }
 }

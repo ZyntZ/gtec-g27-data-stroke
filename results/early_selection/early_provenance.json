@@ -17,7 +17,7 @@
     "tie_and_no_inner_fold": "filterbank_csp_shrinkage_lda"
   },
   "design_sha256": "1a79d713f5947023034c93170e7c8d862828d8f023833ccde7a3d76bae75dee4",
-  "source_commit": "5a356b3fd072e8ddedfef9c98a270482423d5d35",
+  "source_commit": "561e114132d861c5733cee128f771e67942fcbee",
   "source_commit_scope": "Base commit at execution; source_sha256 identifies executed working-tree files",
   "source_hash_encoding": "SHA256 of UTF-8 source bytes with CRLF normalized to LF",
   "input_sha256": {
