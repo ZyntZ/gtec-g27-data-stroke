@@ -599,4 +599,23 @@ selected on the same exposed test runs or called a clinical improvement.
 
 The [comparison report](results/accuracy_calibration/REPORT.html), [methods](analysis/accuracy_calibration/PROTOCOL.md) and [reproduction handoff](results/overnight/MORNING_REPORT.md) retain the earlier four-second calibration/transfer study and verification checks. Those pipelines, windows and exposed test scores are separate from the merged early chronological audit above. They are not interchangeable replications or fresh validation. The historical fixed-column physiology receipt predates the current conditional per-file montage and must not certify the revised anatomical labels.
 
-Latest integration: `dbab3b7` adds the cue-response audit and prequential negative controls. The original benchmark remains historical; the current protocol records the unavailable affected-hand metadata and limits ERD/ERS inference to exploratory asymmetry.
+Latest integrated main snapshot: `07d725f` adds the chronological CSP/cue mechanism audit. The branch also incorporates the actual PR7/PR8 stack; active early source provenance is regenerated, and current combined checks are separated in `FINAL_CHECKS.json`. The original benchmark remains historical; the current protocol records the unavailable affected-hand metadata and limits ERD/ERS inference to exploratory asymmetry.
+
+
+## Review summary after stacked integration
+
+The fixed early comparison is a negative selection result: at 60 calibration
+trials, selected75/120 versus fixed CSP82/120, with P2 PRE8/20 versus13/20.
+No prospective improvement is established. The streaming decoder fails closed
+after any processing exception; its model rollback does not make EEG chunks
+retryable. Recovery requires reconstruction from a known run boundary.
+
+The historical 10/20/40-label graphics use random, balanced subsets across the
+full training run, not chronological calibration prefixes. PNG/SVG captions
+and the HTML report say this explicitly. The dated overnight records retain
+their original execution scopes; optional generated exports support review.
+
+The organizer clarification permits feedback-period EEG and all calibration
+trials. Its reference statistic is the maximum time-point mean trial accuracy;
+fixed-window/early scores remain different endpoints. The shared protocol
+records that contract, clinical-side limits and sensor/source correspondence.

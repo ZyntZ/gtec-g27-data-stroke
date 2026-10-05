@@ -1,5 +1,5 @@
 {
-  "checked_at_utc": "2026-10-05T06:32:00.535843+00:00",
+  "checked_at_utc": "2026-10-05T08:32:49.192653+00:00",
   "scope": "Frozen historical scores reproduced; covariance API parity, not clinical validation",
   "prediction_rows_matched": 3840,
   "summary_rows_matched": 192,
@@ -25,7 +25,7 @@
   },
   "source_hash_normalization": "CRLF to LF; raw recording hashes unchanged",
   "additional_source_sha256_lf": {
-    "stroke_rehab/riemann_stream.py": "e8293281eefb0a61e2d8ea46d17fd54459be23eee62ee1cfc6be7a5e9d1a1a86",
+    "stroke_rehab/riemann_stream.py": "b5aa0518e1264addfa8295fdc0db6bbb68a5881bdb2f74b08ef176aeac498f7c",
     "stroke_rehab/features.py": "fba7d9a2bf19cc1900486eb9df1367b5f60e4907d5d4d7ae14b8dfd39c90fba2",
     "stroke_rehab/data.py": "1759401e31fc41c2accc439adc387e1086bd1e7380f39fbcf9b3917967b3cc68"
   },
