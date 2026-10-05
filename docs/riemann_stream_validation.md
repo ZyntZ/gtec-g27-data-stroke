@@ -11,6 +11,16 @@ count return to their state before the call, including a failure partway
 through `predict_stream`. A finite nonnegative reference prior is required.
 Tests cover invalid input, partial failure and the normal reset/parity behavior.
 
+Model-level rollback does not restore the EEG stream's filters, trial accumulator
+or sample position. `CausalRiemannDecoder` therefore fails closed: any processing
+exception raises `StreamDecoderFailedError` and makes that decoder terminal.
+Further calls are rejected even if the original classifier problem is removed.
+Recovery requires constructing a new decoder (which resets model references)
+and replaying all EEG/onsets from a known run boundary. Retrying only the failed
+chunk or resetting only the model is unsupported. Regression tests inject a
+classifier failure in the chunk completing a trial, verify model rollback and
+terminal rejection, then verify reconstruction; invalid EEG also fails closed.
+
 `results/forward_calibration/stream_parity.json` records a separate reproduction:
 all **3,840** historical training-only predictions and **192** summary rows match.
 The original main provenance remains intact; PR5's incoming provenance snapshot

@@ -89,12 +89,20 @@ class CausalRiemannStream:
         return event
 
 
+class StreamDecoderFailedError(RuntimeError):
+    """Terminal decoder error; restart with all EEG from a known run boundary."""
+
+
 class CausalRiemannDecoder:
     """Inference-only: one decision per trial from an already fitted model.
 
     Owns one run. Construction resets the model's adaptation state to the
     training reference; every decision then advances it. Do not share a model
     between two decoders that are running at the same time.
+
+    A processing error makes this decoder terminal. The EEG/filter state is
+    not rolled back, so retrying the failed chunk is forbidden. Construct a
+    new decoder and replay from the start of a known run to recover.
     """
 
     def __init__(self, fitted_model, *, fs=256, channels=16, window=(2.5, 3.5), bands=BANDS):
@@ -102,13 +110,24 @@ class CausalRiemannDecoder:
             raise ValueError("Model was fitted with a different number of bands")
         self.model = fitted_model.reset()
         self.stream = CausalRiemannStream(fs, channels, window, bands)
+        self.failed = False
 
     def process(self, chunk, *, onsets=()):
-        event = self.stream.process(chunk, onsets=onsets)
-        if event is None:
-            return None
-        label = int(self.model.predict_next(event.covariance))
-        return DecisionEvent(event.onset_sample, event.decision_sample, label)
+        if self.failed:
+            raise StreamDecoderFailedError(
+                "Decoder is terminal after a processing failure; construct a new "
+                "decoder and replay from a known run boundary")
+        try:
+            event = self.stream.process(chunk, onsets=onsets)
+            if event is None:
+                return None
+            label = int(self.model.predict_next(event.covariance))
+            return DecisionEvent(event.onset_sample, event.decision_sample, label)
+        except Exception as error:
+            self.failed = True
+            raise StreamDecoderFailedError(
+                "Decoder processing failed; this instance is terminal. Construct "
+                "a new decoder and replay from a known run boundary") from error
 
 
 def replay_decisions(recording, fitted_model, *, chunk_samples=64, window=(2.5, 3.5),
