@@ -56,6 +56,8 @@ def main(argv=None):
              "results/decision_time.csv"),
             ("feedback-check", "Look for a stimulation trace or evoked response at feedback onset",
              "results/feedback_timing_check.csv"),
+            ("stream-check", "Riemannian decoder: chunked streaming versus batch decisions",
+             "results/riemann_stream_check.csv"),
             ("lateralize", "Descriptive C3/C4 beta change with per-file channel layout",
              "results/lateralization.csv"),
             ("transfer", "Decode each session with a model from the patient's other session",
@@ -179,6 +181,9 @@ def main(argv=None):
     elif args.command == "feedback-check":
         from .timing import run_feedback_check
         run_feedback_check(args.data_dir, args.output)
+    elif args.command == "stream-check":
+        from .riemann_stream import run_stream_check
+        run_stream_check(args.data_dir, args.output)
     elif args.command == "lateralize":
         from .lateralization import run_lateralization
         print(f"Wrote {len(run_lateralization(args.data_dir, args.output))} rows")
