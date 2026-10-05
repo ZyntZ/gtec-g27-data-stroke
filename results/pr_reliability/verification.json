@@ -236,11 +236,35 @@
       "completed": true,
       "reviewed_source_commit": "5037fabb243da6ac0b7e0a08772856e305c12443",
       "actual_runtime_identity": "not independently exposed by agent metadata",
-      "scope": "Read-only consequential integration/source review; root executed numerical reproduction and checks"
+      "scope": "Read-only consequential integration/source review; root executed numerical reproduction and checks",
+      "final_record_check": "At9b147c2 all recorded package/check/shared-receipt hashes match; historical opening and PR7 reuse wording corrected following review. No further source/model defect found."
     },
     "figure_checked": {
       "path": "results/organizer_metric/organizer_metric_timecourse.png",
       "render_reviewed": true
+    },
+    "final_integration_checks": {
+      "checked_at_utc": "2026-10-05T10:22:43.889970+00:00",
+      "execution_base_commit": "9b147c2a12b16e246364bf59b5219cb16c5a3b91",
+      "integrated_pr7": "c3ab95df3e0dd3caeb8a7ee709214b700f5df667",
+      "commands": [
+        {
+          "command": "python -m pytest -q",
+          "returncode": 0,
+          "output": "........................................................................ [ 52%]\n................................................................         [100%]\n136 passed in 22.38s"
+        },
+        {
+          "command": "python tools/repo_preflight.py",
+          "returncode": 0,
+          "output": "Repository preflight passed: no tracked raw data, caches or failed notebooks"
+        },
+        {
+          "command": "python analysis/accuracy_calibration/validate.py",
+          "returncode": 0,
+          "output": "{\n  \"status\": \"pass\",\n  \"checks\": {\n    \"metric_domains_valid\": true,\n    \"expected_sessions_and_families\": true,\n    \"team_baseline_six_sessions_match\": true,\n    \"team_baseline_433_of_480\": true,\n    \"all_new_train_and_test_counts_80\": true,\n    \"oof_trial_coverage\": true,\n    \"oof_labels_and_probabilities_valid\": true,\n    \"oof_family_labels_identical\": true,\n    \"oof_metrics_reproduce\": true,\n    \"subset_memberships_complete\": true,\n    \"exact_balanced_subset_counts\": true,\n    \"nested_subsets\": true,\n    \"all_requested_calibration_budgets\": true,\n    \"calibration_curve_arithmetic\": true,\n    \"full_calibration_endpoint_matches_selected\": true,\n    \"full_calibration_subset_matches_frozen_model\": true,\n    \"full_choice_matches_training_receipt\": true,\n    \"reliability_bins_account_for_80_trials\": true,\n    \"pre_post_transfer_only_pre_training_labels\": true\n  }\n}"
+        }
+      ],
+      "all_calculation_sources_identical_to_actual_reproduction": true
     }
   }
 }

@@ -1,6 +1,6 @@
 # G27 pull request reliability review
 
-Reviewed 5 October 2026. The integration combines main `07d725f`, PR6
+Historical review before update03, 5 October 2026. That integration combined main `07d725f`, PR6
 `e5f8898`, PR7 `4b72159` and the updated PR8 `70c504f`. Passing individual
 branches and matching normal predictions did not establish that combined
 source receipts or failed streaming decisions were safe to reuse.
