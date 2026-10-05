@@ -1,0 +1,85 @@
+{
+  "scope": "Exploratory re-use of previously inspected test MAT files",
+  "organizer_rule": "max_time(mean_trial(binary correctness))",
+  "distinction": "Peak is test-label-selected; fixed time is descriptive, not newly blind",
+  "modeling": "Separate full-training CSP+LDA model at each causal one-second endpoint",
+  "fixed_time_s": 3.5,
+  "endpoints_s": [
+    2.5,
+    2.75,
+    3.0,
+    3.25,
+    3.5,
+    3.75,
+    4.0,
+    4.25,
+    4.5,
+    4.75,
+    5.0,
+    5.25,
+    5.5,
+    5.75,
+    6.0,
+    6.25,
+    6.5,
+    6.75,
+    7.0,
+    7.25,
+    7.5,
+    7.75,
+    8.0
+  ],
+  "window_s": 1.0,
+  "model": "filterbank_csp_shrinkage_lda",
+  "bands_hz": [
+    [
+      8.0,
+      12.0
+    ],
+    [
+      12.0,
+      20.0
+    ],
+    [
+      20.0,
+      30.0
+    ]
+  ],
+  "input_sha256": {
+    "P1_pre_training.mat": "6a2b29ef701d3e839f9ce5e81a9e5df6458130e252a4d94465ecdf249b43c889",
+    "P1_pre_test.mat": "67932a40769002a7c15a8ce138562fb4ecbab9f6d5a92c99c310a76a9ae61bac",
+    "P1_post_training.mat": "88cdaa8214c015d39c8f18f68db8b02c6b46cfffaaeabe2f081d7f582f017732",
+    "P1_post_test.mat": "91faebdc77e73ce0b90917b3a0a42e50b5cf3da3aaa333c38672450fe603e840",
+    "P2_pre_training.mat": "7296aa803d488d6a8f1d1bd0621c1c011c561ac0dc8867c17256bc4a0ed4b93c",
+    "P2_pre_test.mat": "a7486f171e98ff5e362ac05983165771c9fd5ed9b964e79d0a495692a03994f9",
+    "P2_post_training.mat": "fcb480909f6e2c4b81ce0fcebaca242e2ad4d5dc3163d205f74e3a1c45c845bb",
+    "P2_post_test.mat": "d177cae4a56b06168df85db2e7b72df514b938f7198df91578c613454fcb3f21",
+    "P3_pre_training.mat": "247a1a5d585f60da71412892e3f70f10d59c6505cf079d7bb54f78cf779faeed",
+    "P3_pre_test.mat": "bccab42d93f4b1d5a9760bec9e6f88c6e7175aab5c239478cc7258e11179641c",
+    "P3_post_training.mat": "ac47b77cf0d954f4287685d5cf81ffccf611befa1d9e1f3f21c42856afe2140c",
+    "P3_post_test.mat": "73fcb2e93d4fa4d7db3a82f1e7e9389a55152a7dc9ab990819775610af984ccf"
+  },
+  "source_sha256": {
+    "organizer_metric.py": "a4d2bd816598be176170c7bb9684502081b3456e83a5cde0af0d409f24a2b481",
+    "comparison.py": "d2850134cf722bef47196c9eecb1c20f983801a9f625f0f99132b61cc4a3f95a",
+    "models.py": "1c2564c0ec945fa81c1c374d589a7e638c88fad961a93a285df5b5db322382be",
+    "riemann.py": "1a025056045846b16264ff52c9dd626c308f448193204a53f7a29c64e80f5a5b",
+    "features.py": "fba7d9a2bf19cc1900486eb9df1367b5f60e4907d5d4d7ae14b8dfd39c90fba2",
+    "data.py": "1759401e31fc41c2accc439adc387e1086bd1e7380f39fbcf9b3917967b3cc68"
+  },
+  "output_sha256": {
+    "organizer_metric_timecourse.csv": "dff06a4504d76f6ed40587da465306ac557c83ed283510ec4ad862b9341cac65",
+    "organizer_metric_summary.csv": "83ed75ecfa0030ff654de7cffa03ef588b2866d67c160276e60467dab6ad7e85",
+    "organizer_metric_aggregate.csv": "74b9bdc3f56ecd09abc1e19ebe0794944bec61ce2f90ade119c5cfbd63fe8521",
+    "organizer_metric_timecourse.png": "10c6341058ec93be4e2b5ba262cb3a7adb4b8a8d1639b6a820b81e747581b764"
+  },
+  "historical_timecourse_parity": true,
+  "runtime": {
+    "python": "3.13.7",
+    "numpy": "2.4.3",
+    "scipy": "1.17.1",
+    "sklearn": "1.8.0",
+    "matplotlib": "3.10.8"
+  },
+  "limitations": "Peak is not prospective; stimulation times and device latency unavailable"
+}

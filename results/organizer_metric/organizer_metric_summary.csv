@@ -1,0 +1,7 @@
+patient,session,model,calibration_trials,test_trials,grid_points,fixed_time_s,fixed_correct,fixed_accuracy,peak_time_s,peak_correct,peak_accuracy,peak_minus_fixed_correct,peak_is_posthoc
+P1,pre,filterbank_csp_shrinkage_lda,80,80,23,3.5,71,0.8875,3.75,75,0.9375,4,True
+P1,post,filterbank_csp_shrinkage_lda,80,80,23,3.5,73,0.9125,5.25,75,0.9375,2,True
+P2,pre,filterbank_csp_shrinkage_lda,80,80,23,3.5,52,0.65,4.25,64,0.8,12,True
+P2,post,filterbank_csp_shrinkage_lda,80,80,23,3.5,59,0.7375,6.75,79,0.9875,20,True
+P3,pre,filterbank_csp_shrinkage_lda,80,80,23,3.5,47,0.5875,4.25,66,0.825,19,True
+P3,post,filterbank_csp_shrinkage_lda,80,80,23,3.5,56,0.7,5.5,68,0.85,12,True
