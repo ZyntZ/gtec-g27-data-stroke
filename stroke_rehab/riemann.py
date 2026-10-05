@@ -12,6 +12,7 @@ from sklearn.base import BaseEstimator, ClassifierMixin
 from sklearn.linear_model import LogisticRegression
 from sklearn.pipeline import make_pipeline
 from sklearn.preprocessing import StandardScaler
+from sklearn.utils.validation import check_is_fitted
 
 BANDS = tuple((float(low), float(low + 4)) for low in range(4, 32, 4))
 TRIAL_SECONDS = 8
@@ -111,6 +112,12 @@ class RecenteredTangentSpace(BaseEstimator, ClassifierMixin):
         X = np.asarray(X)
         if X.ndim != 4 or X.shape[0] != len(y) or len(np.unique(y)) != 2:
             raise ValueError("Expected trial x band x channel x channel and two labels")
+        try:
+            prior = float(self.prior_trials)
+        except (TypeError, ValueError) as error:
+            raise ValueError("prior_trials must be finite and nonnegative") from error
+        if not np.isfinite(prior) or prior < 0:
+            raise ValueError("prior_trials must be finite and nonnegative")
         self.classes_ = np.unique(y)
         self.means_ = [riemann_mean(X[:, b]) for b in range(X.shape[1])]
         features = np.array([np.concatenate([tangent_vector(c, m)
@@ -121,54 +128,78 @@ class RecenteredTangentSpace(BaseEstimator, ClassifierMixin):
 
     def reset(self):
         """Return the adaptation state to the training reference (start of a run)."""
+        check_is_fitted(self, ("means_", "model_"))
         self.references_ = [m.copy() for m in self.means_]
         self.n_seen_ = 0
         return self
 
     def _check(self, X, ndim):
-        X = np.asarray(X)
-        if X.ndim != ndim or X.shape[-3] != len(self.means_):
-            raise ValueError("Covariance input does not match fitted bands")
+        check_is_fitted(self, ("means_", "model_"))
+        X = np.asarray(X, dtype=np.float64)
+        if (X.ndim != ndim or X.shape[-3:] != np.asarray(self.means_).shape
+                or (ndim == 4 and len(X) == 0)):
+            raise ValueError("Nonempty covariance input must match fitted bands and channels")
+        if not np.isfinite(X).all():
+            raise ValueError("Covariances must be finite")
+        if not np.allclose(X, X.swapaxes(-1, -2), rtol=1e-7, atol=1e-10):
+            raise ValueError("Covariances must be symmetric positive definite")
+        try:
+            np.linalg.cholesky(X)
+        except np.linalg.LinAlgError as error:
+            raise ValueError("Covariances must be symmetric positive definite") from error
         return X
 
     def _step(self, references, n_seen, trial):
         """One trial: updated references, updated count, feature vector."""
         if self.adapt:
-            step = 1.0 / (self.prior_trials + n_seen + 1)
+            step = 1.0 / (float(self.prior_trials) + n_seen + 1)
             references = [geodesic(m, c, step) for m, c in zip(references, trial)]
         features = np.concatenate([tangent_vector(c, m)
                                    for c, m in zip(trial, references)])
         return references, n_seen + 1, features
 
     def _fresh_features(self, X):
+        X = self._check(X, 4)
         references, n_seen, rows = self.means_, 0, []
-        for trial in self._check(X, 4):
+        for trial in X:
             references, n_seen, features = self._step(references, n_seen, trial)
             rows.append(features)
         return np.array(rows)
 
     def predict(self, X):
-        return self.model_.predict(self._fresh_features(X))
+        features = self._fresh_features(X)
+        return self.model_.predict(features)
 
     def decision_function(self, X):
-        return self.model_.decision_function(self._fresh_features(X))
+        features = self._fresh_features(X)
+        return self.model_.decision_function(features)
 
-    def _advance(self, trial):
-        self.references_, self.n_seen_, features = self._step(
-            self.references_, self.n_seen_, self._check(trial, 3))
-        return features[None, :]
+    def _next(self, trial, method):
+        trial = self._check(trial, 3)
+        references, seen, features = self._step(
+            self.references_, self.n_seen_, trial)
+        result = getattr(self.model_, method)(features[None, :])[0]
+        # Commit only after the classifier successfully returns a decision.
+        self.references_, self.n_seen_ = references, seen
+        return result
 
     def predict_next(self, trial):
         """Classify one band x channel x channel trial and advance the state."""
-        return self.model_.predict(self._advance(trial))[0]
+        return self._next(trial, "predict")
 
     def decision_next(self, trial):
         """Signed score for one trial (positive favours `classes_[1]`); advances the state."""
-        return float(self.model_.decision_function(self._advance(trial))[0])
+        return float(self._next(trial, "decision_function"))
 
     def predict_stream(self, X):
         """Classify the next trials of the current run, continuing from the stored state."""
-        return np.array([self.predict_next(trial) for trial in self._check(X, 4)])
+        X = self._check(X, 4)  # Validate the whole batch before any update.
+        references, seen = [m.copy() for m in self.references_], self.n_seen_
+        try:
+            return np.array([self.predict_next(trial) for trial in X])
+        except Exception:
+            self.references_, self.n_seen_ = references, seen
+            raise
 
 
 def oas_from_covariance(covariance, n_samples):

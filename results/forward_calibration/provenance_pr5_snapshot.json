@@ -12,14 +12,14 @@
   "source_sha256": {
     "forward_calibration.py": "75ede1bbad727280df9a23ed901952c0b6458c470bb2a777c7ddd9e1dffd7b19",
     "comparison.py": "d2850134cf722bef47196c9eecb1c20f983801a9f625f0f99132b61cc4a3f95a",
-    "riemann.py": "1a025056045846b16264ff52c9dd626c308f448193204a53f7a29c64e80f5a5b",
+    "riemann.py": "53704e895a0f88832ce6196954cc759fa694edd4da8ba0eb8c356f915957ccfd",
     "models.py": "1c2564c0ec945fa81c1c374d589a7e638c88fad961a93a285df5b5db322382be"
   },
   "runtime": {
-    "python": "3.13.7",
-    "numpy": "2.4.3",
+    "python": "3.11.15",
+    "numpy": "2.4.6",
     "scipy": "1.17.1",
-    "scikit_learn": "1.8.0"
+    "scikit_learn": "1.9.1"
   },
   "model_order": [
     "filterbank_csp_shrinkage_lda",

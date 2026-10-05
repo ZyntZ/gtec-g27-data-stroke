@@ -6,7 +6,8 @@ from sklearn.covariance import oas
 from stroke_rehab.data import Recording
 from stroke_rehab.riemann import (RecenteredTangentSpace, filtered_trials, oas_from_covariance,
                                   window_covariances)
-from stroke_rehab.riemann_stream import CausalRiemannStream, replay_decisions
+from stroke_rehab.riemann_stream import (CausalRiemannDecoder, CausalRiemannStream,
+                                         StreamDecoderFailedError, replay_decisions)
 
 WINDOW = (2.5, 3.5)
 
@@ -109,3 +110,44 @@ def test_stream_decision_ignores_samples_after_the_window(fitted):
     a = replay_decisions(recording, fitted, window=WINDOW)
     b = replay_decisions(altered, fitted, window=WINDOW)
     assert [d.label for d in a] == [d.label for d in b]
+
+
+def test_classifier_failure_is_terminal_and_requires_reconstruction(fitted, monkeypatch):
+    decoder = CausalRiemannDecoder(fitted, channels=4, window=(0, 0.5))
+    chunk = np.random.default_rng(12).normal(size=(64, 4))
+    assert decoder.process(chunk, onsets=(0,)) is None
+    references = [r.copy() for r in fitted.references_]
+
+    def fail(_):
+        raise RuntimeError("forced classifier exception")
+
+    with monkeypatch.context() as patch:
+        patch.setattr(fitted.model_, "predict", fail)
+        with pytest.raises(StreamDecoderFailedError, match="terminal") as caught:
+            decoder.process(chunk)
+        assert str(caught.value.__cause__) == "forced classifier exception"
+        assert decoder.failed and decoder.stream.sample == 128
+        assert fitted.n_seen_ == 0
+        for before, after in zip(references, fitted.references_, strict=True):
+            np.testing.assert_array_equal(before, after)
+
+    # Removing the injected failure does not make the consumed EEG retryable.
+    with pytest.raises(StreamDecoderFailedError, match="known run boundary"):
+        decoder.process(chunk)
+    assert decoder.stream.sample == 128 and fitted.n_seen_ == 0
+
+    recovered = CausalRiemannDecoder(fitted, channels=4, window=(0, 0.5))
+    assert recovered.process(chunk, onsets=(0,)) is None
+    event = recovered.process(chunk)
+    assert not recovered.failed and event.onset_sample == 0
+    assert event.decision_sample == 128 and fitted.n_seen_ == 1
+
+
+def test_invalid_eeg_makes_decoder_terminal(fitted):
+    decoder = CausalRiemannDecoder(fitted, channels=4)
+    with pytest.raises(StreamDecoderFailedError, match="terminal") as caught:
+        decoder.process(np.full((64, 4), np.nan))
+    assert isinstance(caught.value.__cause__, ValueError)
+    assert decoder.failed and fitted.n_seen_ == 0
+    with pytest.raises(StreamDecoderFailedError, match="known run boundary"):
+        decoder.process(np.zeros((64, 4)))
