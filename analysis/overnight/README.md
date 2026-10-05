@@ -1,5 +1,7 @@
 # Overnight verification and research
 
+Historical handoff for the named snapshots below. Its test counts, notebook/export checks and fixed-montage parity do not certify the final integrated branch. Current integrated checks are recorded in the `current_stack_checks` entry of [FINAL_CHECKS.json](../../results/overnight/FINAL_CHECKS.json).
+
 Authorized by Jason on 4 October 2026. Goal: a reviewable package by 08:00 London on 5 October, stopping earlier when its outputs are complete, with a maximum six hours of active assistant work. This is assistant work, not a calendar booking for Jason.
 
 The isolated `analysis/overnight-verification` worktree starts with the accuracy/calibration study `c1a6d4`, incorporating Anna's current main `45d5b91` as merge `1edae10`. Existing mu PR #1 and the original accuracy worktree are preserved.

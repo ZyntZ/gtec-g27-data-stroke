@@ -1,5 +1,7 @@
 # G27 verification and research handoff — 4–5 October 2026
 
+Historical handoff for the named snapshots below. Its test counts, notebook/export checks and fixed-montage parity do not certify the final integrated branch. Current integrated checks are recorded in the `current_stack_checks` entry of [FINAL_CHECKS.json](FINAL_CHECKS.json).
+
 Historical physiology PR [#1](https://github.com/ZyntZ/gtec-g27-data-stroke/pull/1) was ready at `8f44f8d` against main `483ac87` after 42 tests/preflight. Its implementation is now incorporated directly in main `44d240f`. The numerical pipeline, notebook execution and model-export checks are complete. The single training-only selection sensitivity is mixed and is not adopted as a universal upgrade.
 
 

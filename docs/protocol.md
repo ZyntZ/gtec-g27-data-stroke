@@ -188,3 +188,26 @@ These checks can describe robustness of a signal pattern, not establish lesion
 side or rehabilitation benefit. In 31 stroke patients, artifact reduction
 changed measured ERD and reduced optimistic decoder accuracy, illustrating why
 accuracy alone cannot certify motor-cortical origin. [López-Larraz et al., 2018](https://pmc.ncbi.nlm.nih.gov/articles/PMC6180341/).
+
+
+## Organizer scoring clarification — 5 October 2026
+
+The organizer reply supplied by the team on 5 October clarifies the published
+reference statistic: fit using the training/calibration MAT file, then evaluate
+the corresponding test MAT file. All calibration trials may be used, and
+feedback-period EEG is permitted. For a correctness matrix indexed by time and
+trial, average across trials first, then take the maximum across time:
+`peak_accuracy = correctness.mean(axis=1).max()`. Averaging each trial's best
+time would be a different, incorrect statistic. Declare the evaluated time
+range/grid and retained trial IDs; the reference material describes the original
+windows, and the reply imposes no strict additional window.
+
+Only the video is required; the reply adds no specific instructions. This is
+team-supplied clarification, not a separately retrieved message. It does not
+provide per-trial FES timestamps or confirm the acquisition montage. Feedback
+permission does not establish motor-intent specificity or clinical benefit.
+The archive's test runs have already been inspected. Peak time-point accuracy
+is the permitted descriptive reference statistic, not independent validation
+of a model or a test-chosen decision time. Existing fixed-window/fixed-time
+analyses remain separate results and are not exact reproductions of that peak
+statistic. The early chronological comparison retains its frozen +3.5 s cutoff.
