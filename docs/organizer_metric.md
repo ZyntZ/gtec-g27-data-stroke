@@ -92,13 +92,13 @@ per-trial FES timestamps, no gain over competing teams or rehabilitation
 benefit can be established by these results. For a video, show the
 post-hoc peak **and** the fixed-time curve with these qualifications.
 
-## Shared execution after current-main integration
+## PR7 component receipt reuse after current-main integration
 
-This component integrates main `0413792` and retains the PR8 terminal-error fix.
+The PR7 component integrates main `0413792` and retains the PR8 terminal-error fix.
 Its active organizer and stream receipts come from an actual run of the combined
 PR6 calculation sources at `5037fab`. Every recorded source dependency and output
 fingerprint is identical here; the full component suite checks those identities.
-There was no independent refit of identical models in this checkout. The original
+There was no independent refit of identical models in the PR7 checkout. The original
 update03 organizer receipt and this component's earlier stream receipt are kept
 as clearly named snapshots. Source hashes normalize CRLF to LF; raw input/output
 bytes remain unchanged. This reuse establishes execution equivalence for the

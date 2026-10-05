@@ -69,6 +69,7 @@
     "shared_receipt_sha256_lf": {
       "results/organizer_metric/organizer_metric_provenance.json": "a59aaf04f99d5e5f5c59cffd56e33aed16cf4bb4a849f0b0a42e75a3493f3de7",
       "results/forward_calibration/stream_parity.json": "4a248c0031c37c20e2f453b39dc5e3ead5a380aa4c8c3456b54bf6ce51d41233"
-    }
+    },
+    "branch": "analysis/chronological-early-calibration (PR7)"
   }
 }
