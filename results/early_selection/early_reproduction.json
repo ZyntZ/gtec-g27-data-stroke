@@ -56,20 +56,12 @@
     "receipt_reuse": "Organizer and stream calculations were actually rerun on PR6; every recorded dependency and output fingerprint is identical in this component. Early calculation sources and saved outputs are unchanged.",
     "commands": [
       {
-        "command": [
-          "C:\\Users\\jason\\Documents\\ChatGPT\\Competitions\\work\\g27_accuracy_env\\Scripts\\python.exe",
-          "-m",
-          "pytest",
-          "-q"
-        ],
+        "command": "python -m pytest -q",
         "returncode": 0,
         "output": "........................................................................ [ 64%]\n.......................................                                  [100%]\n111 passed in 16.93s"
       },
       {
-        "command": [
-          "C:\\Users\\jason\\Documents\\ChatGPT\\Competitions\\work\\g27_accuracy_env\\Scripts\\python.exe",
-          "tools/repo_preflight.py"
-        ],
+        "command": "python tools/repo_preflight.py",
         "returncode": 0,
         "output": "Repository preflight passed: no tracked raw data, caches or failed notebooks"
       }
