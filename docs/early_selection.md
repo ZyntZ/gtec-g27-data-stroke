@@ -111,3 +111,12 @@ and main07d725f. All six raw training hashes and all four prediction/summary/
 choice output hashes must remain identical; `early_reproduction.json` records
 the stacked comparison separately. Complete combined tests still check the
 actual executed source hashes rather than weakening the receipt guard.
+
+The later current-main integration includes `0413792` and the strengthened stream
+guard from PR9. `early_reproduction.json.latest_main_integration` records its full
+tests and use of organizer/stream receipts from the actual PR6 execution at
+`5037fab`; all declared calculation dependencies and outputs match this branch.
+The early-selection sources and four numerical outputs are unchanged, so no
+additional selection or model search was run. The component remains scoped to
+early analysis and shared correctness repairs, without PR6's wider benchmark and
+historical report package.
