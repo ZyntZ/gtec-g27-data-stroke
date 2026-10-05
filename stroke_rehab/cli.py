@@ -54,6 +54,8 @@ def main(argv=None):
              "results/model_comparison.csv"),
             ("decision-time", "Causal accuracy against decision time, both models",
              "results/decision_time.csv"),
+            ("feedback-check", "Look for a stimulation trace or evoked response at feedback onset",
+             "results/feedback_timing_check.csv"),
             ("lateralize", "Descriptive C3/C4 beta change with per-file channel layout",
              "results/lateralization.csv"),
             ("transfer", "Decode each session with a model from the patient's other session",
@@ -164,6 +166,9 @@ def main(argv=None):
     elif args.command == "decision-time":
         from .comparison import run_decision_time
         run_decision_time(args.data_dir, args.output)
+    elif args.command == "feedback-check":
+        from .timing import run_feedback_check
+        run_feedback_check(args.data_dir, args.output)
     elif args.command == "lateralize":
         from .lateralization import run_lateralization
         print(f"Wrote {len(run_lateralization(args.data_dir, args.output))} rows")

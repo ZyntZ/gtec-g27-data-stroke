@@ -1,7 +1,8 @@
 import numpy as np
 
 from stroke_rehab.data import Recording
-from stroke_rehab.montage import GRID, LAYOUTS, layout_fit, layout_for
+from stroke_rehab.montage import (GRID, LAYOUTS, global_search, layout_fit, layout_for,
+                                  mirrored)
 from stroke_rehab.riemann import (RecenteredTangentSpace, filtered_trials, geodesic,
                                   riemann_mean, window_covariances)
 
@@ -63,3 +64,14 @@ def test_layout_fit_prefers_the_generating_layout():
     assert layout_for("x/P2_post_test.mat") == LAYOUTS["paper"]
     assert layout_for("x/P1_pre_test.mat").index("C3") == 6
     assert all(sorted(layout) == sorted(set(layout)) for layout in LAYOUTS.values())
+
+
+def test_global_search_recovers_a_scrambled_order_up_to_mirror():
+    layout = LAYOUTS["paper"]
+    xy = np.array([GRID[name] for name in layout], dtype=float)
+    correlation = np.exp(-np.linalg.norm(xy[:, None] - xy[None], axis=-1) / 3)
+    assert global_search(correlation, layout, restarts=6)[0] in ("stated", "mirror")
+    flip = mirrored(layout)
+    assert [layout[i] for i in flip][:5] == ["FC6", "FC2", "FCz", "FC1", "FC5"]
+    scrambled = np.random.default_rng(3).permutation(16)
+    assert global_search(correlation[np.ix_(scrambled, scrambled)], layout, restarts=6)[0] == "other"
