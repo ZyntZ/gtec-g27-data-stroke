@@ -10,3 +10,14 @@ __pycache__/
 *.egg-info/
 results/accuracy_calibration/training_covariances.npz
 /results/mu_power/
+
+# organizer recordings, archive and fitted models stay local
+data/
+results/mu_power/
+# slides, deck builders, animations and the video script are delivered outside Git
+presentation/
+*.pptx
+*.gif
+video_script*.md
+*.pyc
+.DS_Store

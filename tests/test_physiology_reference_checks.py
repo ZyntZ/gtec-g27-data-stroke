@@ -38,3 +38,13 @@ def test_missing_or_changed_reference_cannot_report_a_pass(reference, mode):
         manifest["csv_checks"] = []
     with pytest.raises((ValueError, RuntimeError, FileNotFoundError)):
         VERIFY.verify_physiology_csvs(out, manifest)
+
+
+def test_historical_source_gate_normalizes_lines_and_rejects_method_change(tmp_path):
+    source = tmp_path / 'method.py'
+    source.write_bytes(b'channel = 4\r\n')
+    manifest = dict(source_sha256_lf={'method.py': hashlib.sha256(b'channel = 4\n').hexdigest()})
+    VERIFY.verify_physiology_source(tmp_path, manifest)
+    source.write_bytes(b'channel = 8\r\n')
+    with pytest.raises(RuntimeError, match='Historical physiology source changed'):
+        VERIFY.verify_physiology_source(tmp_path, manifest)

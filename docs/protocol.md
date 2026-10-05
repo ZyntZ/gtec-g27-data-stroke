@@ -166,3 +166,23 @@ and functional electrical stimulation (FES) feedback. Subject-wise curves
 and numeric values are reproduced by `notebooks/02_causal_latency.ipynb`.
 The fixed early window remains the calibration default until feedback
 timestamps and the organizers' scoring contract establish a valid endpoint.
+
+
+## Missing clinical side and exploratory ERD/ERS
+
+On 5 October 2026, the organizer reply relayed by the team stated that affected
+hand/lesion hemisphere information is unavailable. A further suggestion was
+that experienced analysts might infer it from ERD/ERS. Keep this suggestion as
+a hypothesis: neither the left/right trial label nor a larger power decrease
+is a clinical lesion label. Do not add inferred patient-side metadata, flip
+hemispheres, or call a channel ipsilesional/contralesional from these data.
+
+The current per-file C3/C4 map is correlation-inferred and remains unconfirmed,
+including orientation. Report task-hand-labelled, channel-labelled power
+changes under the declared map. If exploring asymmetry, show both early and
+later feedback-exposed windows, sensitivity to plausible mappings/reference,
+and artifact controls. Retain all 80 trials or explicitly match exclusions.
+These checks can describe robustness of a signal pattern, not establish lesion
+side or rehabilitation benefit. In 31 stroke patients, artifact reduction
+changed measured ERD and reduced optimistic decoder accuracy, illustrating why
+accuracy alone cannot certify motor-cortical origin. [López-Larraz et al., 2018](https://pmc.ncbi.nlm.nih.gov/articles/PMC6180341/).

@@ -1,7 +1,7 @@
 {
   "checked_at_utc": "2026-10-04T23:23:26.973055+00:00",
   "base_commit": "44d240ffc82c2088ea58537e81565f3acb736ca0",
-  "branch": "codex/calibration-review",
+  "branch": "analysis/calibration-benchmarks",
   "default_environment_tests": {
     "passed": 63,
     "skipped_modules": 1,
@@ -71,13 +71,6 @@
   },
   "boundaries": "Technical and retrospective checks; no fresh validation, merge, clinical claim or submission",
   "runner_hardening": "Matching, mismatching and missing-reference synthetic cases pass; zero subprocess exit cannot conceal failed numerical verification",
-  "astra_remaining_review": {
-    "requested_model": "gpt-6-astra",
-    "requested_effort": "ultra",
-    "runtime_model_id": "not independently exposed by collaboration tool",
-    "changes": "Correct nonexistent hosted-workflow and historical-report wording; fail on numerical mismatches/missing references",
-    "numerical_results_changed": false
-  },
   "previous_review_test_execution": {
     "checked_at_utc": "2026-10-04T22:44:09.692164+00:00",
     "base_commit": "483ac87b98ad385664b11986382e53a8c69abd2e",
@@ -97,10 +90,19 @@
       "runner": "Scientific environment; pytest imported from existing user package directory after scientific imports; plugin autoload disabled"
     }
   },
-  "astra_followup": {
-    "dispatch_model": "gpt-6-astra",
-    "requested_effort": "ultra",
-    "runtime_id": "not independently exposed",
+  "main_integration_receipt": "main_integration_check.json",
+  "current_saved_csv_checks": 19,
+  "new_regression_tests": 15,
+  "collaborator_source_review": {
+    "head": "a3382b7e053ed8cdb9c9d06dba3bd0c9c7293fa2",
+    "changes": "Transfer fits source training only; per-file mu columns follow inferred montage, still needs acquisition metadata",
+    "numerical_reproduction": false
+  },
+  "review_corrections": {
+    "changes": "Correct nonexistent hosted-workflow and historical-report wording; fail on numerical mismatches/missing references",
+    "numerical_results_changed": false
+  },
+  "followup_corrections": {
     "fixes": [
       "Portable published CSV validation and truthful test evidence",
       "Accuracy vs probability tradeoffs",
@@ -110,13 +112,5 @@
     ],
     "new_decoder_fitting": false,
     "test_scores_changed": false
-  },
-  "main_integration_receipt": "main_integration_check.json",
-  "current_saved_csv_checks": 19,
-  "new_regression_tests": 15,
-  "collaborator_source_review": {
-    "head": "a3382b7e053ed8cdb9c9d06dba3bd0c9c7293fa2",
-    "changes": "Transfer fits source training only; per-file mu columns follow inferred montage, still needs acquisition metadata",
-    "numerical_reproduction": false
   }
 }

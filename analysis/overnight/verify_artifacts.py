@@ -18,6 +18,15 @@ def sha(path):
     return hashlib.sha256(path.read_bytes()).hexdigest()
 
 
+def verify_physiology_source(root, reference_manifest):
+    """Do not apply an old channel-map receipt to changed physiology code."""
+    for name, expected in reference_manifest['source_sha256_lf'].items():
+        actual = hashlib.sha256((Path(root) / name).read_bytes().replace(b'\r\n', b'\n')).hexdigest()
+        if actual != expected:
+            raise RuntimeError('Historical physiology source changed: ' + name +
+                               '. Preserve the old receipt; create a separate current-method reproduction.')
+
+
 def verify_physiology_csvs(output, reference_manifest):
     """Fail closed when output-free notebooks have no tracked reference CSVs."""
     expected = {'mu_power/all_training_trial_mu.csv',
@@ -42,6 +51,10 @@ def run(data):
     import jsonschema
     import pandas as pd
     from jupyter_client import KernelManager
+
+    manifest = json.loads((ROOT / 'results/overnight/mu_reference_hashes.json').read_text())
+    if (ROOT / 'notebooks/03_mu_power.ipynb').is_file():
+        verify_physiology_source(ROOT, manifest)
 
     ignored = ROOT / 'data/overnight-reproduction'
     sandbox = ignored / 'notebook-sandbox'

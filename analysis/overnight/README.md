@@ -2,9 +2,9 @@
 
 Authorized by Jason on 4 October 2026. Goal: a reviewable package by 08:00 London on 5 October, stopping earlier when its outputs are complete, with a maximum six hours of active assistant work. This is assistant work, not a calendar booking for Jason.
 
-The isolated `codex/overnight-verification` worktree starts with the accuracy/calibration study `c1a6d4`, incorporating Anna's current main `45d5b91` as merge `1edae10`. Existing mu PR #1 and the original accuracy worktree are preserved.
+The isolated `analysis/overnight-verification` worktree starts with the accuracy/calibration study `c1a6d4`, incorporating Anna's current main `45d5b91` as merge `1edae10`. Existing mu PR #1 and the original accuracy worktree are preserved.
 
-For independent review, the model/research files are packaged on `codex/calibration-review`, based directly on main `483ac87`. This branch omits the physiology changes already in PR #1. The receipts retain the actual combined-worktree snapshots on which they were produced. The artifact checker executes whichever notebooks are present, including the physiology notebook after PR #1 is incorporated.
+For independent review, the model/research files are packaged on `analysis/calibration-benchmarks`, based directly on main `483ac87`. This branch omits the physiology changes already in PR #1. The receipts retain the actual combined-worktree snapshots on which they were produced. The artifact checker executes whichever notebooks are present, including the physiology notebook after PR #1 is incorporated.
 
 Jason subsequently asked to continue using the newest commits. Fetch and compare remote main before every new batch and the final handoff. Record the exact snapshot for each result. Complete a running frozen comparison before integrating new source; rerun only checks affected by relevant upstream changes. The final integrated fetch points to `483ac87`. This adds README/preflight changes and leaves the reproduced numerical analysis unchanged.
 
@@ -58,3 +58,20 @@ The artifact runner now requires all three frozen physiology CSV hashes in `mu_r
 The supplied-montage mapping remains an assumption for each recording. PR #3's correlation topology does not verify acquisition labels or orientation; it proposes a layout hypothesis. Cross-run transfer and source pooling assume channel correspondence. PR #3's adapted Riemannian pipeline, feedback plots and transfer contract differ from this fixed-reference comparison; do not pool their scores.
 
 Latest collaborator snapshot checked: `a3382b7`. It fixes auxiliary transfer to fit the source training run only and changes its physiology to a per-file correlation-inferred layout, adding a CP5/CP1-swap hypothesis. The source-label concern is resolved in that branch. Other contract differences remain: inferred acquisition mapping, zero-phase filtering, unlabeled recentering and both temporal directions. This is a source review of that snapshot, not a reproduction of its changed numerical outputs.
+
+
+## Current integration — main 3506ca2, 5 October 2026
+
+PRs 3 and 4 are now merged. The current physiology module uses inferred
+per-file channel mappings, so the fixed-montage CSV hashes above are historical.
+The artifact runner now rejects changed physiology source before execution;
+it cannot overwrite an old receipt or claim parity under a different map.
+The old numerical receipts remain valid for their recorded source snapshots.
+Run the current mu module separately for current descriptive outputs; those
+outputs are not a reproduction of the historical fixed-montage CSVs.
+
+PR2 was closed automatically when its head branch was renamed. Its replacement
+review branch is `analysis/calibration-benchmarks`, reconciled with main 3506ca2.
+The source-level channel map and ERD/ERS limitations are in `docs/protocol.md`.
+New chronological selection and covariance-stream work have separate branches
+and receipts; their results must not be pooled with this four-second benchmark.

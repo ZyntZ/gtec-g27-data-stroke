@@ -47,6 +47,33 @@ def main(argv=None):
     control.add_argument("--config", default="configs/negative_controls.json")
     control.add_argument("--data-dir", default=None)
     control.add_argument("--output", default=None)
+    for name, text, output in (
+            ("montage-check", "Test which channel layout each recording follows",
+             "results/montage_check.csv"),
+            ("compare", "Filter-bank CSP versus Riemannian decoder, same trials and windows",
+             "results/model_comparison.csv"),
+            ("decision-time", "Causal accuracy against decision time, both models",
+             "results/decision_time.csv"),
+            ("feedback-check", "Look for a stimulation trace or evoked response at feedback onset",
+             "results/feedback_timing_check.csv"),
+            ("lateralize", "Descriptive C3/C4 beta change with per-file channel layout",
+             "results/lateralization.csv"),
+            ("transfer", "Decode each session with a model from the patient's other session",
+             "results/transfer.csv")):
+        extra = sub.add_parser(name, help=text)
+        extra.add_argument("--data-dir", default="data/stroke-rehab")
+        extra.add_argument("--output", default=output)
+    plot_time = sub.add_parser("plot-decision-time", help="Visualize saved decision-time scores")
+    plot_time.add_argument("--csv", default="results/decision_time.csv")
+    plot_time.add_argument("--output", default="results/decision_time.png")
+    plot_time.add_argument("--theme", choices=("light", "dark"), default="light")
+    forward = sub.add_parser("forward-calibration", help="Training-only causal forward validation at fixed calibration budgets")
+    forward.add_argument("--config", default="configs/forward_calibration.json")
+    forward.add_argument("--data-dir", default="data/stroke-rehab")
+    forward.add_argument("--output-dir", default="results/forward_calibration")
+    forward_plot = sub.add_parser("plot-forward-calibration", help="Plot the training-only calibration audit")
+    forward_plot.add_argument("--csv", default="results/forward_calibration/forward_calibration_summary.csv")
+    forward_plot.add_argument("--output", default="results/forward_calibration/forward_calibration.png")
     plot = sub.add_parser("plot", help="Visualize saved session scores")
     plot.add_argument("--csv", default="results/session_results.csv")
     plot.add_argument("--output", default="results/session_accuracy.png")
@@ -130,6 +157,42 @@ def main(argv=None):
             permutations=config["permutations"], seed=config["seed"],
             folds=config["folds"], purge=config["purge_trials"],
             chunk_samples=config["chunk_samples"])
+    elif args.command == "montage-check":
+        from .montage import run_montage_check
+        run_montage_check(args.data_dir, args.output)
+    elif args.command == "compare":
+        from .comparison import run_comparison
+        run_comparison(args.data_dir, args.output)
+    elif args.command == "decision-time":
+        from .comparison import run_decision_time
+        run_decision_time(args.data_dir, args.output)
+    elif args.command == "feedback-check":
+        from .timing import run_feedback_check
+        run_feedback_check(args.data_dir, args.output)
+    elif args.command == "lateralize":
+        from .lateralization import run_lateralization
+        print(f"Wrote {len(run_lateralization(args.data_dir, args.output))} rows")
+    elif args.command == "transfer":
+        from .transfer import run_transfer
+        run_transfer(args.data_dir, args.output)
+    elif args.command == "forward-calibration":
+        from .forward_calibration import run_forward_calibration
+        import json
+        from pathlib import Path
+        design = json.loads(Path(args.config).read_text(encoding="utf-8"))
+        predictions, summary = run_forward_calibration(
+            args.data_dir, args.output_dir,
+            budgets=design["budgets"], stops=design["decision_times_s"],
+            validation_start=design["validation_start_0based"],
+            validation_stop=design["validation_stop_0based"],
+            window_s=design["window_s"])
+        print(f"Training-only: {len(predictions)} decisions, {len(summary)} session/model/time/budget rows")
+    elif args.command == "plot-forward-calibration":
+        from .forward_plot import plot_forward_calibration
+        print(plot_forward_calibration(args.csv, args.output))
+    elif args.command == "plot-decision-time":
+        from .plotting import plot_decision_time
+        print(plot_decision_time(args.csv, args.output, theme=args.theme))
     else:
         from .plotting import plot_results
         print(plot_results(args.csv, args.output))

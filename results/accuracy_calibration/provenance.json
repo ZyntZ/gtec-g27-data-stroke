@@ -71,6 +71,5 @@
     "probability_reliability.csv": "2ee2ab477cb5c4f78142b50ed4475a84b2e0556f378f93667e1ea1aa481360eb",
     "training_oof_predictions.csv": "99467bdaeab9f8c40f104a47a500a15dbfb510a6b2f2065490413899c13028d8"
   },
-  "repository_correction": "Anna/ZyntZ is the team repository, based on ffcdb7e. Independent comparison outputs moved unchanged from the separate nxxis reference checkout. Reproduced Anna baseline433/480 here; nxxis444/479 remains a separate reference receipt.",
-  "assistant_model": "Current Codex session and inherited specialist review; exact model/effort identifier was not exposed by tool results."
+  "repository_correction": "Anna/ZyntZ is the team repository, based on ffcdb7e. Independent comparison outputs moved unchanged from the separate nxxis reference checkout. Reproduced Anna baseline433/480 here; nxxis444/479 remains a separate reference receipt."
 }

@@ -15,5 +15,9 @@
       "reference_sha256": "0a5b8919e894dbd9fb24fcfa332296a1cbbd8efcda9c99c223c30b447edc4619"
     }
   ],
-  "policy": "Exact frozen CSV hashes, required even when main stores notebook source without outputs; no ignored local CSV becomes its own reference."
+  "policy": "Exact frozen CSV hashes, required even when main stores notebook source without outputs; no ignored local CSV becomes its own reference.",
+  "source_sha256_lf": {
+    "analysis/mu_power/mu_pass.py": "cc26e461688e77ad5c6e8a8abbe64b2a3caa267abb0d62b4d2c419b20c03b463"
+  },
+  "current_scope": "Historical fixed-montage calculation only; current inferred per-file montage must have a separate receipt."
 }

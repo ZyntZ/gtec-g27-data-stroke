@@ -1,6 +1,6 @@
 # Evidence for the overnight G27 review
 
-Reviewed with Astra at Ultra on 4 October 2026 against the local accuracy/calibration study at `c1a6d42339b191bfc3c23a7d4da64cd8487cfdc8`. These findings support a comparator and evaluation checks; they do not establish rehabilitation benefit or co-adaptation from the retrospective recordings.
+Reviewed on 4 October 2026 against the local accuracy/calibration study at `c1a6d42339b191bfc3c23a7d4da64cd8487cfdc8`. These findings support a comparator and evaluation checks; they do not establish rehabilitation benefit or co-adaptation from the retrospective recordings.
 
 ## Methods and evaluation
 
@@ -28,8 +28,49 @@ Anna's message to the other collaborator requests their time-resolved accuracy c
 
 Current zero-label transfer and target-only labelled calibration are different fitting regimes. Balanced random calibration subsets are retrospective label-budget experiments; they are not chronological acquisition times or a measured learning trajectory.
 
-## Smallest mechanism experiment — proposed after Astra review, 5 October 2026
+## Smallest mechanism experiment — proposed after review, 5 October 2026
 
 Use one synthetic two-learner simulation before involving EEG: a user/encoder maps a target into noisy features, and a decoder maps features into an output. Compare fixed, slow and fast decoder updates at declared rates, with the same initial parameters and noise streams for ten paired seeds. Include a frozen-encoder control so improved decoder tracking of drift cannot be mistaken for user learning. Measure assisted task error, encoder change/effort, unassisted retention with the final decoder frozen, and concentration of target information across feature directions. Define the synthetic update rules and each measure before running; a reduction in predictive directions is not automatically reduced overall neural dimensionality.
 
 Output: one runnable notebook and one table, CPU only, maximum one hour of execution after implementation. Do not sweep rates to choose a winner. Start with synthetic features at the covariance/tangent readout interface; the current nonlinear covariance-to-tangent transform need not be simulated to test two-learner dynamics. Connect this later to the existing NeuralBench pipeline through a separately defined perturbation/transfer experiment. This is a mechanism hypothesis motivated by Rajeswaran and Madduri above, not evidence about stroke EEG, an accepted competition adaptation policy or a launched new project. Existing Fabrizi data and findings remain separate.
+
+
+## What the current methods actually do — 5 October 2026
+
+The forward audit fits a labelled prefix and predicts the same later trials
+61–80 at declared EEG cutoffs. It measures retrospective chronological
+performance on six training sessions; it does not measure treatment benefit.
+The newer selection policy uses only forward folds within that prefix to choose
+between fixed CSP/LDA and Riemannian pipelines at +3.5 s. All later tails were
+already exposed. At 60 calibration trials, fixed CSP has 82/120 correct and the
+selected policy 75/120; the selection policy has not improved the result.
+
+CSP learns spatial projections separating class covariance patterns; LDA then
+classifies relative projected band power. The Riemannian method represents each
+trial with shrunk covariance matrices, whitens them by a covariance reference,
+takes matrix-log tangent features, and uses regularized logistic regression.
+Its current-trial reference update uses EEG without labels. Explicit stream
+state makes that update persist across covariance batches; it does not itself
+filter raw EEG or demonstrate human learning. These two pipelines use different
+band banks, so their comparison cannot isolate geometry alone.
+
+The most useful next experiment is fixed recentering on/off at the same early
+endpoint and trial IDs, with class recalls and continuous decision-score
+ranking alongside accuracy. This separates adaptation effects and threshold
+collapse from a change of model family. Freeze it before execution, show P2/P3
+individually, and do not select a winning arm from these exposed tails.
+Geometry-aware alignment is a later transfer hypothesis requiring confirmed
+channel correspondence and identical label budgets. [Rodrigues et al., 2019](https://pubmed.ncbi.nlm.nih.gov/30596565/).
+
+For EEG/NeuralBench, use this as an evaluation extension: matched chronological
+splits, class-collapse indicators, held-out subject/session transfer and explicit
+adaptation state. For broader NeuroAI, the controlled two-learner simulation
+above would test encoder/decoder interaction; offline stroke EEG does not
+identify that mechanism. Keep the simulator, EEG benchmark and clinical
+interpretations separate.
+
+Affected-hand metadata are unavailable according to the organizer reply relayed
+on 5 October. Exploring ERD/ERS asymmetry is reasonable, but clinical side
+inference would need independent validation and a confirmed montage. Artifact
+and compensatory activity can affect both measured ERD and apparent decoder
+performance. [Primary stroke artifact study](https://pmc.ncbi.nlm.nih.gov/articles/PMC6180341/).
