@@ -72,6 +72,11 @@ def main(argv=None):
     cue.add_argument("--output", default="results/cue_audit.csv")
     cue.add_argument("--folds", type=int, default=5)
     cue.add_argument("--purge", type=int, default=1)
+    prequential = sub.add_parser("prequential", help="Training-only sequential prediction with pre-cue and label-only controls")
+    prequential.add_argument("--data-dir", default="data/stroke-rehab")
+    prequential.add_argument("--output", default="results/prequential_summary.csv")
+    prequential.add_argument("--warmup", type=int, default=20)
+    prequential.add_argument("--chunk-samples", type=int, default=512)
     forward = sub.add_parser("forward-calibration", help="Training-only causal forward validation at fixed calibration budgets")
     forward.add_argument("--config", default="configs/forward_calibration.json")
     forward.add_argument("--data-dir", default="data/stroke-rehab")
@@ -195,6 +200,11 @@ def main(argv=None):
             validation_stop=design["validation_stop_0based"],
             window_s=design["window_s"])
         print(f"Training-only: {len(predictions)} decisions, {len(summary)} session/model/time/budget rows")
+    elif args.command == "prequential":
+        from .prequential import run_prequential
+        rows = run_prequential(args.data_dir, args.output, warmup=args.warmup,
+                               chunk_samples=args.chunk_samples)
+        print(f"Wrote {len(rows)} training-only, sequential session/method scores")
     elif args.command == "plot-forward-calibration":
         from .forward_plot import plot_forward_calibration
         print(plot_forward_calibration(args.csv, args.output))
