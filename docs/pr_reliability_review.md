@@ -14,7 +14,31 @@ source receipts or failed streaming decisions were safe to reuse.
 
 An independent review was requested with `gpt-6-astra` at Ultra effort and completed after a capacity retry. Its runtime identity is not independently exposed by agent metadata. The review inspected published sources and Anna's comments; this checkout executed the checks.
 
-## Checks and interpretation
+## Current-main integration — 5 October 2026
+
+Anna's newer comments on PR6/7/9 identify current-main update03 as the remaining
+integration dependency. Main `0413792` and PR9 `173a3a3` were combined with PR6;
+source repair `5037fab` then received an actual organizer-metric rerun and stream
+replay. All three organizer CSV hashes and all twelve raw input hashes are
+unchanged. The full combined suite passes **136 tests**, with optional accuracy
+dependencies installed, plus preflight and all 19 published-arithmetic checks.
+Exact commands/source fingerprints are in `verification.json.current_stack_checks`.
+
+The organizer manifest now requires all six calculation sources and all four
+outputs, with source hashes normalized across Windows/Linux text checkouts.
+The stream manifest also requires its reproduction driver, spatial operations
+and event definitions. Both active receipts are produced by execution, with
+their preceding snapshots preserved. PR7 adopts only shared repairs plus current
+main, checks identical executed dependencies/outputs, and passes 111 component
+tests. PR5/8 remain one integration unit; the unchanged PR5 base is not separately
+safe to merge. The one-page PDF and earlier hosted pass remain historical.
+
+The new organizer rerun reads the already-inspected test MAT files; the forward
+replay remains training-only. These distinctions replace any broad claim that
+the whole current integration reads training data only. No model search or
+independent accuracy improvement follows from the unchanged numerical results.
+
+## Historical checks and interpretation
 
 The source fingerprint failure was reproduced before repair. The current
 verification commands and exact execution evidence are recorded in

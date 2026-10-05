@@ -4,6 +4,16 @@ A reproducible starting line for the BR41N.IO Stroke Rehab track. We use the org
 
 ## Critical research review
 
+Current-main integration checks are recorded in
+[`results/pr_reliability/verification.json.current_stack_checks`](results/pr_reliability/verification.json):
+main `0413792`, PR6 and PR9 pass 136 tests with optional accuracy dependencies,
+repository preflight and 19 published-result checks. An actual organizer scoring
+rerun preserves all three update03 CSVs and twelve input hashes; stream replay
+preserves 3,840 predictions/192 summaries and all six 80-trial runs. The early
+comparison still favors fixed CSP, 82/120 versus selection75/120. Earlier receipts,
+hosted checks and the one-page PDF retain their historical source scope. No
+independent accuracy improvement or main merge is implied.
+
 Treat accuracy as an instruction/feedback decoding result, not a motor-intent or clinical endpoint. The new training-only `stroke-rehab cue-audit` finds a strong immediate cue-period voltage signal in P1 POST (69/80, versus 40/80 before the instruction), an unresolved confound rather than a new test score. Reproduce it with `stroke-rehab cue-audit` after downloading the organizer archive; detailed conditions and all six per-run values are in `results/cue_audit.csv`. The existing held-out test runs have already been examined and are not a fresh blind set.
 
 ## Active team

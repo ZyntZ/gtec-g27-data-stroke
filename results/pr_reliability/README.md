@@ -1,5 +1,21 @@
 # Integration checks
 
+`verification.json.current_stack_checks` records the actual execution of main
+`0413792` plus PR6 and PR9. It passes **136 tests with optional accuracy
+dependencies**, preflight and all 19 published-result arithmetic checks. All
+three organizer metric CSVs and twelve raw input hashes match update03; 3,840
+forward predictions/192 summaries, twelve stream parity conditions and six
+80-trial replays match. Organizer scoring reads six training and six previously
+inspected test recordings; stream replay reads training recordings only.
+
+The top-level fields, hosted checks and one-page PDF below describe the earlier
+pre-update03 integration. They do not certify this new combined source.
+`organizer_metric_provenance_update03_snapshot.json` and
+`stream_parity_pre_update03_snapshot.json` retain the preceding receipts;
+their active counterparts were refreshed by actual execution.
+
+## Historical pre-update03 verification
+
 `verification.json` identifies this integration's executed source, inputs,
 unchanged numerical outputs and test/preflight results. It supersedes no
 historical receipt: `combined_early_parity.json` records the older stream wrapper, and the `results/overnight/` files identify their own
